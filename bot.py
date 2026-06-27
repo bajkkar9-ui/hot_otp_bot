@@ -351,25 +351,31 @@ def _build_numbers_display_kb(svc, scnt, display_nums, flag, c_name, is_v2=False
     emoji = _svc_display_emoji(svc_label)
     keyboard = []
     # Row: service name header
+    _hdr_icon_id = _svc_icon_emoji_id(svc_label)
+    _hdr_kwargs = {"icon_custom_emoji_id": _hdr_icon_id} if _hdr_icon_id else {}
     keyboard.append([types.InlineKeyboardButton(
-        f"{emoji} {svc_label.upper()}",
-        callback_data="noop", style="success"
+        f"{svc_label.upper()}",
+        callback_data="noop", style="success", **_hdr_kwargs
     )])
     # One row per number
     for dnum in display_nums:
         keyboard.append([types.InlineKeyboardButton(
             f"{flag} {dnum}",
-            copy_text=types.CopyTextButton(text=dnum), style="primary"
+            copy_text=types.CopyTextButton(text=dnum), style="primary",
+            **_flag_btn_kwargs(flag, "5447508713181034519")
         )])
     # Row 1: Change Number + OTP Group on same row
     change_cb = f"v2rng:{v2_prefix}:{v2_sid}" if is_v2 else f"n:{svc}:{scnt}"
-    action_row = [types.InlineKeyboardButton("🔄 Change Number", callback_data=change_cb, style="danger")]
+    _cn_text, _cn_icon = _btn_text_and_icon("change_number", "🔄 Change Number")
+    action_row = [types.InlineKeyboardButton(_cn_text, callback_data=change_cb, style="danger", **_cn_icon)]
     if get_otp_group_link():
-        action_row.append(types.InlineKeyboardButton("📢 OTP Group", url=get_otp_group_link(), style="success"))
+        _og_text, _og_icon = _btn_text_and_icon("otp_group_btn", "📢 OTP Group")
+        action_row.append(types.InlineKeyboardButton(_og_text, url=get_otp_group_link(), style="success", **_og_icon))
     keyboard.append(action_row)
     # Row 2: Back alone
     back_cb = "v2back" if is_v2 else "back_to_services"
-    keyboard.append([types.InlineKeyboardButton("⬅️ Back", callback_data=back_cb, style="primary")])
+    _bk_text, _bk_icon = _btn_text_and_icon("back", "⬅️ Back")
+    keyboard.append([types.InlineKeyboardButton(_bk_text, callback_data=back_cb, style="primary", **_bk_icon)])
     return types.InlineKeyboardMarkup(keyboard)
 
 
@@ -428,13 +434,13 @@ def _schedule_delete(chat_id, msg_id):
 TEMPLATES_FILE = "message_templates.json"
 # <<SYNC:_DEFAULT_TEMPLATES:START>>
 _DEFAULT_TEMPLATES = {
-    'otp_group': '━━━━━━━━━━━━━━━\n<blockquote>📱 <b>{svc}</b> {flag} | <code>{tagged_number}</code> | {flag}</blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>🔑 KEY : <b>{otp}</b></blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>🌍 Country: {country} {flag}</blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>📩 MESSAGE\n{sms}</blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>💬 Thanks for using 🫦👅</blockquote>\n━━━━━━━━━━━━━━━',
-    'start': '🔥 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧-𝗲 𝗦𝗔𝗚𝗢𝗧𝗢𝗠!</b> 🔥\n\n╔═════════════════════════════╗\n   🧾 <b>USER DASHBOARD</b>\n╠═════════════════════════════╣\n  👤 <b>User:</b> {uname}\n  🆔 <b>ID:</b> <code>{uid}</code>\n  📊 <b>Status:</b> 💎 Premium\n  🚀 <b>Workers:</b> 0\n╚═════════════════════════════╝\n\n╔══════════════════╗\n 𝗡𝗶𝗰𝗵𝗲𝗿 𝗰𝗵𝗮𝗻𝗻𝗲𝗹𝗲 <b>𝗝𝗢𝗜𝗡</b> 𝗵𝗼𝘆𝗲\n <b>𝗩𝗘𝗥𝗜𝗙𝗬</b> 𝗯𝗮𝘁𝗮𝗻𝗲 𝗰𝗹𝗶𝗰𝗸 𝗸𝗼𝗿𝗼!\n╚══════════════════╝\n\n🤖 <i>𝙋𝙤𝙬𝙚𝙧𝙚𝙙 𝙗𝙮</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>',
-    'otp_dm': '{flag}📲{number}🫦 {svc}\n🫦COUNTRY: {country} {flag}',
+    'otp_group': '━━━━━━━━━━━━━━━\n<blockquote>{svc_emoji} <b>{svc}</b> {flag} | <code>{tagged_number}</code> | {flag}</blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_key} KEY : <b>{otp}</b></blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_world} Country: {country} {flag}</blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_sms} MESSAGE\n{sms}</blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>💬 Thanks for using 🫦👅</blockquote>\n━━━━━━━━━━━━━━━',
+    'otp_dm': '{flag} {emoji_number_pre}{number} {svc_emoji}{svc}\n{emoji_country_pre}{country}{emoji_country_post}',
+    'otp_dm_v2': '{emoji_number_pre}{number} {svc_emoji}{svc}\n{emoji_country_pre}{country}{emoji_country_post}',
     'verify_success': '🔥 <b>VERIFICATION COMPLETE!</b> 🔥\n\n╔═════════════════════════════╗\n   ✅ <b>ACCESS GRANTED</b>\n╠═════════════════════════════╣\n  👋 <b>Welcome, {vname}!</b>\n  🆔 <b>ID:</b> <code>{uid}</code>\n  📊 <b>Status:</b> 💎 Premium\n╚═════════════════════════════╝\n\n⚡ <b>𝗘𝗸𝗸𝗵𝗼𝗻 𝗻𝘂𝗺𝗯𝗮𝗿 𝗻𝗶𝘁𝗲 𝗽𝗮𝗿𝗯𝗲!</b> ⚡',
     'number_assigned': '✅ <b>Number Assigned Successfully !</b>\n\n🔧 <b>Platform :</b> {svc}\n🌍 <b>Country :</b> {flag} {country}\n\n📞 <b>Number :</b> <code>{number}</code>\n\n⏱ <b>Auto code fetch :</b> 10:00s',
-    'broadcast': '🔥 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧!</b> 🔥\n⚡━━━━━━━━━━━━━━━━⚡\n\n📢 {text} 📢\n\n⚡━━━━━━━━━━━━━━━━⚡\n🤖🔥 <i>𝙋𝙤𝙬𝙚𝙧𝙚𝙙 𝙗𝙮</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>  🔥🤖',
-    'otp_dm_v2': '{flag}|{number}| {svc}\n🌍COUNTRY: {country}',
+    'broadcast': '🔥 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧!</b> 🔥\n⚡━━━━━━━━━━━━━━━━⚡\n\n📢 {text} 📢\n\n⚡━━━━━━━━━━━━━━━━⚡\n🤖🔥 <i>𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>  🔥🤖',
+    'start': '📣 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧-𝗲 𝗦𝗔𝗚𝗢𝗧𝗢𝗠!</b> 📣\n\n╔════════════════════════════╗\n   👑 <b>USER DASHBOARD</b>\n╠════════════════════════════╣\n  👨\u200d💻 <b>User:</b> {uname}\n  🗣️<b>ID:</b> <code>{uid}</code>\n  📊 <b>Status:</b> 💎 Premium\n  👀 <b>Workers:</b> 0\n╚════════════════════════════╝\n\n╔══════════════════╗\n 𝑁𝑖𝑐ℎ𝑒𝑟 𝑐ℎ𝑎𝑛𝑛𝑒𝑙𝑒 <b>𝗝𝗢𝗜𝗡</b> 𝑘𝑜𝑟𝑒\n <b>𝗩𝗘𝗥𝗜𝗙𝗬</b> 𝑏𝑎𝑡𝑎𝑛𝑒 𝑐𝑙𝑖𝑐𝑘 𝑘𝑜𝑟𝑜!\n╚══════════════════╝\n\n😊 <i>𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>',
 }
 # <<SYNC:_DEFAULT_TEMPLATES:END>>
 _templates = load_json(TEMPLATES_FILE, dict(_DEFAULT_TEMPLATES))
@@ -561,7 +567,7 @@ _TEMPLATE_LABELS = {
 }
 
 _TEMPLATE_VARS = {
-    "start": "{uname} = ইউজার নাম, {uid} = ইউজার আইডি",
+    "start": "{uname} = ইউজার নাম, {uid} = ইউজার আইডি | Icons: {emoji_start_header}, {emoji_start_crown}, {emoji_start_user}, {emoji_start_id}, {emoji_start_status}, {emoji_start_workers}, {emoji_start_powered}",
     "otp_group": "{svc} = সার্ভিস, {number} = নম্বর, {tagged_number} = TAG সহ নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS",
     "otp_dm": "{svc} = সার্ভিস, {number} = নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS",
     "otp_dm_v2": "{svc} = সার্ভিস, {number} = নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS",
@@ -599,6 +605,15 @@ otp_stats_lock = threading.Lock()
 def _save_otp_stats():
     with otp_stats_lock:
         save_json(OTP_STATS_FILE, otp_stats)
+
+
+CUSTOM_EMOJI_FILE = "custom_emojis.json"
+_custom_emojis: dict = load_json(CUSTOM_EMOJI_FILE, {"flags": {}, "services": {}})
+_custom_emoji_lock = threading.Lock()
+
+def _save_custom_emojis():
+    with _custom_emoji_lock:
+        save_json(CUSTOM_EMOJI_FILE, _custom_emojis)
 
 # Tracks last service+country per user so OTP message buttons know what to request
 _user_last_svc: dict[int, tuple] = {}   # uid -> (svc, scnt)
@@ -644,11 +659,22 @@ def tag_number(number, tag):
 
 
 def _ensure_code_tag(text, value):
-    """Wrap `value` in <code> if not already wrapped."""
+    """Wrap `value` in <code> if not already wrapped.
+    Only replaces occurrences outside of HTML tags so that tg-emoji emoji-id
+    attributes (which contain long digit strings) are never corrupted."""
     v = str(value)
     if f"<code>{v}</code>" in text:
         return text
-    return text.replace(v, f"<code>{v}</code>", 1)
+    # Split on HTML tags; odd-indexed parts are tags, even-indexed are plain text
+    parts = re.split(r'(<[^>]*>)', text)
+    replaced = False
+    result = []
+    for part in parts:
+        if not replaced and not re.match(r'^<[^>]*>$', part) and v in part:
+            part = part.replace(v, f'<code>{v}</code>', 1)
+            replaced = True
+        result.append(part)
+    return ''.join(result)
 
 
 def _send_with_retry(fn, max_retries=3, **kwargs):
@@ -733,16 +759,32 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
     # HTML-escape SMS body so special chars (&, <, >) don't break Telegram HTML
     # parsing and force a plain-text fallback (which strips blockquotes)
     _sms_val = _html.escape(sms_body) if sms_body else "—"
+    _rflag = _resolve_flag(flag)
+    _emoji_extra = _msg_emoji_vars()   # {emoji_NAME: <tg-emoji>...} for custom emoji slots
+    _svc_emoji_html = _v2_svc_emoji(svc)
+    _emoji_number_pre  = _get_dm_emoji("number_pre")
+    _emoji_country_pre = _get_dm_emoji("country_pre")
+    _emoji_country_post= _get_dm_emoji("country_post")
     _grp_vars = dict(svc=svc, number=mask_number(number), tagged_number=_tagged,
                      taged_number=_tagged,
-                     country=c_name, flag=flag, otp=otp_str,
+                     country=c_name, flag=_rflag, otp=otp_str,
                      sms_body=_sms_val, sms=_sms_val,
-                     vname=svc, text=_sms_val)
+                     vname=svc, text=_sms_val,
+                     svc_emoji=_svc_emoji_html,
+                     emoji_number_pre=_emoji_number_pre,
+                     emoji_country_pre=_emoji_country_pre,
+                     emoji_country_post=_emoji_country_post,
+                     **_emoji_extra)
     _dm_vars  = dict(svc=svc, number=(number if str(number).startswith("+") else "+" + str(number)),
                      tagged_number=_tagged, taged_number=_tagged,
-                     country=c_name, flag=flag, otp=otp_str,
+                     country=c_name, flag=_rflag, otp=otp_str,
                      sms_body=_sms_val, sms=_sms_val,
-                     vname=svc, text=_sms_val)
+                     vname=svc, text=_sms_val,
+                     svc_emoji=_svc_emoji_html,
+                     emoji_number_pre=_emoji_number_pre,
+                     emoji_country_pre=_emoji_country_pre,
+                     emoji_country_post=_emoji_country_post,
+                     **_emoji_extra)
 
     class _SafeDict(dict):
         """Return the original placeholder for any missing key so the template
@@ -751,8 +793,8 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
             return "{" + k + "}"
 
     def _make_bold_italic(text):
-        """Wrap in bold+italic unless text has <blockquote> (block tags break inside <b><i>)."""
-        if "<blockquote>" in text:
+        """Wrap in bold+italic unless text has <blockquote> or <tg-emoji> (these break inside <b><i>)."""
+        if "<blockquote>" in text or "<tg-emoji" in text:
             return text
         return f"<b><i>{text}</i></b>"
 
@@ -788,18 +830,21 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
     if chat_id == get_otp_group_id():
         markup = types.InlineKeyboardMarkup()
         # Copy OTP button — clicking copies the code to clipboard
+        _oc_text, _oc_icon = _btn_text_and_icon("otp_copy", "🔒 ")
         try:
             markup.add(types.InlineKeyboardButton(
-                f"🔒 {otp_str}",
-                copy_text=types.CopyTextButton(text=otp_str), style="success"
+                f"{_oc_text}{otp_str}",
+                copy_text=types.CopyTextButton(text=otp_str), style="success", **_oc_icon
             ))
         except Exception:
-            markup.add(types.InlineKeyboardButton(f"🔑 {otp_str}", callback_data="noop", style="success"))
+            markup.add(types.InlineKeyboardButton(f"🔑 {otp_str}", callback_data="noop", style="success", **_oc_icon))
         _btns = []
         if get_bot_link():
-            _btns.append(types.InlineKeyboardButton("🤖 𝗡𝘂𝗺𝗯𝗲𝗿 𝗕𝗼𝘁", url=get_bot_link(), style="primary"))
+            _nb_text, _nb_icon = _btn_text_and_icon("number_bot", "🤖 𝗡𝘂𝗺𝗯𝗲𝗿 𝗕𝗼𝘁")
+            _btns.append(types.InlineKeyboardButton(_nb_text, url=get_bot_link(), style="primary", **_nb_icon))
         if get_channel2():
-            _btns.append(types.InlineKeyboardButton("📢 𝗠𝗮𝗶𝗻 𝗖𝗵𝗮𝗻𝗻𝗲𝗹", url=get_channel2(), style="danger"))
+            _mc_text, _mc_icon = _btn_text_and_icon("main_channel", "📢 𝗠𝗮𝗶𝗻 𝗖𝗵𝗮𝗻𝗻𝗲𝗹")
+            _btns.append(types.InlineKeyboardButton(_mc_text, url=get_channel2(), style="danger", **_mc_icon))
         if _btns:
             markup.row(*_btns)
 
@@ -831,9 +876,10 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
         last_svc_info = _user_last_svc.get(uid)
         dm_markup = types.InlineKeyboardMarkup(row_width=2)
         # Copy OTP button — clicking copies the code to clipboard
+        _oc_text2, _oc_icon2 = _btn_text_and_icon("otp_copy", "🔒 ")
         dm_markup.add(types.InlineKeyboardButton(
-            f"🔒 {otp_str}",
-            copy_text=types.CopyTextButton(text=otp_str), style="success"
+            f"{_oc_text2}{otp_str}",
+            copy_text=types.CopyTextButton(text=otp_str), style="success", **_oc_icon2
         ))
         _is_v2 = uid in _v2_users
 
@@ -850,11 +896,17 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
         message, used_default = _build_message(_dm_tpl_key, _dm_vars)
         result, rl, err = _try_send("DM", chat_id, message, dm_markup)
 
-        # If custom template caused a send error, retry with default
+        # If send failed, retry with default template
         if err and not used_default:
-            print(f"[OTP-DM] ⚠️ Send failed (custom template HTML error?): {err} — retrying with default")
-            message = _ensure_code_tag(_DEFAULT_TEMPLATES[_dm_tpl_key].format(**_dm_vars), otp_str)
+            print(f"[OTP-DM] ⚠️ Send failed: {err} — retrying with default template")
+            message = _ensure_code_tag(_DEFAULT_TEMPLATES[_dm_tpl_key].format_map(_SafeDict(_dm_vars)), otp_str)
             result, rl, err = _try_send("DM-DEFAULT", chat_id, message, dm_markup)
+
+        # Last resort: strip all HTML and send as plain text
+        if err:
+            print(f"[OTP-DM] ⚠️ HTML send failed: {err} — retrying as plain text")
+            plain_dm = _strip_html(message)
+            result, rl, err = _try_send("DM-PLAIN", chat_id, plain_dm, dm_markup, parse_mode=None)
 
         if err:
             print(f"[OTP-DM] ❌ Exception sending to user {chat_id}: {err}")
@@ -2540,10 +2592,190 @@ threading.Thread(target=_v2_panel_monitor, daemon=True).start()
 
 
 def _v2_svc_emoji(sid):
-    m = {"FACEBOOK": "🔵", "INSTAGRAM": "📸", "WHATSAPP": "💚", "TELEGRAM": "✈️",
-         "TWITTER": "🐦", "TIKTOK": "🎵", "BINANCE": "🟡", "SNAPCHAT": "👻",
-         "GOOGLE": "🔴", "YOUTUBE": "📺", "LINKEDIN": "💼", "AMAZON": "🛒"}
+    m = {
+        "INSTAGRAM": '<tg-emoji emoji-id="5319160079465857105">📸</tg-emoji>',
+        "FACEBOOK":  '<tg-emoji emoji-id="5323261730283863478">🔵</tg-emoji>',
+        "TELEGRAM":  '<tg-emoji emoji-id="5330237710655306682">✈️</tg-emoji>',
+        "WHATSAPP":  '<tg-emoji emoji-id="5334998226636390258">💚</tg-emoji>',
+        "TIKTOK":    '<tg-emoji emoji-id="5327982530702359565">🎵</tg-emoji>',
+        "TWITTER": "🐦", "BINANCE": "🟡", "SNAPCHAT": "👻",
+        "GOOGLE": "🔴", "YOUTUBE": "📺", "LINKEDIN": "💼", "AMAZON": "🛒",
+    }
     return m.get((sid or "").upper(), "📱")
+
+
+def _svc_icon_emoji_id(sid):
+    """Return icon_custom_emoji_id for known services (for inline buttons)."""
+    m = {
+        "INSTAGRAM": "5319160079465857105",
+        "FACEBOOK":  "5323261730283863478",
+        "TELEGRAM":  "5330237710655306682",
+        "WHATSAPP":  "5334998226636390258",
+        "TIKTOK":    "5327982530702359565",
+    }
+    key = (sid or "").upper()
+    with _custom_emoji_lock:
+        override = _custom_emojis.get("services", {}).get(key)
+    return override or m.get(key)
+
+
+def _resolve_flag(flag):
+    """Convert a flag emoji to <tg-emoji> tag if a custom ID is set (HTML messages only).
+    Checks specific flag map first, then falls back to the 'flag_default' msg_slot."""
+    if not flag:
+        return flag
+    with _custom_emoji_lock:
+        eid = _custom_emojis.get("flags", {}).get(flag)
+        if not eid:
+            slot = _custom_emojis.get("msg_slots", {}).get("flag_default", {})
+            eid  = slot.get("id") if isinstance(slot, dict) else None
+    if eid:
+        return f'<tg-emoji emoji-id="{eid}">{flag}</tg-emoji>'
+    return flag
+
+
+def _flag_icon_emoji_id(flag, fallback=None):
+    """Return icon_custom_emoji_id for a flag emoji (for inline buttons).
+    Checks specific flag map first, then falls back to the 'flag_default' msg_slot."""
+    if not flag:
+        return fallback
+    with _custom_emoji_lock:
+        eid = _custom_emojis.get("flags", {}).get(flag)
+        if not eid:
+            slot = _custom_emojis.get("msg_slots", {}).get("flag_default", {})
+            eid  = slot.get("id") if isinstance(slot, dict) else None
+    return eid or fallback
+
+
+def _flag_btn_kwargs(flag, fallback=None):
+    """Return dict with icon_custom_emoji_id if a custom ID exists for this flag."""
+    eid = _flag_icon_emoji_id(flag, fallback)
+    return {"icon_custom_emoji_id": eid} if eid else {}
+
+
+# ── DM message fixed-position emoji ───────────────────────────────────────────
+_DM_EMOJI_DEFAULTS = {
+    "number_pre":  {"id": "5422858869372104873", "fb": "📞"},
+    "country_pre": {"id": "5287292843763713628", "fb": "🌍"},
+    "country_post":{"id": "5210956306952758910", "fb": "✨"},
+}
+_DM_EMOJI_LABELS = {
+    "number_pre":  "নাম্বারের সামনে",
+    "country_pre": "কান্ট্রির সামনে",
+    "country_post":"কান্ট্রির পরে",
+}
+
+def _get_dm_emoji(key):
+    """Return <tg-emoji> HTML for a DM fixed emoji slot.
+    Priority: msg_slots[dm_<key>]  →  dm_emoji[key]  →  hardcoded default."""
+    slot_map = {"number_pre": "dm_number_pre", "country_pre": "dm_country_pre", "country_post": "dm_country_post"}
+    defaults = _DM_EMOJI_DEFAULTS.get(key, {})
+    slot_name = slot_map.get(key, "")
+    with _custom_emoji_lock:
+        cfg = (_custom_emojis.get("msg_slots", {}).get(slot_name)
+               or _custom_emojis.get("dm_emoji", {}).get(key, {}))
+    eid = (cfg.get("id") if isinstance(cfg, dict) else None) or defaults.get("id", "")
+    fb  = (cfg.get("fb") if isinstance(cfg, dict) else None) or defaults.get("fb", "")
+    return f'<tg-emoji emoji-id="{eid}">{fb}</tg-emoji>' if eid else fb
+
+
+# ── Button emoji config ────────────────────────────────────────────────────────
+_BTN_EMOJI_PREFIX = {
+    "otp_copy":         "🔒 ",
+    "number_bot":       "🤖 ",
+    "main_channel":     "📢 ",
+    "change_number":    "🔄 ",
+    "otp_group_btn":    "📢 ",
+    "back":             "⬅️ ",
+    "refresh":          "🔄 ",
+    "start_otp_group":  "🔥 ",
+    "start_channel":    "📢 ",
+    "start_verify":     "✅ ",
+}
+_BTN_DEFAULT_ICONS = {
+    "otp_copy":      "5447508713181034519",
+    "number_bot":    "5325684684544289988",
+    "main_channel":  "5368493177634301681",
+    "change_number": "5375170473095077321",
+    "otp_group_btn": "5368493177634301681",
+    "back":          "5370806945236130133",
+    "refresh":       "5323523560080158541",
+}
+_BTN_DISPLAY_NAMES = {
+    "otp_copy":         "🔒 OTP Copy (OTP message এ copy বাটন)",
+    "number_bot":       "🤖 Number Bot (OTP message এ bot লিংক)",
+    "main_channel":     "📢 Main Channel (OTP message এ channel)",
+    "change_number":    "🔄 Change Number (নম্বর পরিবর্তন)",
+    "otp_group_btn":    "📢 OTP Group (নম্বর দেখানোর পরে group বাটন)",
+    "back":             "⬅️ Back (পেছনে যাওয়া)",
+    "refresh":          "🔄 Refresh",
+    "start_otp_group":  "🔥 Start — OTP Group JOIN বাটন",
+    "start_channel":    "📢 Start — Main Channel JOIN বাটন",
+    "start_verify":     "✅ Start — VERIFY KORO বাটন",
+}
+
+
+def _btn_text_and_icon(key, default_text, default_icon_id=None):
+    """Return (text, icon_kwargs). If custom emoji set: strip plain emoji prefix from text."""
+    with _custom_emoji_lock:
+        custom_id = _custom_emojis.get("buttons", {}).get(key)
+    icon_id = custom_id or default_icon_id or _BTN_DEFAULT_ICONS.get(key)
+    if custom_id:
+        prefix = _BTN_EMOJI_PREFIX.get(key, "")
+        text = default_text[len(prefix):] if prefix and default_text.startswith(prefix) else default_text
+    else:
+        text = default_text
+    return text, ({"icon_custom_emoji_id": icon_id} if icon_id else {})
+
+
+# ── Message emoji slots ────────────────────────────────────────────────────────
+# Predefined named icon slots  (slot_key → (default_fallback_char, display_label))
+_MSG_ICON_SLOTS = {
+    "start_header":  ("🔥", "Start — টাইটেল Header Icon"),
+    "start_crown":   ("👑", "Start — Dashboard Crown"),
+    "start_user":    ("👨‍💻", "Start — User Icon"),
+    "start_id":      ("🗣️", "Start — ID Icon"),
+    "start_status":  ("📊", "Start — Status Icon"),
+    "start_workers": ("👀", "Start — Workers Icon"),
+    "start_powered": ("😊", "Start — Powered By Icon"),
+    "otp_phone":     ("📱", "OTP Group — Phone Icon"),
+    "otp_key":       ("🔑", "OTP — Key/OTP Icon"),
+    "otp_world":     ("🌍", "OTP — Country Icon"),
+    "otp_sms":       ("📩", "OTP — SMS Icon"),
+    "verify_title":  ("🔥", "Verify — Success Icon"),
+    # ── DM emoji positional ───────────────────────────────────────────────────
+    "dm_number_pre":   ("📞", "DM — নাম্বারের আগে"),
+    "dm_country_pre":  ("🌍", "DM — দেশের নামের আগে"),
+    "dm_country_post": ("✨", "DM — দেশের নামের পরে"),
+    # ── Flag default ──────────────────────────────────────────────────────────
+    "flag_default":  ("🏳️", "Flag — সব পতাকার Default Custom Emoji"),
+}
+_msg_icon_set_state: dict = {}  # uid → {"key": slot_key}
+
+
+def _msg_emoji_vars():
+    """Build {emoji_NAME: tg-emoji-html or default-char} vars for template substitution.
+    Predefined slots always have a fallback so {emoji_NAME} never raises KeyError."""
+    result = {}
+    for name, (default_char, _) in _MSG_ICON_SLOTS.items():
+        result[f"emoji_{name}"] = default_char
+    with _custom_emoji_lock:
+        slots = dict(_custom_emojis.get("msg_slots", {}))
+    for name, cfg in slots.items():
+        eid = cfg.get("id", "")
+        fb  = cfg.get("fb", "")
+        result[f"emoji_{name}"] = f'<tg-emoji emoji-id="{eid}">{fb}</tg-emoji>' if eid else fb
+    # DM positional aliases — template uses {emoji_number_pre} etc. directly
+    for alias, slot_name, default_id, default_fb in [
+        ("emoji_number_pre",   "dm_number_pre",   "5422858869372104873", "📞"),
+        ("emoji_country_pre",  "dm_country_pre",  "5287292843763713628", "🌍"),
+        ("emoji_country_post", "dm_country_post", "5210956306952758910", "✨"),
+    ]:
+        cfg = slots.get(slot_name, {})
+        eid = cfg.get("id") or default_id
+        fb  = cfg.get("fb") or default_fb
+        result[alias] = f'<tg-emoji emoji-id="{eid}">{fb}</tg-emoji>'
+    return result
 
 
 def _v2_build_console_markup():
@@ -2558,10 +2790,11 @@ def _v2_build_console_markup():
             continue
         if not cfg.get("ranges"):
             continue
-        emoji = _v2_svc_emoji(sid)
+        _icon_id = _svc_icon_emoji_id(sid)
+        _btn_kwargs = {"icon_custom_emoji_id": _icon_id} if _icon_id else {}
         btns.append(types.InlineKeyboardButton(
-            f"{emoji} {sid}", callback_data=f"v2svc_cc:{sid}",
-            style=_STYLES[idx % len(_STYLES)]
+            f"{sid}", callback_data=f"v2svc_cc:{sid}",
+            style=_STYLES[idx % len(_STYLES)], **_btn_kwargs
         ))
         idx += 1
     if btns:
@@ -2581,7 +2814,8 @@ def _v2_build_country_markup(sid):
         else:
             label = f"{flag} অজানা দেশ"
         btns.append(types.InlineKeyboardButton(
-            label, callback_data=f"v2csvc:{sid}:{prefix}", style="primary"
+            label, callback_data=f"v2csvc:{sid}:{prefix}", style="primary",
+            **_flag_btn_kwargs(flag)
         ))
     if btns:
         markup.add(*btns)
@@ -2598,7 +2832,7 @@ def _cc_services_markup():
         check = "✅" if cfg.get("enabled") else "⭕"
         rng_cnt = len(cfg.get("ranges", []))
         btns.append(types.InlineKeyboardButton(
-            f"{check} {_v2_svc_emoji(sid)} {sid} ({rng_cnt})",
+            f"{check} {sid} ({rng_cnt})",
             callback_data=f"cc_svc:{sid}", style="success"
         ))
     for i in range(0, len(btns), 2):
@@ -2619,7 +2853,8 @@ def _cc_service_detail_markup(sid):
             rlabel = f"🗑️ {flag} {c_name} ({prefix})"
         else:
             rlabel = f"🗑️ ({prefix})"
-        markup.add(types.InlineKeyboardButton(rlabel, callback_data=f"cc_delrange:{sid}:{prefix}", style="danger"))
+        markup.add(types.InlineKeyboardButton(rlabel, callback_data=f"cc_delrange:{sid}:{prefix}", style="danger",
+                                              **_flag_btn_kwargs(flag)))
     markup.add(types.InlineKeyboardButton("➕ Range যোগ করো", callback_data=f"cc_addrange:{sid}", style="success"))
     markup.add(types.InlineKeyboardButton("⬅️ Back", callback_data="cc_back", style="primary"))
     return markup
@@ -2841,14 +3076,16 @@ def _v3_build_console_markup(services):
     for idx, svc in enumerate(services):
         sid = str(svc.get("sid") or svc.get("service") or svc.get("name") or svc.get("id") or "?")
         cnt = svc.get("count") or svc.get("available") or svc.get("total") or 0
-        emoji = _v2_svc_emoji(sid)
+        _icon_id = _svc_icon_emoji_id(sid)
+        _btn_kwargs = {"icon_custom_emoji_id": _icon_id} if _icon_id else {}
         btns.append(types.InlineKeyboardButton(
-            f"{emoji} {sid} ({cnt})", callback_data=f"v3svc:{sid}",
-            style=_STYLES[idx % len(_STYLES)]
+            f"{sid} ({cnt})", callback_data=f"v3svc:{sid}",
+            style=_STYLES[idx % len(_STYLES)], **_btn_kwargs
         ))
     if btns:
         markup.add(*btns)
-    markup.add(types.InlineKeyboardButton("🔄 Refresh", callback_data="v3back", style="danger"))
+    _rf_text, _rf_icon = _btn_text_and_icon("refresh", "🔄 Refresh")
+    markup.add(types.InlineKeyboardButton(_rf_text, callback_data="v3back", style="danger", **_rf_icon))
     return markup, bool(btns)
 
 
@@ -2879,8 +3116,9 @@ def _send_to_extra_group(chat_id, otp, number, seconds, service, sms_body, grp_c
     _tagged = tag_number(number, _tag)
     _sms_val = _html.escape(sms_body) if sms_body else "—"
     _grp_vars = dict(svc=svc, number=mask_number(number), tagged_number=_tagged,
-                     taged_number=_tagged, country=c_name, flag=flag, otp=otp_str,
-                     sms_body=_sms_val, sms=_sms_val, vname=svc, text=_sms_val)
+                     taged_number=_tagged, country=c_name, flag=_resolve_flag(flag), otp=otp_str,
+                     sms_body=_sms_val, sms=_sms_val, vname=svc, text=_sms_val,
+                     **_msg_emoji_vars())
 
     class _SafeDict(dict):
         def __missing__(self, k):
@@ -4258,12 +4496,41 @@ def _get_svc_map():
 SERVICE_BUTTON_MAP = {}
 
 
+def _v1_build_service_markup():
+    """Build V1 service list as inline keyboard — only shows services that have stock."""
+    _STYLES = ["success", "primary", "danger"]
+    btns = []
+    idx = 0
+    for svc_info in _services:
+        label = svc_info.get("label", "")
+        key   = svc_info.get("key", "")
+        total = sum(len(v) for v in stock.get(key, {}).values())
+        if not total:
+            continue
+        _icon_id = _svc_icon_emoji_id(key)
+        _btn_kwargs = {"icon_custom_emoji_id": _icon_id} if _icon_id else {}
+        btns.append(types.InlineKeyboardButton(
+            label,
+            callback_data=f"v1svc:{key}",
+            style=_STYLES[idx % len(_STYLES)],
+            **_btn_kwargs
+        ))
+        idx += 1
+    markup = types.InlineKeyboardMarkup(row_width=2)
+    if btns:
+        markup.add(*btns)
+    return markup, bool(btns)
+
+
 def show_services(message):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    btns = [types.KeyboardButton(s["label"]) for s in _services]
-    for i in range(0, len(btns), 2):
-        markup.add(*btns[i:i + 2])
-    markup.add(types.KeyboardButton("🔙 Main Menu"))
+    markup, has_btns = _v1_build_service_markup()
+    if not has_btns:
+        bot.send_message(
+            message.chat.id,
+            "❌ <b>এখন কোনো service-এ stock নেই।</b>\nAdmin কে জানাও।",
+            parse_mode="HTML",
+        )
+        return
     bot.send_message(
         message.chat.id,
         "🛠 <b>Select Service:</b>",
@@ -4281,7 +4548,8 @@ def show_countries(chat_id, svc):
                 _, flag = get_country_details(nums[0])
                 btns.append(
                     types.InlineKeyboardButton(
-                        f"{flag} {cnt}", callback_data=f"n:{svc}:{cnt}", style="primary"
+                        f"{flag} {cnt}", callback_data=f"n:{svc}:{cnt}", style="primary",
+                        **_flag_btn_kwargs(flag)
                     )
                 )
     if btns:
@@ -4309,18 +4577,25 @@ def start_cmd(message):
         last_name=u.last_name or "",
         username=u.username or "",
     )
+    import html as _html
     uname = f"@{u.username}" if u.username else (u.first_name or "User")
-    uid_str = u.id
+    uname = _html.escape(str(uname))
+    uid_str = _html.escape(str(u.id))
     markup = types.InlineKeyboardMarkup()
     _grp = get_otp_group_link() or CHANNEL_1
     if _grp:
-        markup.add(types.InlineKeyboardButton("🔥 𝗢𝗧𝗣 𝗚𝗿𝘂𝗽 𝗝𝗢𝗜𝗡 🔥", url=_grp, style="success"))
+        _sog_text, _sog_icon = _btn_text_and_icon("start_otp_group", "🔥 𝗢𝗧𝗣 𝗚𝗿𝘂𝗽 𝗝𝗢𝗜𝗡 🔥")
+        markup.add(types.InlineKeyboardButton(_sog_text, url=_grp, style="success", **_sog_icon))
     if get_channel2():
-        markup.add(types.InlineKeyboardButton("📢 𝗠𝗮𝗶𝗻 𝗖𝗵𝗮𝗻𝗻𝗲𝗹 𝗝𝗢𝗜𝗡", url=get_channel2(), style="primary"))
-    markup.add(types.InlineKeyboardButton("✅ 𝗩𝗘𝗥𝗜𝗙𝗬 𝗞𝗢𝗥𝗢 ✅", callback_data="v", style="danger"))
+        _sch_text, _sch_icon = _btn_text_and_icon("start_channel", "📢 𝗠𝗮𝗶𝗻 𝗖𝗵𝗮𝗻𝗻𝗲𝗹 𝗝𝗢𝗜𝗡")
+        markup.add(types.InlineKeyboardButton(_sch_text, url=get_channel2(), style="primary", **_sch_icon))
+    _sv_text, _sv_icon = _btn_text_and_icon("start_verify", "✅ 𝗩𝗘𝗥𝗜𝗙𝗬 𝗞𝗢𝗥𝗢 ✅")
+    markup.add(types.InlineKeyboardButton(_sv_text, callback_data="v", style="danger", **_sv_icon))
+    class _SS(dict):
+        def __missing__(self, k): return f"{{{k}}}"
     bot.send_message(
         message.chat.id,
-        get_template("start").format(uname=uname, uid=uid_str),
+        get_template("start").format_map(_SS(uname=uname, uid=uid_str, **_msg_emoji_vars())),
         reply_markup=markup,
         parse_mode="HTML",
     )
@@ -5665,7 +5940,63 @@ def callback_handler(call):
                 )
 
         elif data == "back_to_services":
-            show_services(call.message)
+            markup, has_btns = _v1_build_service_markup()
+            if has_btns:
+                try:
+                    bot.edit_message_text(
+                        "🛠 <b>Select Service:</b>",
+                        call.message.chat.id,
+                        call.message.message_id,
+                        reply_markup=markup,
+                        parse_mode="HTML",
+                    )
+                except Exception:
+                    bot.send_message(
+                        call.message.chat.id,
+                        "🛠 <b>Select Service:</b>",
+                        reply_markup=markup,
+                        parse_mode="HTML",
+                    )
+                bot.answer_callback_query(call.id)
+            else:
+                bot.answer_callback_query(call.id, "❌ এখন কোনো service-এ stock নেই।", show_alert=True)
+
+        elif data.startswith("v1svc:"):
+            svc_key = data.split(":", 1)[1]
+            markup = types.InlineKeyboardMarkup(row_width=2)
+            btns = []
+            svc_stock = dict(stock.get(svc_key, {}))   # snapshot to avoid race
+            for cnt, nums in svc_stock.items():
+                if nums:
+                    _, flag = get_country_details(nums[0])
+                    btns.append(types.InlineKeyboardButton(
+                        f"{flag} {cnt}",
+                        callback_data=f"n:{svc_key}:{cnt}",
+                        style="primary",
+                        **_flag_btn_kwargs(flag)
+                    ))
+            if btns:
+                markup.add(*btns)
+            markup.add(types.InlineKeyboardButton("⬅️ 𝗕𝗮𝗰𝗸", callback_data="back_to_services", style="danger"))
+            if btns:
+                try:
+                    bot.edit_message_text(
+                        "🌍 <b>Country select koro:</b>",
+                        call.message.chat.id,
+                        call.message.message_id,
+                        reply_markup=markup,
+                        parse_mode="HTML",
+                    )
+                except Exception:
+                    bot.send_message(
+                        call.message.chat.id,
+                        "🌍 <b>Country select koro:</b>",
+                        reply_markup=markup,
+                        parse_mode="HTML",
+                    )
+                bot.answer_callback_query(call.id)
+            else:
+                bot.answer_callback_query(call.id, "❌ এই service-এ stock নেই!", show_alert=True)
 
         elif data.startswith("s:"):
             svc = data.split(":")[1]
@@ -5677,7 +6008,8 @@ def callback_handler(call):
                         _, flag = get_country_details(nums[0])
                         btns.append(
                             types.InlineKeyboardButton(
-                                f" {flag} {cnt}", callback_data=f"n:{svc}:{cnt}", style="primary"
+                                f" {flag} {cnt}", callback_data=f"n:{svc}:{cnt}", style="primary",
+                                **_flag_btn_kwargs(flag)
                             )
                         )
             if btns:
@@ -5793,7 +6125,8 @@ def callback_handler(call):
                     if len(cb.encode()) <= 64:
                         markup.add(
                             types.InlineKeyboardButton(
-                                f"🗑️ {flag} {cnt}  ({len(nums)} টি)", callback_data=cb, style="success"
+                                f"🗑️ {flag} {cnt}  ({len(nums)} টি)", callback_data=cb, style="success",
+                                **_flag_btn_kwargs(flag)
                             )
                         )
             if not has_any:
@@ -5826,7 +6159,7 @@ def callback_handler(call):
             bot.edit_message_text(
                 f"⚠️ <b>CONFIRM DELETE</b> ⚠️\n\n"
                 f"💬 <b>Service ▸▸</b>  {svc.upper()}\n"
-                f"🌍 <b>Country ▸▸</b>  {flag} {cnt}\n"
+                f"🌍 <b>Country ▸▸</b>  {_resolve_flag(flag)} {cnt}\n"
                 f"📱 <b>Numbers ▸▸</b>  {count} টি\n\n"
                 f" Sure? Ei {count} টি number delete hoye jabe!",
                 call.message.chat.id,
@@ -6087,6 +6420,59 @@ def callback_handler(call):
             else:
                 bot.answer_callback_query(call.id, "❌ Config পাওয়া যায়নি!", show_alert=True)
 
+        elif data.startswith("msgicon_set:"):
+            if call.from_user.id not in ADMIN_IDS:
+                return
+            slot_key = data.split(":", 1)[1]
+            if slot_key not in _MSG_ICON_SLOTS:
+                bot.answer_callback_query(call.id, "❌ Unknown slot!", show_alert=True)
+                return
+            default_char, label = _MSG_ICON_SLOTS[slot_key]
+            uid = call.from_user.id
+            _msg_icon_set_state[uid] = {"key": slot_key}
+            try:
+                bot.delete_message(call.message.chat.id, call.message.message_id)
+            except Exception:
+                pass
+            msg = bot.send_message(
+                call.message.chat.id,
+                f"✨ <b>Message Icon Set</b>\n\n"
+                f"📌 <b>Slot:</b> <code>{{emoji_{slot_key}}}</code>\n"
+                f"🏷️ <b>Label:</b> {label}\n"
+                f"🔘 <b>Default:</b> {default_char}\n\n"
+                f"Custom emoji sticker পাঠাও (Telegram premium emoji), অথবা emoji ID নম্বর লিখো:\n"
+                f"<i>/back লিখো বাতিল করতে</i>",
+                parse_mode="HTML",
+                reply_markup=_back_admin_kb(),
+            )
+            bot.register_next_step_handler(msg, _set_msg_icon_step)
+            bot.answer_callback_query(call.id)
+
+        elif data.startswith("msgicon_reset:"):
+            if call.from_user.id not in ADMIN_IDS:
+                return
+            slot_key = data.split(":", 1)[1]
+            with _custom_emoji_lock:
+                removed = _custom_emojis.get("msg_slots", {}).pop(slot_key, None)
+            if removed:
+                _save_custom_emojis()
+                bot.answer_callback_query(call.id, f"✅ '{slot_key}' reset হয়েছে!", show_alert=False)
+            else:
+                bot.answer_callback_query(call.id, "ইতিমধ্যে default আছে।", show_alert=False)
+            try:
+                bot.delete_message(call.message.chat.id, call.message.message_id)
+            except Exception:
+                pass
+            _show_msg_icons_menu(call.message)
+
+        elif data in ("msgicon_close", "msgicon_noop"):
+            if data == "msgicon_close":
+                try:
+                    bot.delete_message(call.message.chat.id, call.message.message_id)
+                except Exception:
+                    pass
+            bot.answer_callback_query(call.id)
+
         elif data.startswith("editmsg:"):
             if call.from_user.id not in ADMIN_IDS:
                 return
@@ -6270,7 +6656,8 @@ def callback_handler(call):
                 short = c_name.split()[0] if c_name and c_name != "Unknown" else ""
                 label = f"{flag} {short} | {rng}" if short else f"{flag} {rng}"
                 rng_btns.append(types.InlineKeyboardButton(
-                    label, callback_data=f"v2rng:{prefix}:{sid}", style="danger"
+                    label, callback_data=f"v2rng:{prefix}:{sid}", style="danger",
+                    **_flag_btn_kwargs(flag)
                 ))
             if rng_btns:
                 markup.add(*rng_btns)
@@ -7382,7 +7769,7 @@ def text_handler(message):
                 "ℹ️ <b>Kono resend cholthechhilo na.</b>",
                 parse_mode="HTML")
 
-    elif txt == "🔍 𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲??" and uid in ADMIN_IDS:
+    elif txt == "🔍 𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲𝗹" and uid in ADMIN_IDS:
         _testpanel_state[uid] = {"step": "url", "data": {}}
         msg = bot.send_message(
             message.chat.id,
@@ -7506,6 +7893,132 @@ def text_handler(message):
     elif txt == "📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀" and uid in ADMIN_IDS:
         _show_extra_groups(message)
 
+    elif txt == "✨ 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗜𝗰𝗼𝗻𝘀" and uid in ADMIN_IDS:
+        _show_msg_icons_menu(message)
+
+    elif txt == "🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶" and uid in ADMIN_IDS:
+        _show_custom_emoji_menu(message)
+
+    elif txt == "🏳️ Flag Emoji Set" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "flag"
+        bot.send_message(
+            message.chat.id,
+            "🏳️ <b>Flag Emoji Set</b>\n\n"
+            "Flag emoji আর তার custom emoji ID পাঠাও:\n\n"
+            "<b>ফরম্যাট:</b> <code>🇧🇩 5432198765432198765</code>\n\n"
+            "<i>প্রতিটি flag আলাদা message-এ পাঠাও।</i>",
+            parse_mode="HTML"
+        )
+        bot.register_next_step_handler(message, _custom_emoji_input)
+
+    elif txt == "🎯 Service Emoji Set" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "service"
+        bot.send_message(
+            message.chat.id,
+            "🎯 <b>Service Emoji Set</b>\n\n"
+            "Service নাম আর custom emoji ID পাঠাও:\n\n"
+            "<b>ফরম্যাট:</b> <code>INSTAGRAM 5319160079465857105</code>\n\n"
+            "<i>Service name সব CAPITAL-এ লিখো।</i>",
+            parse_mode="HTML"
+        )
+        bot.register_next_step_handler(message, _custom_emoji_input)
+
+    elif txt == "🗑️ Flag Emoji Del" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "del_flag"
+        with _custom_emoji_lock:
+            flags_set = dict(_custom_emojis.get("flags", {}))
+        if flags_set:
+            lines = "\n".join(f"<code>{k}</code>" for k in flags_set)
+            bot.send_message(
+                message.chat.id,
+                f"🗑️ <b>Flag Emoji Delete</b>\n\nমুছতে চাও কোন flag emoji?\n\n{lines}\n\n"
+                "Flag emoji পাঠাও (শুধু emoji, যেমন: <code>🇧🇩</code>):",
+                parse_mode="HTML"
+            )
+            bot.register_next_step_handler(message, _custom_emoji_input)
+        else:
+            bot.send_message(message.chat.id, "❌ কোনো flag emoji সেট নেই।")
+
+    elif txt == "🗑️ Service Emoji Del" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "del_service"
+        with _custom_emoji_lock:
+            svcs_set = dict(_custom_emojis.get("services", {}))
+        if svcs_set:
+            lines = "\n".join(f"<code>{k}</code>" for k in svcs_set)
+            bot.send_message(
+                message.chat.id,
+                f"🗑️ <b>Service Emoji Delete</b>\n\nমুছতে চাও কোন service?\n\n{lines}\n\n"
+                "Service নাম পাঠাও (যেমন: <code>INSTAGRAM</code>):",
+                parse_mode="HTML"
+            )
+            bot.register_next_step_handler(message, _custom_emoji_input)
+        else:
+            bot.send_message(message.chat.id, "❌ কোনো service emoji সেট নেই।")
+
+    elif txt == "🔘 Button Emoji Set" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "btn"
+        available = "\n".join(f"  <code>{k}</code> — {v}" for k, v in _BTN_DISPLAY_NAMES.items())
+        bot.send_message(
+            message.chat.id,
+            f"🔘 <b>Button Emoji Set</b>\n\n"
+            f"Button key আর custom emoji ID পাঠাও:\n\n"
+            f"<b>ফরম্যাট:</b> <code>button_key emoji_id</code>\n\n"
+            f"<b>Available buttons:</b>\n{available}\n\n"
+            f"<b>উদাহরণ:</b>\n<code>change_number 5375170473095077321</code>\n\n"
+            f"<i>Custom emoji সেট হলে button text থেকে plain emoji automatically সরে যাবে।</i>",
+            parse_mode="HTML"
+        )
+        bot.register_next_step_handler(message, _custom_emoji_input)
+
+    elif txt == "🗑️ Button Emoji Del" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "del_btn"
+        with _custom_emoji_lock:
+            btns_set = dict(_custom_emojis.get("buttons", {}))
+        if btns_set:
+            lines = "\n".join(f"<code>{k}</code> → <code>{v}</code>" for k, v in btns_set.items())
+            bot.send_message(
+                message.chat.id,
+                f"🗑️ <b>Button Emoji Delete</b>\n\nমুছতে চাও কোন button?\n\n{lines}\n\n"
+                "Button key পাঠাও (যেমন: <code>change_number</code>):",
+                parse_mode="HTML"
+            )
+            bot.register_next_step_handler(message, _custom_emoji_input)
+        else:
+            bot.send_message(message.chat.id, "❌ কোনো button emoji সেট নেই।")
+
+    elif txt == "💬 Msg Emoji Set" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "msg_slot"
+        with _custom_emoji_lock:
+            slots_set = dict(_custom_emojis.get("msg_slots", {}))
+        slot_list = "\n".join(f"  <code>{{emoji_{k}}}</code> → {v.get('fb','')}" for k, v in slots_set.items()) or "  (কিছু নেই)"
+        bot.send_message(
+            message.chat.id,
+            f"💬 <b>Message Emoji Set</b>\n\n"
+            f"বর্তমান slots:\n{slot_list}\n\n"
+            f"নতুন slot যোগ করতে পাঠাও:\n\n"
+            f"<b>ফরম্যাট:</b> <code>slot_name emoji_id fallback_emoji</code>\n\n"
+            f"<b>উদাহরণ:</b>\n<code>fire 5432198765432198765 🔥</code>\n\n"
+            f"এরপর যেকোনো message template-এ <code>{{emoji_fire}}</code> লিখলে custom emoji দেখাবে।",
+            parse_mode="HTML"
+        )
+        bot.register_next_step_handler(message, _custom_emoji_input)
+
+    elif txt == "🗑️ Msg Emoji Del" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "del_msg_slot"
+        with _custom_emoji_lock:
+            slots_set = dict(_custom_emojis.get("msg_slots", {}))
+        if slots_set:
+            lines = "\n".join(f"<code>{k}</code> → {v.get('fb','')}" for k, v in slots_set.items())
+            bot.send_message(
+                message.chat.id,
+                f"🗑️ <b>Message Emoji Delete</b>\n\nমুছতে চাও কোন slot?\n\n{lines}\n\n"
+                "Slot নাম পাঠাও (যেমন: <code>fire</code>):",
+                parse_mode="HTML"
+            )
+            bot.register_next_step_handler(message, _custom_emoji_input)
+        else:
+            bot.send_message(message.chat.id, "❌ কোনো message emoji slot সেট নেই।")
+
     elif txt in ("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟", "🔙 Admin Panel") and uid in ADMIN_IDS:
         _go_admin_panel(message)
 
@@ -7553,7 +8066,7 @@ def _demo_cfg_number(message):
             invalid.append(num)
         else:
             valid.append(num)
-            result_lines += f"  ✅ <code>{num}</code>  {flag} {c_name}\n"
+            result_lines += f"  ✅ <code>{num}</code>  {_resolve_flag(flag)} {c_name}\n"
     if not valid:
         msg = bot.send_message(
             message.chat.id,
@@ -8482,6 +8995,326 @@ def _resend_old_otps(message):
     threading.Thread(target=_do_resend, daemon=True).start()
 
 
+_custom_emoji_state: dict = {}   # uid -> "flag" | "service" | "del_flag" | "del_service"
+
+_MSG_ICON_GROUPS = [
+    ("📲 DM Message Emoji", ["dm_number_pre", "dm_country_pre", "dm_country_post"]),
+    ("🏳️ Flag Emoji", ["flag_default"]),
+    ("📱 OTP Messages", ["otp_phone", "otp_key", "otp_world", "otp_sms"]),
+    ("🚀 Start Screen", ["start_header", "start_crown", "start_user", "start_id", "start_status", "start_workers", "start_powered"]),
+    ("✅ Verify Screen", ["verify_title"]),
+]
+
+def _show_msg_icons_menu(message, note=""):
+    """Inline keyboard menu for setting/resetting predefined message icon slots."""
+    with _custom_emoji_lock:
+        slots_set = dict(_custom_emojis.get("msg_slots", {}))
+    markup = types.InlineKeyboardMarkup(row_width=2)
+    lines = []
+    for group_label, group_keys in _MSG_ICON_GROUPS:
+        lines.append(f"\n<b>{group_label}:</b>")
+        for key in group_keys:
+            if key not in _MSG_ICON_SLOTS:
+                continue
+            default_char, label = _MSG_ICON_SLOTS[key]
+            custom = slots_set.get(key)
+            if custom:
+                fb  = custom.get("fb", default_char)
+                cid = custom.get("id", "")
+                lines.append(f"  ✅ {fb} <b>{label}</b> <code>[{cid[:8]}…]</code>")
+                markup.add(
+                    types.InlineKeyboardButton(f"✏️ {label}", callback_data=f"msgicon_set:{key}"),
+                    types.InlineKeyboardButton("🔄 Reset", callback_data=f"msgicon_reset:{key}"),
+                )
+            else:
+                lines.append(f"  🔘 {default_char} <b>{label}</b> (default)")
+                markup.add(
+                    types.InlineKeyboardButton(f"✏️ {label}", callback_data=f"msgicon_set:{key}"),
+                    types.InlineKeyboardButton("—", callback_data="msgicon_noop"),
+                )
+    markup.add(types.InlineKeyboardButton("❌ বন্ধ করো", callback_data="msgicon_close"))
+    text = (
+        f"✨ <b>Message Icons</b>\n"
+        f"━━━━━━━━━━━━━━\n\n"
+        f"<i>✏️ ক্লিক করে custom emoji sticker পাঠাও বা ID টাইপ করো।</i>\n"
+        f"<i>🔄 Reset করলে default emoji ফিরে আসবে।</i>"
+        + "\n".join(lines)
+        + ("\n\n<i>✅ " + note + "</i>" if note else "")
+        + "\n\n━━━━━━━━━━━━━━\n"
+    )
+    try:
+        bot.send_message(message.chat.id, text, reply_markup=markup, parse_mode="HTML")
+    except Exception as e:
+        print(f"[MSG-ICONS] Failed: {e}")
+
+
+def _set_msg_icon_step(message):
+    """Step handler: receive custom emoji for a message icon slot."""
+    uid = message.from_user.id
+    state = _msg_icon_set_state.pop(uid, None)
+    if not state:
+        return
+    if _is_back(message.text) or _intercept_menu_btn(message):
+        return
+    slot_key = state["key"]
+    default_char, label = _MSG_ICON_SLOTS.get(slot_key, ("", ""))
+    custom_emoji_id = None
+    fallback_char = default_char
+    if message.entities:
+        for ent in message.entities:
+            if ent.type == "custom_emoji":
+                custom_emoji_id = getattr(ent, "custom_emoji_id", None)
+                text = message.text or ""
+                fallback_char = text[ent.offset:ent.offset + ent.length] or default_char
+                break
+    if not custom_emoji_id:
+        txt = (message.text or "").strip()
+        if txt.isdigit() and len(txt) > 10:
+            custom_emoji_id = txt
+        else:
+            msg = bot.send_message(
+                message.chat.id,
+                "❌ Custom emoji পাওয়া যায়নি!\n\n"
+                "Telegram premium custom emoji sticker পাঠাও, অথবা emoji ID নম্বর দাও।\n\nআবার চেষ্টা করো:",
+                parse_mode="HTML",
+                reply_markup=_back_admin_kb(),
+            )
+            _msg_icon_set_state[uid] = state
+            bot.register_next_step_handler(msg, _set_msg_icon_step)
+            return
+    with _custom_emoji_lock:
+        _custom_emojis.setdefault("msg_slots", {})[slot_key] = {"id": custom_emoji_id, "fb": fallback_char}
+    _save_custom_emojis()
+    _show_msg_icons_menu(message, note=f"✅ <b>{label}</b> — custom emoji সেট হয়েছে!")
+
+
+def _show_custom_emoji_menu(message, note=""):
+    uid = message.from_user.id
+    with _custom_emoji_lock:
+        flags_set   = dict(_custom_emojis.get("flags", {}))
+        svcs_set    = dict(_custom_emojis.get("services", {}))
+        btns_set    = dict(_custom_emojis.get("buttons", {}))
+        slots_set   = dict(_custom_emojis.get("msg_slots", {}))
+        dm_e_set    = dict(_custom_emojis.get("dm_emoji", {}))
+
+    flag_lines = "\n".join(f"  {k} → <code>{v}</code>" for k, v in flags_set.items()) or "  (কিছু নেই — 🏳️ Flag Emoji Set দিয়ে যোগ করো)"
+    svc_lines  = "\n".join(f"  {k} → <code>{v}</code>" for k, v in svcs_set.items())  or "  (কিছু নেই)"
+    btn_lines  = "\n".join(f"  <code>{k}</code> → <code>{v}</code>" for k, v in btns_set.items()) or "  (কিছু নেই)"
+    slot_lines = "\n".join(f"  {{emoji_{k}}} → {v.get('fb','?')} (id:<code>{v.get('id','')}</code>)" for k, v in slots_set.items()) or "  (কিছু নেই)"
+
+    dm_emoji_lines = ""
+    for key, defs in _DM_EMOJI_DEFAULTS.items():
+        cur = dm_e_set.get(key, {})
+        cur_id = cur.get("id") or defs["id"]
+        cur_fb = cur.get("fb") or defs["fb"]
+        label  = _DM_EMOJI_LABELS.get(key, key)
+        dm_emoji_lines += f"  {cur_fb} <b>{label}</b> → <code>{cur_id}</code>\n"
+
+    all_btn_keys = "\n".join(
+        f"  <code>{k}</code> — {v}" for k, v in _BTN_DISPLAY_NAMES.items()
+    )
+    text = (
+        f"🎨 <b>Custom Emoji Settings</b>\n"
+        f"━━━━━━━━━━━━━━\n\n"
+        f"📲 <b>DM Message Emoji (number/country):</b>\n{dm_emoji_lines}\n"
+        f"🏳️ <b>Flag Emojis:</b>\n{flag_lines}\n\n"
+        f"🎯 <b>Service Emojis:</b>\n{svc_lines}\n\n"
+        f"🔘 <b>Button Emojis (সেট করা):</b>\n{btn_lines}\n\n"
+        f"📋 <b>সব Button Key:</b>\n{all_btn_keys}\n\n"
+        f"💬 <b>Message Slot Emojis:</b>\n{slot_lines}\n\n"
+        f"━━━━━━━━━━━━━━\n"
+        + (f"<i>{note}</i>\n" if note else "")
+    )
+    mk = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    mk.add("🏳️ Flag Emoji Set", "🎯 Service Emoji Set")
+    mk.add("🗑️ Flag Emoji Del", "🗑️ Service Emoji Del")
+    mk.add("🔘 Button Emoji Set", "🗑️ Button Emoji Del")
+    mk.add("💬 Msg Emoji Set", "🗑️ Msg Emoji Del")
+    mk.add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟")
+    bot.send_message(message.chat.id, text, reply_markup=mk, parse_mode="HTML")
+
+
+def _custom_emoji_input(message):
+    uid = message.from_user.id
+    mode = _custom_emoji_state.pop(uid, None)
+    if not mode:
+        return
+    txt = (message.text or "").strip()
+    if _is_back(txt) or txt == "🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟":
+        _go_admin_panel(message)
+        return
+    if _intercept_menu_btn(message):
+        return
+
+    parts = txt.split()
+
+    if mode == "flag":
+        # Supports both single: "🇧🇩 ID" and numbered bulk list: "1. 🇧🇩 ID\n2. 🇺🇸 ID2"
+        import re as _re
+        lines = [l.strip() for l in txt.splitlines() if l.strip()]
+        parsed = {}
+        for line in lines:
+            # Strip leading "1." "1)" "1-" numbering if present
+            clean = _re.sub(r'^\d+[\.\)\-]\s*', '', line).strip()
+            tokens = clean.split()
+            if len(tokens) == 2 and tokens[1].isdigit():
+                parsed[tokens[0]] = tokens[1]
+        if not parsed:
+            bot.send_message(message.chat.id,
+                "❌ ফরম্যাট ভুল!\n\n<b>একটি:</b> <code>🇧🇩 5432198765432198765</code>\n"
+                "<b>বাল্ক (numbered list):</b>\n<code>1. 🇧🇩 5432198765432198765\n2. 🇺🇸 5976694588658686266</code>\n\nআবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("flags", {}).update(parsed)
+        _save_custom_emojis()
+        added = "\n".join(f"  {k} → <code>{v}</code>" for k, v in parsed.items())
+        _show_custom_emoji_menu(message, note=f"✅ {len(parsed)}টি flag সেট হয়েছে:\n{added}")
+
+    elif mode == "service":
+        # Format: INSTAGRAM 5319160079465857105
+        if len(parts) != 2:
+            bot.send_message(message.chat.id,
+                "❌ ফরম্যাট ভুল!\n\n<b>সঠিক ফরম্যাট:</b>\n<code>INSTAGRAM 5319160079465857105</code>\n\nআবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        svc_name, emoji_id = parts[0].upper(), parts[1]
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("services", {})[svc_name] = emoji_id
+        _save_custom_emojis()
+        _show_custom_emoji_menu(message, note=f"✅ {svc_name} → {emoji_id} সেট হয়েছে!")
+
+    elif mode == "del_flag":
+        emoji_char = parts[0] if parts else ""
+        with _custom_emoji_lock:
+            removed = _custom_emojis.get("flags", {}).pop(emoji_char, None)
+        if removed:
+            _save_custom_emojis()
+            _show_custom_emoji_menu(message, note=f"🗑️ {emoji_char} ডিলিট হয়েছে!")
+        else:
+            bot.send_message(message.chat.id, f"❌ <code>{emoji_char}</code> পাওয়া যায়নি।", parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+
+    elif mode == "del_service":
+        svc_name = (parts[0] if parts else "").upper()
+        with _custom_emoji_lock:
+            removed = _custom_emojis.get("services", {}).pop(svc_name, None)
+        if removed:
+            _save_custom_emojis()
+            _show_custom_emoji_menu(message, note=f"🗑️ {svc_name} ডিলিট হয়েছে!")
+        else:
+            bot.send_message(message.chat.id, f"❌ <code>{svc_name}</code> পাওয়া যায়নি।", parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+
+    elif mode == "btn":
+        # Format: button_key emoji_id  (e.g. change_number 5375170473095077321)
+        if len(parts) != 2:
+            available = "\n".join(f"  <code>{k}</code> — {v}" for k, v in _BTN_DISPLAY_NAMES.items())
+            bot.send_message(message.chat.id,
+                f"❌ ফরম্যাট ভুল!\n\n<b>সঠিক ফরম্যাট:</b>\n<code>button_key emoji_id</code>\n\n"
+                f"<b>Available buttons:</b>\n{available}\n\nআবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        btn_key, emoji_id = parts[0].lower(), parts[1]
+        if btn_key not in _BTN_DISPLAY_NAMES:
+            available = ", ".join(f"<code>{k}</code>" for k in _BTN_DISPLAY_NAMES)
+            bot.send_message(message.chat.id,
+                f"❌ <code>{btn_key}</code> পাওয়া যায়নি!\n\nValid keys: {available}\n\nআবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("buttons", {})[btn_key] = emoji_id
+        _save_custom_emojis()
+        _show_custom_emoji_menu(message, note=f"✅ Button <code>{btn_key}</code> → <code>{emoji_id}</code> সেট হয়েছে!")
+
+    elif mode == "del_btn":
+        btn_key = (parts[0] if parts else "").lower()
+        with _custom_emoji_lock:
+            removed = _custom_emojis.get("buttons", {}).pop(btn_key, None)
+        if removed:
+            _save_custom_emojis()
+            _show_custom_emoji_menu(message, note=f"🗑️ Button <code>{btn_key}</code> ডিলিট হয়েছে!")
+        else:
+            bot.send_message(message.chat.id, f"❌ <code>{btn_key}</code> পাওয়া যায়নি।", parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+
+    elif mode == "msg_slot":
+        # Format: slot_name emoji_id fallback_emoji  (e.g. fire 5432198765432198765 🔥)
+        if len(parts) < 3:
+            bot.send_message(message.chat.id,
+                "❌ ফরম্যাট ভুল!\n\n<b>সঠিক ফরম্যাট:</b>\n<code>slot_name emoji_id fallback_emoji</code>\n\n"
+                "<b>উদাহরণ:</b>\n<code>fire 5432198765432198765 🔥</code>\n\n"
+                "এরপর যেকোনো message template-এ <code>{emoji_fire}</code> লিখলে custom emoji দেখাবে।\n\nআবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        slot_name = parts[0].lower()
+        emoji_id  = parts[1]
+        fallback  = " ".join(parts[2:])
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("msg_slots", {})[slot_name] = {"id": emoji_id, "fb": fallback}
+        _save_custom_emojis()
+        _show_custom_emoji_menu(message,
+            note=f"✅ Slot <code>emoji_{slot_name}</code> সেট হয়েছে!\n"
+                 f"Template-এ <code>{{emoji_{slot_name}}}</code> ব্যবহার করো।")
+
+    elif mode == "del_msg_slot":
+        slot_name = (parts[0] if parts else "").lower()
+        with _custom_emoji_lock:
+            removed = _custom_emojis.get("msg_slots", {}).pop(slot_name, None)
+        if removed:
+            _save_custom_emojis()
+            _show_custom_emoji_menu(message, note=f"🗑️ Slot <code>emoji_{slot_name}</code> ডিলিট হয়েছে!")
+        else:
+            bot.send_message(message.chat.id, f"❌ <code>emoji_{slot_name}</code> পাওয়া যায়নি।", parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+
+    elif mode == "dm_emoji":
+        # Format: slot_key emoji_id fallback_emoji  e.g. "number_pre 5422858869372104873 📞"
+        if len(parts) < 3:
+            bot.send_message(message.chat.id,
+                "❌ ফরম্যাট ভুল!\n\n<b>সঠিক ফরম্যাট:</b>\n<code>slot_key emoji_id fallback_emoji</code>\n\n"
+                "<b>উদাহরণ:</b>\n<code>number_pre 5422858869372104873 📞</code>\n\nআবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        slot_key = parts[0].lower()
+        if slot_key not in _DM_EMOJI_DEFAULTS:
+            valid = ", ".join(f"<code>{k}</code>" for k in _DM_EMOJI_DEFAULTS)
+            bot.send_message(message.chat.id,
+                f"❌ <code>{slot_key}</code> valid না!\n\nValid keys: {valid}\n\nআবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        emoji_id = parts[1]
+        fallback = " ".join(parts[2:])
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("dm_emoji", {})[slot_key] = {"id": emoji_id, "fb": fallback}
+        _save_custom_emojis()
+        label = _DM_EMOJI_LABELS.get(slot_key, slot_key)
+        _show_custom_emoji_menu(message,
+            note=f"✅ DM emoji <b>{label}</b> → {fallback} <code>{emoji_id}</code> সেট হয়েছে!")
+
+    elif mode == "del_dm_emoji":
+        slot_key = (parts[0] if parts else "").lower()
+        with _custom_emoji_lock:
+            removed = _custom_emojis.get("dm_emoji", {}).pop(slot_key, None)
+        if removed:
+            _save_custom_emojis()
+            label = _DM_EMOJI_LABELS.get(slot_key, slot_key)
+            _show_custom_emoji_menu(message, note=f"🗑️ DM emoji <b>{label}</b> → default-এ ফিরে গেছে!")
+        else:
+            valid = ", ".join(f"<code>{k}</code>" for k in _DM_EMOJI_DEFAULTS)
+            bot.send_message(message.chat.id,
+                f"❌ <code>{slot_key}</code> কাস্টম করা ছিল না।\nValid keys: {valid}\n\nআবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+
+
 def _go_admin_panel(message, text="🔥 <b>ADMIN PANEL</b>"):
     uid = message.from_user.id
     chat_id = message.chat.id
@@ -8508,6 +9341,7 @@ def _go_admin_panel(message, text="🔥 <b>ADMIN PANEL</b>"):
     m_admin.add("🔀 𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁")
     m_admin.add("🎛️ 𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴")
     m_admin.add("📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀")
+    m_admin.add("✨ 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗜𝗰𝗼𝗻𝘀", "🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶")
     m_admin.add("⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂")
     bot.send_message(
         message.chat.id,
@@ -8557,7 +9391,7 @@ def _cc_addrange_step(message):
     c_name, flag = get_country_details(prefix)
     bot.send_message(
         message.chat.id,
-        f"✅ <b>{_v2_svc_emoji(sid)} {sid}</b> এ <b>{flag} {c_name} ({prefix})</b> যোগ হয়েছে!",
+        f"✅ <b>{_v2_svc_emoji(sid)} {sid}</b> এ <b>{_resolve_flag(flag)} {c_name} ({prefix})</b> যোগ হয়েছে!",
         reply_markup=types.ReplyKeyboardRemove(),
         parse_mode="HTML"
     )
@@ -8601,7 +9435,7 @@ def _ask_new_template(call, key):
             f"📌 <b>ব্যবহারযোগ্য ভেরিয়েবল:</b>\n<code>{vars_hint}</code>\n\n"
             f"📄 <b>বর্তমান ফরমেট:</b>\n<code>{current_escaped}</code>\n\n"
             f"⬇️ <b>নতুন ফরমেট লিখো:</b>\n"
-            f"<i>(HTML ট্যাগ সাপোর্টেড: &lt;b&gt;, &lt;i&gt;, &lt;code&gt;, &lt;/b&gt; etc.)</i>",
+            f"<i>(HTML ট্যাগ সাপোর্টেড: &lt;b&gt;, &lt;i&gt;, &lt;code&gt;, &lt;blockquote&gt; — এবং সরাসরি custom emoji পাঠালেও কাজ করবে!)</i>",
             reply_markup=_back_admin_kb(),
             parse_mode="HTML",
         )
@@ -8616,6 +9450,57 @@ def _ask_new_template(call, key):
         except Exception:
             return
     bot.register_next_step_handler(msg, _save_new_template)
+
+
+def _message_to_html(message):
+    """Convert message text + entities to HTML string.
+    Preserves custom_emoji, bold, italic, code, blockquote etc.
+    Also preserves manually typed <tg-emoji> or <b> HTML if no entities override.
+    """
+    import html as _html
+    from collections import defaultdict
+    text = message.text or ""
+    entities = message.entities or []
+    if not entities:
+        return text
+    chars = list(text)
+    n = len(chars)
+    opens = defaultdict(list)
+    closes = defaultdict(list)
+    for ent in sorted(entities, key=lambda e: (e.offset, -e.length)):
+        o, l = ent.offset, ent.length
+        etype = ent.type
+        if etype == "bold":
+            opens[o].append("<b>"); closes[o + l].append("</b>")
+        elif etype == "italic":
+            opens[o].append("<i>"); closes[o + l].append("</i>")
+        elif etype == "underline":
+            opens[o].append("<u>"); closes[o + l].append("</u>")
+        elif etype == "strikethrough":
+            opens[o].append("<s>"); closes[o + l].append("</s>")
+        elif etype == "code":
+            opens[o].append("<code>"); closes[o + l].append("</code>")
+        elif etype == "pre":
+            opens[o].append("<pre>"); closes[o + l].append("</pre>")
+        elif etype == "blockquote":
+            opens[o].append("<blockquote>"); closes[o + l].append("</blockquote>")
+        elif etype == "custom_emoji":
+            eid = getattr(ent, "custom_emoji_id", "") or ""
+            opens[o].append(f'<tg-emoji emoji-id="{eid}">')
+            closes[o + l].append("</tg-emoji>")
+        elif etype == "text_link":
+            url = _html.escape(getattr(ent, "url", "") or "")
+            opens[o].append(f'<a href="{url}">')
+            closes[o + l].append("</a>")
+    result = []
+    for i in range(n + 1):
+        for tag in closes.get(i, []):
+            result.append(tag)
+        if i < n:
+            for tag in opens.get(i, []):
+                result.append(tag)
+            result.append(chars[i])
+    return "".join(result)
 
 
 def _save_new_template(message):
@@ -8635,7 +9520,7 @@ def _save_new_template(message):
             _go_admin_panel(message)
             return
         key = state["key"]
-        new_text = message.text or ""
+        new_text = _message_to_html(message)
         if not new_text.strip():
             msg = bot.send_message(
                 message.chat.id,
@@ -8730,6 +9615,8 @@ _ALL_MENU_BTNS = {
     "⚙️ 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀", "✏️ 𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀", "📡 𝗩𝟮 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗙𝗼𝗿𝗺𝗮𝘁", "🔀 𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁",
     "🎛️ 𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴", "📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀", "👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼", "⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂",
     "🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟", "🔙 Admin Panel", "🔙 Admin Menu",
+    "🔘 Button Emoji Set", "🗑️ Button Emoji Del",
+    "💬 Msg Emoji Set", "🗑️ Msg Emoji Del",
 }
 
 
