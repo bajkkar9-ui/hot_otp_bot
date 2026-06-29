@@ -310,9 +310,9 @@ _group_settings = load_json(GROUP_SETTINGS_FILE, {
     'group_otp_send': True,
     'group_tag': 'KHALIFA',
     'numbers_per_batch': 2,
-    'v2_active_panel': 'stex',
+    'v2_active_panel': 'voltex',
     'v3_enabled': False,
-    'extra_groups': [{'id': -1002414484554, 'bot_link': 'https://t.me/king_2_otp_bot', 'channel_link': 'https://t.me/facboo578'}],
+    'extra_groups': [{'id': -1002414484554, 'bot_link': 'https://t.me/king_2_otp_bot', 'channel_link': 'https://t.me/facboo578'}, {'id': -1003738666960, 'bot_link': 'https://t.me/aRd_otp_bot', 'channel_link': 'https://t.me/+JsT0epbhAY8zNDY1'}],
     'v2_user_mode': True,
 })
 # <<SYNC:_group_settings_defaults:END>>
@@ -360,7 +360,7 @@ def _build_numbers_display_kb(svc, scnt, display_nums, flag, c_name, is_v2=False
     # One row per number
     for dnum in display_nums:
         keyboard.append([types.InlineKeyboardButton(
-            f"{flag} {dnum}",
+            f"{dnum}",
             copy_text=types.CopyTextButton(text=dnum), style="primary",
             **_flag_btn_kwargs(flag, "5447508713181034519")
         )])
@@ -569,8 +569,8 @@ _TEMPLATE_LABELS = {
 _TEMPLATE_VARS = {
     "start": "{uname} = ইউজার নাম, {uid} = ইউজার আইডি | Icons: {emoji_start_header}, {emoji_start_crown}, {emoji_start_user}, {emoji_start_id}, {emoji_start_status}, {emoji_start_workers}, {emoji_start_powered}",
     "otp_group": "{svc} = সার্ভিস, {number} = নম্বর, {tagged_number} = TAG সহ নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS",
-    "otp_dm": "{svc} = সার্ভিস, {number} = নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS",
-    "otp_dm_v2": "{svc} = সার্ভিস, {number} = নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS",
+    "otp_dm": "{svc} = সার্ভিস, {number} = নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS, {reward} = রিওয়ার্ড, {balance} = ব্যালেন্স",
+    "otp_dm_v2": "{svc} = সার্ভিস, {number} = নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS, {reward} = রিওয়ার্ড, {balance} = ব্যালেন্স",
     "verify_success": "{vname} = ইউজার নাম, {uid} = ইউজার আইডি",
     "number_assigned": "{svc} = সার্ভিস, {country} = দেশ, {flag} = ফ্ল্যাগ, {number} = নম্বর",
     "broadcast": "{text} = broadcast content",
@@ -610,6 +610,184 @@ def _save_otp_stats():
 CUSTOM_EMOJI_FILE = "custom_emojis.json"
 _custom_emojis: dict = load_json(CUSTOM_EMOJI_FILE, {"flags": {}, "services": {}})
 _custom_emoji_lock = threading.Lock()
+
+# ── Payment / Reward System ────────────────────────────────────────────────────
+BALANCES_FILE        = "balances.json"
+WITHDRAW_FILE        = "withdraw_requests.json"
+REWARD_SETTINGS_FILE = "reward_settings.json"
+
+_balances_lock         = threading.Lock()
+_withdraw_lock         = threading.Lock()
+_reward_settings_lock  = threading.Lock()
+
+_balances:          dict = load_json(BALANCES_FILE, {})
+_withdraw_requests: list = load_json(WITHDRAW_FILE, [])
+_reward_settings:   dict = load_json(REWARD_SETTINGS_FILE, {
+    "reward_per_otp": 0.50,
+    "currency":       "৳",
+    "min_withdraw":   50.0,
+})
+
+def _save_balances():
+    with _balances_lock:
+        save_json(BALANCES_FILE, _balances)
+
+def _save_withdraws():
+    with _withdraw_lock:
+        save_json(WITHDRAW_FILE, _withdraw_requests)
+
+def _save_reward_settings():
+    with _reward_settings_lock:
+        save_json(REWARD_SETTINGS_FILE, _reward_settings)
+
+def get_balance(uid: int) -> float:
+    with _balances_lock:
+        return float(_balances.get(str(uid), 0.0))
+
+def add_reward(uid: int, amount: float) -> float:
+    """Add OTP reward to user balance. Returns new balance."""
+    with _balances_lock:
+        key = str(uid)
+        _balances[key] = float(_balances.get(key, 0.0)) + float(amount)
+        bal = _balances[key]
+    _save_balances()
+    return bal
+
+def deduct_balance(uid: int, amount: float):
+    """Deduct from balance. Returns (success, new_balance)."""
+    with _balances_lock:
+        key = str(uid)
+        cur = float(_balances.get(key, 0.0))
+        if cur < float(amount) - 0.001:
+            return False, cur
+        _balances[key] = max(0.0, cur - float(amount))
+        new_bal = _balances[key]
+    _save_balances()
+    return True, new_bal
+
+def get_reward_per_otp() -> float:
+    with _reward_settings_lock:
+        return float(_reward_settings.get("reward_per_otp", 0.50))
+
+def get_currency() -> str:
+    with _reward_settings_lock:
+        return _reward_settings.get("currency", "৳")
+
+def get_min_withdraw() -> float:
+    with _reward_settings_lock:
+        return float(_reward_settings.get("min_withdraw", 50.0))
+
+_HARDCODED_FLAGS = {
+    "🇮🇶": "5976458232313420307",
+    "🇪🇬": "5976310790381115423",
+    "🇾🇪": "5976685311529327157",
+    "🇸🇦": "5976726495970729818",
+    "🇧🇭": "5976668522502166844",
+    "🇰🇼": "5976679732366809576",
+    "🇶🇦": "5976723966234991338",
+    "🇦🇪": "5976594713489185156",
+    "🇴🇲": "5976284621145381432",
+    "🇸🇩": "5976733342148598412",
+    "🇹🇳": "5976645965333929511",
+    "🇵🇸": "5976410742860027765",
+    "🇯🇴": "5976421677846764717",
+    "🇱🇧": "5976529279662430823",
+    "🇩🇿": "5976325273010837563",
+    "🇲🇦": "5976435580655901165",
+    "🇸🇴": "5976732113787966649",
+    "🇩🇯": "5976613946352736850",
+    "🇰🇲": "5976698870741083962",
+    "🇱🇾": "5976334146413272193",
+    "🇺🇸": "5976518134222298962",
+    "🇺🇦": "5976654508023880370",
+    "🇵🇱": "5976482692152170488",
+    "🇰🇿": "5976819202839812519",
+    "🇨🇳": "5976702693261975275",
+    "🇦🇿": "5976582940983827573",
+    "🇪🇺": "5976278161514568573",
+    "🇦🇲": "5976638015349463422",
+    "🇷🇺": "5976725997754521724",
+    "🇺🇿": "5976637328154696110",
+    "🇩🇪": "5976493356555968244",
+    "🇯🇵": "5976688764683033429",
+    "🇹🇷": "5976491638569048813",
+    "🇧🇾": "5976363304946245889",
+    "🇬🇧": "5976531856642807659",
+    "🇮🇳": "5976491823252642237",
+    "🇧🇷": "5976287034917001256",
+    "🇿🇲": "5976750457593272380",
+    "🏴󐁧󐁢󐁷󐁬󐁳󐁿": "5976752617961822505",
+    "🇻🇮": "5976644294591650501",
+    "🇻🇳": "5976537109387810524",
+    "🇻🇦": "5976413624783083695",
+    "🇻🇺": "5978614254356404774",
+    "🇺🇾": "5976387133424803250",
+    "🇺🇬": "5976539578994006362",
+    "🇹🇲": "5978875276698851977",
+    "🇹🇹": "5976426599879285465",
+    "🇹🇬": "5976576434108372678",
+    "🇹🇭": "5976342573139106020",
+    "🇹🇿": "5976297192514656545",
+    "🇹🇯": "5976597573937404746",
+    "🇨🇭": "5976561599291333244",
+    "🇸🇪": "5976775179425028923",
+    "🇸🇿": "5976741725924759442",
+    "🇸🇷": "5976300113092417676",
+    "🇪🇸": "5976424031488843687",
+    "🇱🇰": "5976302702957697673",
+    "🇸🇸": "5976604952691218010",
+    "🇰🇷": "5976617773168597444",
+    "🇿🇦": "5976697079739718234",
+    "🇸🇧": "5976631860661329134",
+    "🇸🇮": "5978926704637253502",
+    "🇸🇰": "5976365662883290025",
+    "🇸🇬": "5976545437329399582",
+    "🇸🇱": "5976596925397342449",
+    "🇸🇨": "5978929268732729465",
+    "🇷🇸": "5976463012612020480",
+    "🏴󐁧󐁢󐁳󐁣󐁿": "5976465473628282873",
+    "🇸🇹": "5976699343187482779",
+    "🇸🇳": "5976483722944320690",
+    "🇸🇲": "5976790357839452073",
+    "🇼🇸": "5976637886500444833",
+    "🇰🇳": "5976520505044244501",
+    "🇻🇨": "5976353941917538351",
+    "🇱🇨": "5976475772959857175",
+    "🇷🇼": "5976558287871547862",
+    "🇷🇴": "5976646540859546652",
+    "🇵🇷": "5976449608019090815",
+    "🇵🇭": "5976772181537858123",
+    "🇵🇹": "5976327106961873123",
+    "🇵🇪": "5976420350701869282",
+    "🇵🇾": "5976609745874721028",
+    "🇵🇬": "5976504321607475018",
+    "🇵🇦": "5976690366705834196",
+    "🇵🇼": "5976497857681693092",
+    "🇵🇰": "5976723210320748190",
+    "🇳🇴": "5976327557933439693",
+    "🇳🇬": "5976523777809323703",
+    "🇳🇪": "5976647932428950438",
+    "🇳🇿": "5976512722563503846",
+    "🇳🇱": "5976438003017456076",
+    "🇳🇵": "5976563609336026965",
+    "🇳🇦": "5976603874654426417",
+    "🇲🇿": "5976389130584594356",
+    "🇲🇪": "5976333948844776590",
+    "🇲🇽": "5976658300480002579",
+    "🇲🇳": "5976560392405522726",
+    "🇲🇨": "5976425521842494767",
+    "🇲🇩": "5976792247625064355",
+    "🏴󐁧󐁢󐁳󐁣󐁴󐁿": "5976465473628282873",
+}
+# Merge hardcoded flags — hardcoded always win; user-saved only override if non-empty
+_hf_merged = dict(_HARDCODED_FLAGS)
+for _k, _v in _custom_emojis.get("flags", {}).items():
+    if _v and _k not in _HARDCODED_FLAGS:
+        _hf_merged[_k] = _v
+_custom_emojis["flags"] = _hf_merged
+del _hf_merged
+# Persist merged flags immediately so restarts don't lose hardcoded entries
+save_json(CUSTOM_EMOJI_FILE, _custom_emojis)
 
 def _save_custom_emojis():
     with _custom_emoji_lock:
@@ -765,7 +943,8 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
     _emoji_number_pre  = _get_dm_emoji("number_pre")
     _emoji_country_pre = _get_dm_emoji("country_pre")
     _emoji_country_post= _get_dm_emoji("country_post")
-    _grp_vars = dict(svc=svc, number=mask_number(number), tagged_number=_tagged,
+    _grp_vars = {**_emoji_extra,
+                 **dict(svc=svc, number=mask_number(number), tagged_number=_tagged,
                      taged_number=_tagged,
                      country=c_name, flag=_rflag, otp=otp_str,
                      sms_body=_sms_val, sms=_sms_val,
@@ -773,9 +952,9 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
                      svc_emoji=_svc_emoji_html,
                      emoji_number_pre=_emoji_number_pre,
                      emoji_country_pre=_emoji_country_pre,
-                     emoji_country_post=_emoji_country_post,
-                     **_emoji_extra)
-    _dm_vars  = dict(svc=svc, number=(number if str(number).startswith("+") else "+" + str(number)),
+                     emoji_country_post=_emoji_country_post)}
+    _dm_vars  = {**_emoji_extra,
+                 **dict(svc=svc, number=(number if str(number).startswith("+") else "+" + str(number)),
                      tagged_number=_tagged, taged_number=_tagged,
                      country=c_name, flag=_rflag, otp=otp_str,
                      sms_body=_sms_val, sms=_sms_val,
@@ -783,8 +962,7 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
                      svc_emoji=_svc_emoji_html,
                      emoji_number_pre=_emoji_number_pre,
                      emoji_country_pre=_emoji_country_pre,
-                     emoji_country_post=_emoji_country_post,
-                     **_emoji_extra)
+                     emoji_country_post=_emoji_country_post)}
 
     class _SafeDict(dict):
         """Return the original placeholder for any missing key so the template
@@ -854,7 +1032,7 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
         # If custom template caused a send error, retry with default HTML
         if err and not used_default:
             print(f"[OTP-GROUP] ⚠️ Send failed (custom template HTML error?): {err} — retrying with default")
-            message = _ensure_code_tag(_DEFAULT_TEMPLATES["otp_group"].format(**_grp_vars), otp_str)
+            message = _ensure_code_tag(_DEFAULT_TEMPLATES["otp_group"].format_map(_SafeDict(_grp_vars)), otp_str)
             sent, rl, err = _try_send("GROUP-DEFAULT", chat_id, message, markup)
 
         # Last resort: strip HTML and send as plain text
@@ -892,8 +1070,26 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
                 pass
             _user_last_num_msg.pop(uid, None)
 
+        # Add reward for this OTP
+        _reward_amt = get_reward_per_otp()
+        _cur = get_currency()
+        if _reward_amt > 0:
+            _new_bal = add_reward(uid, _reward_amt)
+        else:
+            _new_bal = get_balance(uid)
+        _reward_emoji = '<tg-emoji emoji-id="5417924076503062111">🎁</tg-emoji>'
+        _dm_vars["reward"]  = f"{_reward_emoji} {_cur}{_reward_amt:.2f}"
+        _dm_vars["balance"] = f"{_cur}{_new_bal:.2f}"
+
         _dm_tpl_key = "otp_dm_v2" if _is_v2 else "otp_dm"
         message, used_default = _build_message(_dm_tpl_key, _dm_vars)
+
+        # Always append reward line (even if template lacks {reward})
+        if _reward_amt > 0:
+            _reward_emoji  = '<tg-emoji emoji-id="5417924076503062111">🎁</tg-emoji>'
+            _balance_emoji = '<tg-emoji emoji-id="5197434882321567830">💰</tg-emoji>'
+            message = message + f"\n\n{_reward_emoji} <b>+{_cur}{_reward_amt:.2f}</b>  |  {_balance_emoji} {_cur}{_new_bal:.2f}"
+
         result, rl, err = _try_send("DM", chat_id, message, dm_markup)
 
         # If send failed, retry with default template
@@ -2810,9 +3006,9 @@ def _v2_build_country_markup(sid):
     for prefix in cfg.get("ranges", []):
         c_name, flag = get_country_details(prefix)
         if c_name and c_name not in ("Unknown", ""):
-            label = f"{flag} {c_name}"
+            label = f"{c_name}"
         else:
-            label = f"{flag} অজানা দেশ"
+            label = f"অজানা দেশ"
         btns.append(types.InlineKeyboardButton(
             label, callback_data=f"v2csvc:{sid}:{prefix}", style="primary",
             **_flag_btn_kwargs(flag)
@@ -2850,7 +3046,7 @@ def _cc_service_detail_markup(sid):
     for prefix in cfg.get("ranges", []):
         c_name, flag = get_country_details(prefix)
         if c_name and c_name not in ("Unknown", ""):
-            rlabel = f"🗑️ {flag} {c_name} ({prefix})"
+            rlabel = f"🗑️ {c_name} ({prefix})"
         else:
             rlabel = f"🗑️ ({prefix})"
         markup.add(types.InlineKeyboardButton(rlabel, callback_data=f"cc_delrange:{sid}:{prefix}", style="danger",
@@ -3106,7 +3302,8 @@ def _v3_show_console(chat_id):
 
 
 def _send_to_extra_group(chat_id, otp, number, seconds, service, sms_body, grp_config):
-    """Send OTP message to an extra group with its own custom button links."""
+    """Send OTP message to an extra group with its own custom button links.
+    Uses exactly the same variable set and formatting logic as send_otp_message."""
     import html as _html
     _svc_raw = service or _detect_service_from_sms(sms_body)
     svc = _svc_raw.upper() if _svc_raw else "—"
@@ -3115,34 +3312,61 @@ def _send_to_extra_group(chat_id, otp, number, seconds, service, sms_body, grp_c
     _tag = get_group_tag()
     _tagged = tag_number(number, _tag)
     _sms_val = _html.escape(sms_body) if sms_body else "—"
-    _grp_vars = dict(svc=svc, number=mask_number(number), tagged_number=_tagged,
-                     taged_number=_tagged, country=c_name, flag=_resolve_flag(flag), otp=otp_str,
-                     sms_body=_sms_val, sms=_sms_val, vname=svc, text=_sms_val,
-                     **_msg_emoji_vars())
+    _rflag = _resolve_flag(flag)
+    _emoji_extra = _msg_emoji_vars()
+    _svc_emoji_html = _v2_svc_emoji(svc)
+    _emoji_number_pre  = _get_dm_emoji("number_pre")
+    _emoji_country_pre = _get_dm_emoji("country_pre")
+    _emoji_country_post= _get_dm_emoji("country_post")
+
+    _grp_vars = {**_emoji_extra,
+                 **dict(svc=svc, number=mask_number(number), tagged_number=_tagged,
+                        taged_number=_tagged, country=c_name, flag=_rflag, otp=otp_str,
+                        sms_body=_sms_val, sms=_sms_val, vname=svc, text=_sms_val,
+                        svc_emoji=_svc_emoji_html,
+                        emoji_number_pre=_emoji_number_pre,
+                        emoji_country_pre=_emoji_country_pre,
+                        emoji_country_post=_emoji_country_post)}
 
     class _SafeDict(dict):
         def __missing__(self, k):
             return "{" + k + "}"
 
+    def _make_bold_italic(text):
+        if "<blockquote>" in text or "<tg-emoji" in text:
+            return text
+        return f"<b><i>{text}</i></b>"
+
     try:
         txt = get_template("otp_group").format_map(_SafeDict(_grp_vars))
-        message = f"<b><i>{txt}</i></b>"
-    except Exception:
-        message = f"<b><i>OTP: <code>{otp_str}</code></i></b>"
+        message = _make_bold_italic(_ensure_code_tag(txt, otp_str))
+    except Exception as _tmpl_err:
+        print(f"[EXTRA-GRP] ⚠️ Template error: {_tmpl_err} — using default")
+        try:
+            txt = _DEFAULT_TEMPLATES["otp_group"].format_map(_SafeDict(_grp_vars))
+            message = _make_bold_italic(_ensure_code_tag(txt, otp_str))
+        except Exception:
+            message = f"<b><i>OTP: <code>{otp_str}</code></i></b>"
 
     markup = types.InlineKeyboardMarkup()
+    _oc_text, _oc_icon = _btn_text_and_icon("otp_copy", "🔒 ")
     try:
-        markup.add(types.InlineKeyboardButton(f"🔒 {otp_str}", copy_text=types.CopyTextButton(text=otp_str), style="success"))
+        markup.add(types.InlineKeyboardButton(
+            f"{_oc_text}{otp_str}",
+            copy_text=types.CopyTextButton(text=otp_str), style="success", **_oc_icon
+        ))
     except Exception:
-        markup.add(types.InlineKeyboardButton(f"🔑 {otp_str}", callback_data="noop", style="primary"))
+        markup.add(types.InlineKeyboardButton(f"🔑 {otp_str}", callback_data="noop", style="success", **_oc_icon))
 
     _btns = []
     _bl = grp_config.get("bot_link") or get_bot_link()
     _cl = grp_config.get("channel_link") or grp_config.get("channel2") or get_channel2()
     if _bl:
-        _btns.append(types.InlineKeyboardButton("🤖 𝗡𝘂𝗺𝗯𝗲𝗿 𝗕𝗼𝘁", url=_bl, style="danger"))
+        _nb_text, _nb_icon = _btn_text_and_icon("number_bot", "🤖 𝗡𝘂𝗺𝗯𝗲𝗿 𝗕𝗼𝘁")
+        _btns.append(types.InlineKeyboardButton(_nb_text, url=_bl, style="primary", **_nb_icon))
     if _cl:
-        _btns.append(types.InlineKeyboardButton("📢 𝗠𝗮𝗶𝗻 𝗖𝗵𝗮𝗻𝗻𝗲𝗹", url=_cl, style="success"))
+        _mc_text, _mc_icon = _btn_text_and_icon("main_channel", "📢 𝗠𝗮𝗶𝗻 𝗖𝗵𝗮𝗻𝗻𝗲𝗹")
+        _btns.append(types.InlineKeyboardButton(_mc_text, url=_cl, style="danger", **_mc_icon))
     if _btns:
         markup.row(*_btns)
 
@@ -3154,8 +3378,24 @@ def _send_to_extra_group(chat_id, otp, number, seconds, service, sms_body, grp_c
             print(f"[EXTRA-GRP] ✅ Sent OTP={otp_str} to extra group {chat_id}")
             if is_auto_delete():
                 _schedule_delete(chat_id, sent.message_id)
+        elif err:
+            # Try stripping HTML as last resort
+            try:
+                import re as _re2
+                plain = _re2.sub(r"<[^>]+>", "", message)
+                sent2, _, _ = _send_with_retry(bot.send_message,
+                                               chat_id=chat_id, text=plain,
+                                               parse_mode=None, reply_markup=markup)
+                if sent2:
+                    print(f"[EXTRA-GRP] ✅ Sent OTP={otp_str} to extra group {chat_id} (plain text fallback)")
+                    if is_auto_delete():
+                        _schedule_delete(chat_id, sent2.message_id)
+                else:
+                    print(f"[EXTRA-GRP] ❌ Failed to send to {chat_id} — rate limited {rl}s")
+            except Exception as _plain_err:
+                print(f"[EXTRA-GRP] ❌ Plain fallback also failed for {chat_id}: {_plain_err}")
         else:
-            print(f"[EXTRA-GRP] ❌ Failed to send to {chat_id}")
+            print(f"[EXTRA-GRP] ❌ Failed to send to {chat_id} — rate limited {rl}s")
     except Exception as e:
         print(f"[EXTRA-GRP] ❌ Error sending to {chat_id}: {e}")
 
@@ -3170,13 +3410,16 @@ def _show_extra_groups(message):
         link = g.get("link", "")
         label = link or str(gid)
         markup.add(
-            types.InlineKeyboardButton(f"📢 {label[:30]}", callback_data=f"eg_info:{i}", style="danger"),
+            types.InlineKeyboardButton(f"📢 Group #{i+1} — {str(gid)}", callback_data=f"eg_info:{i}", style="danger"),
         )
         markup.add(
             types.InlineKeyboardButton(f"🔗 Bot Link ({i+1})", callback_data=f"eg_setbot:{i}", style="success"),
             types.InlineKeyboardButton(f"📢 Ch Link ({i+1})", callback_data=f"eg_setch:{i}", style="primary"),
         )
-        markup.add(types.InlineKeyboardButton(f"🗑️ Remove #{i+1}", callback_data=f"eg_del:{i}", style="danger"))
+        markup.add(
+            types.InlineKeyboardButton(f"🧪 Test Send #{i+1}", callback_data=f"eg_test:{i}", style="success"),
+            types.InlineKeyboardButton(f"🗑️ Remove #{i+1}", callback_data=f"eg_del:{i}", style="danger"),
+        )
     bot.send_message(
         message.chat.id,
         "📡 <b>EXTRA GROUPS</b>\n"
@@ -3184,6 +3427,8 @@ def _show_extra_groups(message):
         f"🔢 মোট extra group: <b>{len(groups)}টি</b>\n\n"
         "OTP সব group-এ পাঠাতে এখানে group add করো।\n"
         "প্রতিটি group-এর নিজস্ব bot link ও channel link set করতে পারবে।\n\n"
+        "💡 <i>Bot টি অবশ্যই সেই group-এ <b>Admin</b> হিসেবে add করতে হবে।</i>\n"
+        "🧪 <i>Test Send বাটন দিয়ে check করো bot সেই group-এ message পাঠাতে পারছে কিনা।</i>\n\n"
         "⚡━━━━━━━━━━━━━━⚡",
         reply_markup=markup,
         parse_mode="HTML",
@@ -4469,8 +4714,8 @@ def main_menu(user_id):
     markup.add(types.KeyboardButton("📲 𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥"))
     if _group_settings.get("v3_enabled", True):
         markup.add(types.KeyboardButton("🆕 𝗩𝟯 𝗣𝗔𝗡𝗘𝗟"))
-    markup.add(types.KeyboardButton("📊 𝗦𝗧𝗢𝗖𝗞"), types.KeyboardButton("📞 𝗦𝗔𝗣𝗢𝗥𝗧"))
-    markup.add(types.KeyboardButton("👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼"))
+    markup.add(types.KeyboardButton("📞 𝗦𝗔𝗣𝗢𝗥𝗧"), types.KeyboardButton("💰 𝗕𝗮𝗹𝗮𝗻𝗰𝗲"))
+    markup.add(types.KeyboardButton("👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼"), types.KeyboardButton("💸 𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄"))
     if user_id in ADMIN_IDS:
         markup.add(types.KeyboardButton("⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️"))
     return markup
@@ -4548,7 +4793,7 @@ def show_countries(chat_id, svc):
                 _, flag = get_country_details(nums[0])
                 btns.append(
                     types.InlineKeyboardButton(
-                        f"{flag} {cnt}", callback_data=f"n:{svc}:{cnt}", style="primary",
+                        f"{cnt}", callback_data=f"n:{svc}:{cnt}", style="primary",
                         **_flag_btn_kwargs(flag)
                     )
                 )
@@ -5970,7 +6215,7 @@ def callback_handler(call):
                 if nums:
                     _, flag = get_country_details(nums[0])
                     btns.append(types.InlineKeyboardButton(
-                        f"{flag} {cnt}",
+                        f"{cnt}",
                         callback_data=f"n:{svc_key}:{cnt}",
                         style="primary",
                         **_flag_btn_kwargs(flag)
@@ -6008,7 +6253,7 @@ def callback_handler(call):
                         _, flag = get_country_details(nums[0])
                         btns.append(
                             types.InlineKeyboardButton(
-                                f" {flag} {cnt}", callback_data=f"n:{svc}:{cnt}", style="primary",
+                                f"{cnt}", callback_data=f"n:{svc}:{cnt}", style="primary",
                                 **_flag_btn_kwargs(flag)
                             )
                         )
@@ -6125,7 +6370,7 @@ def callback_handler(call):
                     if len(cb.encode()) <= 64:
                         markup.add(
                             types.InlineKeyboardButton(
-                                f"🗑️ {flag} {cnt}  ({len(nums)} টি)", callback_data=cb, style="success",
+                                f"🗑️ {cnt}  ({len(nums)} টি)", callback_data=cb, style="success",
                                 **_flag_btn_kwargs(flag)
                             )
                         )
@@ -6463,7 +6708,190 @@ def callback_handler(call):
                 bot.delete_message(call.message.chat.id, call.message.message_id)
             except Exception:
                 pass
-            _show_msg_icons_menu(call.message)
+            _show_edit_messages_menu(call.message)
+
+        # ── Withdraw / Payment callbacks ──────────────────────────────────────
+        elif data == "wd_start":
+            bot.answer_callback_query(call.id)
+            _start_withdraw(call.message)
+
+        elif data == "wd_cancel":
+            uid = call.from_user.id
+            _withdraw_state.pop(uid, None)
+            bot.answer_callback_query(call.id, "❌ বাতিল করা হয়েছে।")
+            try:
+                bot.delete_message(call.message.chat.id, call.message.message_id)
+            except Exception:
+                pass
+            bot.send_message(call.message.chat.id, "❌ উইথড্র বাতিল।",
+                             reply_markup=main_menu(uid), parse_mode="HTML")
+
+        elif data.startswith("wd_method:"):
+            uid = call.from_user.id
+            method = data.split(":", 1)[1]
+            state = _withdraw_state.get(uid)
+            if not state:
+                bot.answer_callback_query(call.id, "❌ Session শেষ। আবার চেষ্টা করো।")
+                return
+            state["method"] = method
+            bot.answer_callback_query(call.id, f"✅ {method} সিলেক্ট হয়েছে।")
+            try:
+                bot.delete_message(call.message.chat.id, call.message.message_id)
+            except Exception:
+                pass
+            msg = bot.send_message(
+                call.message.chat.id,
+                f"📲 <b>{method}</b> অ্যাকাউন্ট নম্বর/ঠিকানা লিখুন:\n\n"
+                f"যেমন bKash: <code>01XXXXXXXXX</code>",
+                parse_mode="HTML",
+                reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("❌ বাতিল"),
+            )
+            bot.register_next_step_handler(msg, _wd_account_step)
+
+        elif data == "wd_confirm_submit":
+            uid = call.from_user.id
+            state = _withdraw_state.pop(uid, None)
+            if not state:
+                bot.answer_callback_query(call.id, "❌ Session শেষ। আবার চেষ্টা করো।")
+                return
+            amount  = state.get("amount", 0)
+            method  = state.get("method", "?")
+            account = state.get("account", "?")
+            ok, new_bal = deduct_balance(uid, amount)
+            if not ok:
+                bot.answer_callback_query(call.id, "❌ ব্যালেন্স কম!", show_alert=True)
+                try:
+                    bot.delete_message(call.message.chat.id, call.message.message_id)
+                except Exception:
+                    pass
+                return
+            cur = get_currency()
+            import time as _time
+            req_id = f"{uid}_{int(_time.time())}"
+            req = {
+                "id": req_id, "uid": uid, "amount": amount,
+                "method": method, "account": account,
+                "status": "pending", "timestamp": _time.time(),
+            }
+            with _withdraw_lock:
+                _withdraw_requests.append(req)
+            _save_withdraws()
+            bot.answer_callback_query(call.id, "✅ রিকোয়েস্ট জমা হয়েছে!")
+            try:
+                bot.delete_message(call.message.chat.id, call.message.message_id)
+            except Exception:
+                pass
+            bot.send_message(
+                call.message.chat.id,
+                f"✅ <b>উইথড্র রিকোয়েস্ট জমা হয়েছে!</b>\n\n"
+                f"💵 পরিমাণ: <code>{cur}{amount:.2f}</code>\n"
+                f"📲 মেথড: <b>{method}</b>\n"
+                f"📋 অ্যাকাউন্ট: <code>{account}</code>\n"
+                f"💰 অবশিষ্ট ব্যালেন্স: <code>{cur}{new_bal:.2f}</code>\n\n"
+                f"Admin অনুমোদনের পরে পেমেন্ট পাবেন।",
+                parse_mode="HTML",
+                reply_markup=main_menu(uid),
+            )
+            # Notify all admins
+            admin_markup = types.InlineKeyboardMarkup()
+            admin_markup.add(
+                types.InlineKeyboardButton("✅ অনুমোদন", callback_data=f"wd_approve:{req_id}"),
+                types.InlineKeyboardButton("❌ রিজেক্ট",  callback_data=f"wd_reject:{req_id}"),
+            )
+            uname = call.from_user.username or call.from_user.first_name or str(uid)
+            for admin_id in ADMIN_IDS:
+                try:
+                    bot.send_message(
+                        admin_id,
+                        f"⏳ <b>নতুন উইথড্র রিকোয়েস্ট!</b>\n\n"
+                        f"👤 User: @{uname} (<code>{uid}</code>)\n"
+                        f"💵 পরিমাণ: <code>{cur}{amount:.2f}</code>\n"
+                        f"📲 মেথড: <b>{method}</b>\n"
+                        f"📋 অ্যাকাউন্ট: <code>{account}</code>\n"
+                        f"🔑 ID: <code>{req_id}</code>",
+                        parse_mode="HTML",
+                        reply_markup=admin_markup,
+                    )
+                except Exception:
+                    pass
+
+        elif data.startswith("wd_approve:"):
+            if call.from_user.id not in ADMIN_IDS:
+                bot.answer_callback_query(call.id, "❌ Permission নেই!")
+                return
+            req_id = data.split(":", 1)[1]
+            req = None
+            with _withdraw_lock:
+                for r in _withdraw_requests:
+                    if r["id"] == req_id and r["status"] == "pending":
+                        r["status"] = "approved"
+                        req = r
+                        break
+            if not req:
+                bot.answer_callback_query(call.id, "❌ Request পাওয়া যায়নি বা ইতিমধ্যে প্রসেস হয়েছে।", show_alert=True)
+                return
+            _save_withdraws()
+            cur = get_currency()
+            bot.answer_callback_query(call.id, "✅ অনুমোদন দেওয়া হয়েছে!")
+            try:
+                bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
+                bot.edit_message_text(
+                    call.message.text + "\n\n✅ <b>অনুমোদিত!</b>",
+                    call.message.chat.id, call.message.message_id, parse_mode="HTML"
+                )
+            except Exception:
+                pass
+            try:
+                bot.send_message(
+                    req["uid"],
+                    f"✅ <b>উইথড্র অনুমোদিত হয়েছে!</b>\n\n"
+                    f"💵 পরিমাণ: <code>{cur}{req['amount']:.2f}</code>\n"
+                    f"📲 মেথড: <b>{req['method']}</b>\n"
+                    f"📋 অ্যাকাউন্ট: <code>{req['account']}</code>\n\n"
+                    f"শীঘ্রই পেমেন্ট পাবেন। ধন্যবাদ! 🎉",
+                    parse_mode="HTML",
+                )
+            except Exception:
+                pass
+
+        elif data.startswith("wd_reject:"):
+            if call.from_user.id not in ADMIN_IDS:
+                bot.answer_callback_query(call.id, "❌ Permission নেই!")
+                return
+            req_id = data.split(":", 1)[1]
+            req = None
+            with _withdraw_lock:
+                for r in _withdraw_requests:
+                    if r["id"] == req_id and r["status"] == "pending":
+                        r["status"] = "rejected"
+                        req = r
+                        break
+            if not req:
+                bot.answer_callback_query(call.id, "❌ Request পাওয়া যায়নি বা ইতিমধ্যে প্রসেস হয়েছে।", show_alert=True)
+                return
+            # Refund the balance
+            add_reward(req["uid"], req["amount"])
+            _save_withdraws()
+            cur = get_currency()
+            bot.answer_callback_query(call.id, "❌ রিজেক্ট করা হয়েছে, ব্যালেন্স ফেরত দেওয়া হয়েছে।")
+            try:
+                bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
+                bot.edit_message_text(
+                    call.message.text + "\n\n❌ <b>রিজেক্ট করা হয়েছে।</b>",
+                    call.message.chat.id, call.message.message_id, parse_mode="HTML"
+                )
+            except Exception:
+                pass
+            try:
+                bot.send_message(
+                    req["uid"],
+                    f"❌ <b>উইথড্র রিজেক্ট হয়েছে।</b>\n\n"
+                    f"💵 পরিমাণ: <code>{cur}{req['amount']:.2f}</code> আপনার ব্যালেন্সে ফেরত দেওয়া হয়েছে।\n\n"
+                    f"সমস্যার জন্য admin-এর সাথে যোগাযোগ করুন।",
+                    parse_mode="HTML",
+                )
+            except Exception:
+                pass
 
         elif data in ("msgicon_close", "msgicon_noop"):
             if data == "msgicon_close":
@@ -6654,7 +7082,7 @@ def callback_handler(call):
                 prefix = rng.rstrip("X")
                 c_name, flag = get_country_details(prefix)
                 short = c_name.split()[0] if c_name and c_name != "Unknown" else ""
-                label = f"{flag} {short} | {rng}" if short else f"{flag} {rng}"
+                label = f"{short} | {rng}" if short else f"{rng}"
                 rng_btns.append(types.InlineKeyboardButton(
                     label, callback_data=f"v2rng:{prefix}:{sid}", style="danger",
                     **_flag_btn_kwargs(flag)
@@ -7017,6 +7445,46 @@ def callback_handler(call):
                 f"📢 <b>Group #{idx+1} Channel Link</b>\n\nNew channel link dao (skip = <code>skip</code>):",
                 reply_markup=_back_admin_kb(), parse_mode="HTML")
             bot.register_next_step_handler(msg, _eg_edit_link_step)
+
+        elif data.startswith("eg_test:"):
+            if call.from_user.id not in ADMIN_IDS:
+                return
+            idx = int(data.split(":", 1)[1])
+            extra = _group_settings.get("extra_groups", [])
+            if 0 <= idx < len(extra):
+                g = extra[idx]
+                gid = g.get("id")
+                bot.answer_callback_query(call.id, "🧪 Test message পাঠানো হচ্ছে...")
+                try:
+                    bot.send_message(
+                        gid,
+                        f"🧪 <b>Test Message</b>\n\n"
+                        f"✅ Bot সফলভাবে এই group-এ message পাঠাতে পারছে!\n"
+                        f"🆔 Group ID: <code>{gid}</code>\n\n"
+                        f"<i>OTP আসলে এখানেই পাঠানো হবে।</i>",
+                        parse_mode="HTML",
+                    )
+                    bot.send_message(
+                        call.message.chat.id,
+                        f"✅ <b>Group #{idx+1} Test সফল!</b>\n\n"
+                        f"🆔 ID: <code>{gid}</code>\n"
+                        f"Bot সেই group-এ message পাঠাতে পারছে। OTP আসলে সেখানে যাবে।",
+                        parse_mode="HTML",
+                    )
+                except Exception as e:
+                    bot.send_message(
+                        call.message.chat.id,
+                        f"❌ <b>Group #{idx+1} Test ব্যর্থ!</b>\n\n"
+                        f"🆔 ID: <code>{gid}</code>\n"
+                        f"⚠️ Error: <code>{str(e)[:200]}</code>\n\n"
+                        f"<b>সমাধান:</b>\n"
+                        f"• Bot টিকে ওই group-এ <b>Admin</b> হিসেবে add করো\n"
+                        f"• Group ID সঠিক কিনা চেক করো\n"
+                        f"• Group ID সাধারণত <code>-100XXXXXXXXXX</code> format-এ হয়",
+                        parse_mode="HTML",
+                    )
+            else:
+                bot.answer_callback_query(call.id, "❌ Group পাওয়া যায়নি।", show_alert=True)
 
         elif data.startswith("eg_info:"):
             idx = int(data.split(":", 1)[1])
@@ -7481,9 +7949,20 @@ def text_handler(message):
 
     elif txt == "📞 𝗦𝗔𝗣𝗢𝗥𝗧":
         markup = types.InlineKeyboardMarkup()
-        markup.add(
-            types.InlineKeyboardButton("📩 Support Team", url="https://t.me/Tom_9805", style="primary")
-        )
+        _sup_id = _group_settings.get("support_id", "").strip()
+        if _sup_id:
+            # Build proper t.me URL from username or numeric ID
+            if _sup_id.startswith("http"):
+                _sup_url = _sup_id
+            elif _sup_id.startswith("@"):
+                _sup_url = f"https://t.me/{_sup_id.lstrip('@')}"
+            elif _sup_id.lstrip("-").isdigit():
+                _sup_url = f"tg://user?id={_sup_id}"
+            else:
+                _sup_url = f"https://t.me/{_sup_id}"
+            markup.add(types.InlineKeyboardButton("📩 Support Team", url=_sup_url, style="primary"))
+        else:
+            markup.add(types.InlineKeyboardButton("📩 Support Team", url="https://t.me/Tom_9805", style="primary"))
         bot.send_message(
             message.chat.id,
             "📞 <b>SUPPORT</b> 📞\n"
@@ -7504,6 +7983,17 @@ def text_handler(message):
 
     elif txt == "⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️" and uid in ADMIN_IDS:
         _go_admin_panel(message)
+
+    elif txt == "💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀" and uid in ADMIN_IDS:
+        _payment_admin_msg_handler(message)
+
+    elif txt in ("💵 রিওয়ার্ড সেট করো", "💱 কারেন্সি সেট করো",
+                 "📉 মিনিমাম উইথড্র সেট করো", "📋 সব ব্যালেন্স দেখো",
+                 "➕ ম্যানুয়াল ব্যালেন্স অ্যাড", "➖ ম্যানুয়াল ব্যালেন্স কাটো") and uid in ADMIN_IDS:
+        _payment_admin_msg_handler(message)
+
+    elif txt.startswith("⏳ পেন্ডিং উইথড্র") and uid in ADMIN_IDS:
+        _payment_admin_msg_handler(message)
 
     elif txt == "🔥📢 𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁" and uid in ADMIN_IDS:
         msg = bot.send_message(
@@ -7879,22 +8369,19 @@ def text_handler(message):
     elif txt == "👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼":
         bot.send_message(
             message.chat.id,
-            "<b>👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼</b>\n\n"
-            "<b>✨ Name: 𝗔𝘁𝗶𝗸</b>\n"
-            "<b>⚡ Role: Bot Developer</b>\n"
-            "<b>🤖 Project: Custom Otp Bot</b>\n"
-            "<b>📲 Contact: @Tom_9805</b>\n"
+            "<b><tg-emoji emoji-id=\"5202216593966244027\">👨‍💻</tg-emoji> 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼</b>\n\n"
+            "<b><tg-emoji emoji-id=\"5325547803936572038\">✨</tg-emoji> Name: 𝗔𝘁𝗶𝗸</b>\n"
+            "<b><tg-emoji emoji-id=\"5447644880824181073\">⚡</tg-emoji> Role: Bot Developer</b>\n"
+            "<b><tg-emoji emoji-id=\"5341363621572128687\">🤖</tg-emoji> Project: Custom Otp Bot</b>\n"
+            "<b><tg-emoji emoji-id=\"5391112412445288650\">📲</tg-emoji> Contact: @Tom_9805</b>\n"
             "<b>━━━━━━━━━━━━━━</b>\n"
-            "<b>🔥 Developed &amp; Managed by Atik</b>\n"
+            "<b><tg-emoji emoji-id=\"5447644880824181073\">⚡</tg-emoji> Developed &amp; Managed by Atik</b>\n"
             "<b>━━━━━━━━━━━━━━</b>",
             parse_mode="HTML",
         )
 
     elif txt == "📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀" and uid in ADMIN_IDS:
         _show_extra_groups(message)
-
-    elif txt == "✨ 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗜𝗰𝗼𝗻𝘀" and uid in ADMIN_IDS:
-        _show_msg_icons_menu(message)
 
     elif txt == "🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶" and uid in ADMIN_IDS:
         _show_custom_emoji_menu(message)
@@ -7905,8 +8392,69 @@ def text_handler(message):
             message.chat.id,
             "🏳️ <b>Flag Emoji Set</b>\n\n"
             "Flag emoji আর তার custom emoji ID পাঠাও:\n\n"
-            "<b>ফরম্যাট:</b> <code>🇧🇩 5432198765432198765</code>\n\n"
-            "<i>প্রতিটি flag আলাদা message-এ পাঠাও।</i>",
+            "<b>একটি:</b> <code>🇧🇩 5432198765432198765</code>\n\n"
+            "<b>বাল্ক (numbered list):</b>\n"
+            "<code>1. 🇧🇩 5432198765432198765\n2. 🇺🇸 5976694588658686266</code>\n\n"
+            "<i>অথবা সব flag একসাথে দিতে 🌍 All Flags JSON Set ব্যবহার করো।</i>",
+            parse_mode="HTML"
+        )
+        bot.register_next_step_handler(message, _custom_emoji_input)
+
+    elif txt == "🌍 All Flags JSON Set" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "flag_bulk_json"
+        with _custom_emoji_lock:
+            cur = dict(_custom_emojis.get("flags", {}))
+        cur_preview = json.dumps(cur, ensure_ascii=False, indent=2) if cur else "{}"
+        bot.send_message(
+            message.chat.id,
+            "🌍 <b>All Flags JSON Set</b>\n\n"
+            "একটি JSON পাঠাও যাতে <b>সব</b> flag emoji আর তাদের custom ID থাকবে।\n\n"
+            "<b>ফরম্যাট:</b>\n"
+            "<code>{\n"
+            '  "🇧🇩": "5432198765432198765",\n'
+            '  "🇺🇸": "5976694588658686266",\n'
+            '  "🇮🇳": "5195261305332736014"\n'
+            "}</code>\n\n"
+            "📌 <b>বর্তমান flags (JSON):</b>\n"
+            f"<pre>{cur_preview}</pre>\n\n"
+            "<i>নতুন JSON পাঠালে বর্তমানের সাথে merge হবে (overwrite নয়)।\n"
+            "সব মুছে নতুন করতে আগে 🗑️ Flag Emoji Del দিয়ে মুছো।</i>",
+            parse_mode="HTML"
+        )
+        bot.register_next_step_handler(message, _custom_emoji_input)
+
+    elif txt == "📋 Flag JSON Export" and uid in ADMIN_IDS:
+        with _custom_emoji_lock:
+            cur = dict(_custom_emojis.get("flags", {}))
+        if not cur:
+            bot.send_message(message.chat.id,
+                "📋 এখনো কোনো flag emoji সেট নেই।\n\n"
+                "🌍 All Flags JSON Set দিয়ে যোগ করো।")
+        else:
+            exported = json.dumps(cur, ensure_ascii=False, indent=2)
+            bot.send_message(
+                message.chat.id,
+                f"📋 <b>Current Flag Emojis JSON</b>\n\n"
+                f"<pre>{exported}</pre>\n\n"
+                f"<i>মোট {len(cur)}টি flag সেট আছে।\n"
+                f"Copy করে edit করে 🌍 All Flags JSON Set-এ paste করো।</i>",
+                parse_mode="HTML"
+            )
+        _show_custom_emoji_menu(message)
+
+    elif txt == "🔢 IDs Only Set" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "flag_ids_only"
+        bot.send_message(
+            message.chat.id,
+            "🔢 <b>Flag IDs Only Set</b>\n\n"
+            "শুধু custom emoji ID-গুলো paste করো (একটি করে প্রতি লাইনে)।\n"
+            "Bot নিজেই Telegram থেকে বের করবে কোনটা কোন দেশের flag।\n\n"
+            "<b>ফরম্যাট:</b>\n"
+            "<code>5432198765432198765\n"
+            "5976694588658686266\n"
+            "5195261305332736014</code>\n\n"
+            "<i>একসাথে সর্বোচ্চ 200টি ID দিতে পারবে।</i>",
+            reply_markup=_back_admin_kb(),
             parse_mode="HTML"
         )
         bot.register_next_step_handler(message, _custom_emoji_input)
@@ -8021,6 +8569,12 @@ def text_handler(message):
 
     elif txt in ("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟", "🔙 Admin Panel") and uid in ADMIN_IDS:
         _go_admin_panel(message)
+
+    elif txt == "💰 𝗕𝗮𝗹𝗮𝗻𝗰𝗲":
+        _show_balance(message)
+
+    elif txt == "💸 𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄":
+        _start_withdraw(message)
 
     elif txt == "⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂":
         mname = message.from_user.first_name or message.from_user.username or "User"
@@ -9085,7 +9639,7 @@ def _set_msg_icon_step(message):
     with _custom_emoji_lock:
         _custom_emojis.setdefault("msg_slots", {})[slot_key] = {"id": custom_emoji_id, "fb": fallback_char}
     _save_custom_emojis()
-    _show_msg_icons_menu(message, note=f"✅ <b>{label}</b> — custom emoji সেট হয়েছে!")
+    _show_edit_messages_menu(message, note=f"✅ <b>{label}</b> — custom emoji সেট হয়েছে!")
 
 
 def _show_custom_emoji_menu(message, note=""):
@@ -9097,7 +9651,10 @@ def _show_custom_emoji_menu(message, note=""):
         slots_set   = dict(_custom_emojis.get("msg_slots", {}))
         dm_e_set    = dict(_custom_emojis.get("dm_emoji", {}))
 
-    flag_lines = "\n".join(f"  {k} → <code>{v}</code>" for k, v in flags_set.items()) or "  (কিছু নেই — 🏳️ Flag Emoji Set দিয়ে যোগ করো)"
+    if len(flags_set) > 8:
+        flag_lines = f"  ✅ মোট <b>{len(flags_set)}টি</b> flag custom emoji সেট আছে\n  (📋 Flag JSON Export দিয়ে সব দেখো)"
+    else:
+        flag_lines = "\n".join(f"  {k} → <code>{v}</code>" for k, v in flags_set.items()) or "  (কিছু নেই — 🏳️ Flag Emoji Set দিয়ে যোগ করো)"
     svc_lines  = "\n".join(f"  {k} → <code>{v}</code>" for k, v in svcs_set.items())  or "  (কিছু নেই)"
     btn_lines  = "\n".join(f"  <code>{k}</code> → <code>{v}</code>" for k, v in btns_set.items()) or "  (কিছু নেই)"
     slot_lines = "\n".join(f"  {{emoji_{k}}} → {v.get('fb','?')} (id:<code>{v.get('id','')}</code>)" for k, v in slots_set.items()) or "  (কিছু নেই)"
@@ -9127,9 +9684,11 @@ def _show_custom_emoji_menu(message, note=""):
     )
     mk = types.ReplyKeyboardMarkup(resize_keyboard=True)
     mk.add("🏳️ Flag Emoji Set", "🎯 Service Emoji Set")
-    mk.add("🗑️ Flag Emoji Del", "🗑️ Service Emoji Del")
-    mk.add("🔘 Button Emoji Set", "🗑️ Button Emoji Del")
-    mk.add("💬 Msg Emoji Set", "🗑️ Msg Emoji Del")
+    mk.add("🌍 All Flags JSON Set", "📋 Flag JSON Export")
+    mk.add("🔢 IDs Only Set", "🗑️ Flag Emoji Del")
+    mk.add("🗑️ Service Emoji Del", "🔘 Button Emoji Set")
+    mk.add("🗑️ Button Emoji Del", "💬 Msg Emoji Set")
+    mk.add("🗑️ Msg Emoji Del")
     mk.add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟")
     bot.send_message(message.chat.id, text, reply_markup=mk, parse_mode="HTML")
 
@@ -9149,20 +9708,26 @@ def _custom_emoji_input(message):
     parts = txt.split()
 
     if mode == "flag":
-        # Supports both single: "🇧🇩 ID" and numbered bulk list: "1. 🇧🇩 ID\n2. 🇺🇸 ID2"
+        # Supports: "🇧🇩 ID", "🇧🇩 → ID", numbered "1. 🇧🇩 ID", "1. 🇧🇩 → ID"
         import re as _re
         lines = [l.strip() for l in txt.splitlines() if l.strip()]
         parsed = {}
         for line in lines:
-            # Strip leading "1." "1)" "1-" numbering if present
+            # Strip leading "1." "1)" "1-" numbering
             clean = _re.sub(r'^\d+[\.\)\-]\s*', '', line).strip()
+            # Remove → arrow separator
+            clean = clean.replace('→', '').replace('->', '')
             tokens = clean.split()
-            if len(tokens) == 2 and tokens[1].isdigit():
-                parsed[tokens[0]] = tokens[1]
+            # First token = flag emoji, last token = numeric ID
+            if len(tokens) >= 2 and tokens[-1].isdigit():
+                parsed[tokens[0]] = tokens[-1]
         if not parsed:
             bot.send_message(message.chat.id,
-                "❌ ফরম্যাট ভুল!\n\n<b>একটি:</b> <code>🇧🇩 5432198765432198765</code>\n"
-                "<b>বাল্ক (numbered list):</b>\n<code>1. 🇧🇩 5432198765432198765\n2. 🇺🇸 5976694588658686266</code>\n\nআবার পাঠাও:",
+                "❌ ফরম্যাট ভুল!\n\n"
+                "<b>ফরম্যাট (যেকোনো একটি):</b>\n"
+                "<code>🇧🇩 5432198765432198765</code>\n"
+                "<code>🇧🇩 → 5432198765432198765</code>\n\n"
+                "<b>বাল্ক:</b>\n<code>1. 🇧🇩 → 5432198765432198765\n2. 🇺🇸 → 5976694588658686266</code>\n\nআবার পাঠাও:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
@@ -9171,6 +9736,115 @@ def _custom_emoji_input(message):
         _save_custom_emojis()
         added = "\n".join(f"  {k} → <code>{v}</code>" for k, v in parsed.items())
         _show_custom_emoji_menu(message, note=f"✅ {len(parsed)}টি flag সেট হয়েছে:\n{added}")
+
+    elif mode == "flag_bulk_json":
+        # Accept a JSON object: {"🇧🇩": "123456789", "🇺🇸": "987654321", ...}
+        # Also accept line-by-line: 🇧🇩 123456789\n🇺🇸 987654321
+        import re as _re
+        parsed = {}
+        err_msg = ""
+        # Try JSON first
+        raw = txt.strip()
+        # Strip markdown code fences if present
+        raw = _re.sub(r'^```[a-z]*\n?', '', raw, flags=_re.IGNORECASE)
+        raw = _re.sub(r'\n?```$', '', raw)
+        raw = raw.strip()
+        try:
+            data = json.loads(raw)
+            if not isinstance(data, dict):
+                raise ValueError("JSON must be an object/dict")
+            for k, v in data.items():
+                v_str = str(v).strip()
+                if v_str.isdigit():
+                    parsed[k.strip()] = v_str
+                else:
+                    err_msg += f"⚠️ <code>{k}</code> — ID ভুল (<code>{v}</code>), skip করা হয়েছে\n"
+        except json.JSONDecodeError:
+            # Fall back to line-by-line parsing
+            lines = [l.strip() for l in txt.splitlines() if l.strip()]
+            for line in lines:
+                clean = _re.sub(r'^\d+[\.\)\-]\s*', '', line).strip()
+                tokens = clean.split()
+                if len(tokens) == 2 and tokens[1].isdigit():
+                    parsed[tokens[0]] = tokens[1]
+
+        if not parsed:
+            bot.send_message(message.chat.id,
+                "❌ কিছু parse করা যায়নি!\n\n"
+                "<b>JSON ফরম্যাট:</b>\n"
+                "<code>{\n"
+                '  "🇧🇩": "5432198765432198765",\n'
+                '  "🇺🇸": "5976694588658686266"\n'
+                "}</code>\n\n"
+                "<b>Line-by-line ফরম্যাটও চলবে:</b>\n"
+                "<code>🇧🇩 5432198765432198765\n🇺🇸 5976694588658686266</code>\n\n"
+                "আবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("flags", {}).update(parsed)
+        _save_custom_emojis()
+        added_lines = "\n".join(f"  {k} → <code>{v}</code>" for k, v in parsed.items())
+        note = f"✅ {len(parsed)}টি flag JSON থেকে সেট হয়েছে:\n{added_lines}"
+        if err_msg:
+            note += f"\n\n{err_msg}"
+        _show_custom_emoji_menu(message, note=note)
+
+    elif mode == "flag_ids_only":
+        # User pastes only emoji IDs (one per line or space-separated).
+        # Bot calls Telegram API to resolve each ID → emoji character, then saves.
+        import re as _re
+        raw_ids = []
+        for token in _re.split(r'[\s,\n]+', txt):
+            token = token.strip()
+            if token.isdigit() and len(token) >= 10:
+                raw_ids.append(token)
+        if not raw_ids:
+            bot.send_message(message.chat.id,
+                "❌ কোনো valid ID পাওয়া যায়নি!\n\n"
+                "প্রতি লাইনে একটি করে numeric emoji ID দাও:\n"
+                "<code>5432198765432198765\n5976694588658686266</code>\n\nআবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        raw_ids = raw_ids[:200]  # cap at 200
+        bot.send_message(message.chat.id,
+            f"⏳ {len(raw_ids)}টি ID Telegram থেকে resolve করা হচ্ছে...",
+            parse_mode="HTML")
+        parsed = {}
+        failed = []
+        # Telegram allows max 200 IDs per call — process in chunks of 100
+        chunk_size = 100
+        for i in range(0, len(raw_ids), chunk_size):
+            chunk = raw_ids[i:i + chunk_size]
+            try:
+                stickers = bot.get_custom_emoji_stickers(chunk)
+                # Zip original IDs with returned stickers (API returns in same order)
+                # sticker.custom_emoji_id may be None in some pyTelegramBotAPI versions
+                for eid_orig, sticker in zip(chunk, stickers):
+                    emoji_char = getattr(sticker, "emoji", None)
+                    eid = getattr(sticker, "custom_emoji_id", None) or eid_orig
+                    if emoji_char and eid:
+                        parsed[emoji_char] = eid
+            except Exception as _api_err:
+                failed.extend(chunk)
+                print(f"[FLAG-IDS] API error for chunk: {_api_err}")
+        if not parsed:
+            bot.send_message(message.chat.id,
+                "❌ Telegram থেকে কোনো emoji resolve করা যায়নি!\n\n"
+                "ID-গুলো valid কিনা চেক করো। আবার পাঠাও:",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("flags", {}).update(parsed)
+        _save_custom_emojis()
+        added_lines = "\n".join(f"  {k} → <code>{v}</code>" for k, v in parsed.items())
+        note = f"✅ {len(parsed)}টি flag auto-resolve করে সেট হয়েছে:\n{added_lines}"
+        if failed:
+            note += f"\n\n⚠️ {len(failed)}টি ID resolve হয়নি।"
+        _show_custom_emoji_menu(message, note=note)
 
     elif mode == "service":
         # Format: INSTAGRAM 5319160079465857105
@@ -9315,6 +9989,444 @@ def _custom_emoji_input(message):
             _custom_emoji_state[uid] = mode
 
 
+# ── Payment System — User Functions ──────────────────────────────────────────
+
+def _show_balance(message):
+    uid = message.from_user.id
+    bal = get_balance(uid)
+    cur = get_currency()
+    rpo = get_reward_per_otp()
+    with otp_stats_lock:
+        total_otps = otp_stats.get(str(uid), 0)
+    # Count this user's pending/approved withdraw requests
+    with _withdraw_lock:
+        pending = [r for r in _withdraw_requests if r["uid"] == uid and r["status"] == "pending"]
+        approved = [r for r in _withdraw_requests if r["uid"] == uid and r["status"] == "approved"]
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("💸 উইথড্র করো", callback_data="wd_start"))
+    bot.send_message(
+        message.chat.id,
+        f"💰 <b>আপনার ওয়ালেট</b>\n"
+        f"━━━━━━━━━━━━━━━\n"
+        f"💵 <b>ব্যালেন্স:</b> <code>{cur}{bal:.2f}</code>\n"
+        f"🎁 <b>প্রতি OTP রিওয়ার্ড:</b> <code>{cur}{rpo:.2f}</code>\n"
+        f"📊 <b>মোট OTP:</b> <code>{total_otps}</code>\n"
+        f"⏳ <b>পেন্ডিং উইথড্র:</b> <code>{len(pending)}</code>\n"
+        f"✅ <b>অনুমোদিত উইথড্র:</b> <code>{len(approved)}</code>\n"
+        f"━━━━━━━━━━━━━━━",
+        parse_mode="HTML",
+        reply_markup=markup,
+    )
+
+
+_withdraw_state: dict = {}
+
+
+def _start_withdraw(message):
+    uid = message.from_user.id
+    bal = get_balance(uid)
+    cur = get_currency()
+    min_wd = get_min_withdraw()
+    if bal < min_wd:
+        bot.send_message(
+            message.chat.id,
+            f"❌ <b>ব্যালেন্স কম!</b>\n\n"
+            f"আপনার ব্যালেন্স: <code>{cur}{bal:.2f}</code>\n"
+            f"ন্যূনতম উইথড্র: <code>{cur}{min_wd:.2f}</code>\n\n"
+            f"আরও OTP নিন এবং রিওয়ার্ড জমা করুন।",
+            parse_mode="HTML",
+        )
+        return
+    msg = bot.send_message(
+        message.chat.id,
+        f"💸 <b>উইথড্র রিকোয়েস্ট</b>\n\n"
+        f"আপনার ব্যালেন্স: <code>{cur}{bal:.2f}</code>\n"
+        f"ন্যূনতম: <code>{cur}{min_wd:.2f}</code>\n\n"
+        f"কত টাকা উইথড্র করতে চান? (সংখ্যা লিখুন)\n"
+        f"যেমন: <code>100</code>",
+        parse_mode="HTML",
+        reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("❌ বাতিল"),
+    )
+    _withdraw_state[uid] = {"step": "amount"}
+    bot.register_next_step_handler(msg, _wd_amount_step)
+
+
+def _wd_amount_step(message):
+    uid = message.from_user.id
+    txt = (message.text or "").strip()
+    if txt in ("❌ বাতিল", "❌ Cancel") or _is_back(txt):
+        _withdraw_state.pop(uid, None)
+        bot.send_message(message.chat.id, "❌ উইথড্র বাতিল।",
+                         reply_markup=main_menu(uid), parse_mode="HTML")
+        return
+    if _intercept_menu_btn(message):
+        _withdraw_state.pop(uid, None)
+        return
+    try:
+        amount = float(txt.replace(",", "").strip())
+    except ValueError:
+        msg = bot.send_message(message.chat.id, "❌ সংখ্যা লিখুন! যেমন: <code>100</code>",
+                                parse_mode="HTML")
+        bot.register_next_step_handler(msg, _wd_amount_step)
+        return
+    cur = get_currency()
+    bal = get_balance(uid)
+    min_wd = get_min_withdraw()
+    if amount < min_wd:
+        msg = bot.send_message(message.chat.id,
+            f"❌ ন্যূনতম <code>{cur}{min_wd:.2f}</code> উইথড্র করতে হবে। আবার লিখুন:",
+            parse_mode="HTML")
+        bot.register_next_step_handler(msg, _wd_amount_step)
+        return
+    if amount > bal:
+        msg = bot.send_message(message.chat.id,
+            f"❌ ব্যালেন্স কম! আপনার আছে <code>{cur}{bal:.2f}</code>। আবার লিখুন:",
+            parse_mode="HTML")
+        bot.register_next_step_handler(msg, _wd_amount_step)
+        return
+    _withdraw_state[uid]["amount"] = amount
+    markup = types.InlineKeyboardMarkup(row_width=2)
+    markup.add(
+        types.InlineKeyboardButton("bKash",   callback_data="wd_method:bKash",   icon_custom_emoji_id="6084377871265041519", style="danger"),
+        types.InlineKeyboardButton("Nagad",   callback_data="wd_method:Nagad",   icon_custom_emoji_id="6082388335039351641", style="success"),
+        types.InlineKeyboardButton("Rocket",  callback_data="wd_method:Rocket",  icon_custom_emoji_id="6084843995475742197", style="primary"),
+        types.InlineKeyboardButton("Binance", callback_data="wd_method:Binance", icon_custom_emoji_id="5359437015752401733", style="success"),
+        types.InlineKeyboardButton("❌ বাতিল", callback_data="wd_cancel", style="danger"),
+    )
+    bot.send_message(
+        message.chat.id,
+        f"✅ পরিমাণ: <code>{cur}{amount:.2f}</code>\n\n📲 পেমেন্ট মেথড বেছে নিন:",
+        parse_mode="HTML",
+        reply_markup=markup,
+    )
+
+
+def _wd_account_step(message):
+    uid = message.from_user.id
+    state = _withdraw_state.get(uid, {})
+    txt = (message.text or "").strip()
+    if txt in ("❌ বাতিল", "❌ Cancel") or _is_back(txt):
+        _withdraw_state.pop(uid, None)
+        bot.send_message(message.chat.id, "❌ উইথড্র বাতিল।",
+                         reply_markup=main_menu(uid), parse_mode="HTML")
+        return
+    if _intercept_menu_btn(message):
+        _withdraw_state.pop(uid, None)
+        return
+    if not txt:
+        msg = bot.send_message(message.chat.id, "❌ অ্যাকাউন্ট নম্বর/ঠিকানা লিখুন:")
+        bot.register_next_step_handler(msg, _wd_account_step)
+        return
+    state["account"] = txt
+    method  = state.get("method", "?")
+    amount  = state.get("amount", 0)
+    cur = get_currency()
+    markup = types.InlineKeyboardMarkup()
+    markup.add(
+        types.InlineKeyboardButton("✅ কনফার্ম", callback_data="wd_confirm_submit"),
+        types.InlineKeyboardButton("❌ বাতিল",   callback_data="wd_cancel"),
+    )
+    bot.send_message(
+        message.chat.id,
+        f"💸 <b>উইথড্র কনফার্ম করুন</b>\n\n"
+        f"💵 পরিমাণ: <code>{cur}{amount:.2f}</code>\n"
+        f"📲 মেথড: <b>{method}</b>\n"
+        f"📋 অ্যাকাউন্ট: <code>{txt}</code>\n\n"
+        f"নিশ্চিত করুন?",
+        parse_mode="HTML",
+        reply_markup=markup,
+    )
+
+
+# ── Payment System — Admin Functions ──────────────────────────────────────────
+
+def _show_payment_admin(message):
+    uid = message.from_user.id
+    if uid not in ADMIN_IDS:
+        return
+    cur = get_currency()
+    rpo = get_reward_per_otp()
+    min_wd = get_min_withdraw()
+    with _withdraw_lock:
+        pending_wds = [r for r in _withdraw_requests if r["status"] == "pending"]
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add("💵 রিওয়ার্ড সেট করো", "💱 কারেন্সি সেট করো")
+    markup.add("📉 মিনিমাম উইথড্র সেট করো")
+    markup.add("📋 সব ব্যালেন্স দেখো")
+    markup.add("➕ ম্যানুয়াল ব্যালেন্স অ্যাড", "➖ ম্যানুয়াল ব্যালেন্স কাটো")
+    markup.add(f"⏳ পেন্ডিং উইথড্র ({len(pending_wds)})")
+    markup.add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟")
+    bot.send_message(
+        message.chat.id,
+        f"💰 <b>Payment Settings</b>\n\n"
+        f"🎁 প্রতি OTP রিওয়ার্ড: <code>{cur}{rpo:.2f}</code>\n"
+        f"💱 কারেন্সি: <code>{cur}</code>\n"
+        f"📉 মিনিমাম উইথড্র: <code>{cur}{min_wd:.2f}</code>\n"
+        f"⏳ পেন্ডিং উইথড্র: <code>{len(pending_wds)}</code>",
+        parse_mode="HTML",
+        reply_markup=markup,
+    )
+
+
+_payment_admin_state: dict = {}
+
+
+def _payment_admin_msg_handler(message):
+    uid = message.from_user.id
+    if uid not in ADMIN_IDS:
+        return
+    txt = (message.text or "").strip()
+
+    if txt == "💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀":
+        _show_payment_admin(message)
+
+    elif txt == "💵 রিওয়ার্ড সেট করো":
+        cur = get_currency()
+        msg = bot.send_message(
+            message.chat.id,
+            f"🎁 প্রতি OTP-এর জন্য রিওয়ার্ড কত হবে?\n\n"
+            f"বর্তমান: <code>{cur}{get_reward_per_otp():.2f}</code>\n"
+            f"নতুন পরিমাণ লিখুন (যেমন: <code>0.50</code>):",
+            parse_mode="HTML",
+            reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟"),
+        )
+        _payment_admin_state[uid] = "set_reward"
+        bot.register_next_step_handler(msg, _payment_admin_input)
+
+    elif txt == "💱 কারেন্সি সেট করো":
+        msg = bot.send_message(
+            message.chat.id,
+            f"💱 কারেন্সি সিম্বল কী হবে?\n\n"
+            f"বর্তমান: <code>{get_currency()}</code>\n"
+            f"নতুন সিম্বল লিখুন (যেমন: <code>৳</code> বা <code>$</code>):",
+            parse_mode="HTML",
+            reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟"),
+        )
+        _payment_admin_state[uid] = "set_currency"
+        bot.register_next_step_handler(msg, _payment_admin_input)
+
+    elif txt == "📉 মিনিমাম উইথড্র সেট করো":
+        cur = get_currency()
+        msg = bot.send_message(
+            message.chat.id,
+            f"📉 ন্যূনতম উইথড্র পরিমাণ কত?\n\n"
+            f"বর্তমান: <code>{cur}{get_min_withdraw():.2f}</code>\n"
+            f"নতুন পরিমাণ লিখুন (যেমন: <code>50</code>):",
+            parse_mode="HTML",
+            reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟"),
+        )
+        _payment_admin_state[uid] = "set_min_withdraw"
+        bot.register_next_step_handler(msg, _payment_admin_input)
+
+    elif txt == "📋 সব ব্যালেন্স দেখো":
+        with _balances_lock:
+            bal_copy = dict(_balances)
+        if not bal_copy:
+            bot.send_message(message.chat.id, "❌ কোনো ব্যালেন্স নেই।", parse_mode="HTML")
+            return
+        cur = get_currency()
+        lines = []
+        for k, v in sorted(bal_copy.items(), key=lambda x: -float(x[1])):
+            lines.append(f"<code>{k}</code> → <b>{cur}{float(v):.2f}</b>")
+        text = "📋 <b>সব ইউজারের ব্যালেন্স</b>\n━━━━━━━━━━━━━━\n" + "\n".join(lines[:50])
+        if len(lines) > 50:
+            text += f"\n…এবং আরও {len(lines)-50} জন"
+        bot.send_message(message.chat.id, text, parse_mode="HTML")
+
+    elif txt in ("➕ ম্যানুয়াল ব্যালেন্স অ্যাড", "➖ ম্যানুয়াল ব্যালেন্স কাটো"):
+        action = "add" if "অ্যাড" in txt else "deduct"
+        msg = bot.send_message(
+            message.chat.id,
+            f"👤 কোন ইউজারের ব্যালেন্স {'<b>যোগ</b>' if action=='add' else '<b>কাটা</b>'} করবে?\n\n"
+            f"ইউজারের <b>Telegram ID</b> লিখুন (যেমন: <code>123456789</code>):",
+            parse_mode="HTML",
+            reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟"),
+        )
+        _payment_admin_state[uid] = f"manual_uid:{action}"
+        bot.register_next_step_handler(msg, _payment_admin_input)
+
+    elif txt.startswith("⏳ পেন্ডিং উইথড্র"):
+        _show_pending_withdraws(message)
+
+
+def _payment_admin_input(message):
+    uid = message.from_user.id
+    if uid not in ADMIN_IDS:
+        return
+    mode = _payment_admin_state.pop(uid, None)
+    txt = (message.text or "").strip()
+    if _is_back(txt) or _intercept_menu_btn(message):
+        return
+    if mode == "set_reward":
+        try:
+            val = float(txt.replace(",", ""))
+            if val < 0:
+                raise ValueError
+        except ValueError:
+            msg = bot.send_message(message.chat.id, "❌ ভুল! একটি ধনাত্মক সংখ্যা দিন:")
+            _payment_admin_state[uid] = "set_reward"
+            bot.register_next_step_handler(msg, _payment_admin_input)
+            return
+        with _reward_settings_lock:
+            _reward_settings["reward_per_otp"] = val
+        _save_reward_settings()
+        cur = get_currency()
+        bot.send_message(message.chat.id,
+            f"✅ প্রতি OTP রিওয়ার্ড সেট হয়েছে: <code>{cur}{val:.2f}</code>",
+            parse_mode="HTML", reply_markup=types.ReplyKeyboardRemove())
+        _show_payment_admin(message)
+
+    elif mode == "set_currency":
+        if not txt:
+            msg = bot.send_message(message.chat.id, "❌ কারেন্সি সিম্বল দিন:")
+            _payment_admin_state[uid] = "set_currency"
+            bot.register_next_step_handler(msg, _payment_admin_input)
+            return
+        with _reward_settings_lock:
+            _reward_settings["currency"] = txt
+        _save_reward_settings()
+        bot.send_message(message.chat.id,
+            f"✅ কারেন্সি সেট হয়েছে: <code>{txt}</code>",
+            parse_mode="HTML", reply_markup=types.ReplyKeyboardRemove())
+        _show_payment_admin(message)
+
+    elif mode == "set_min_withdraw":
+        try:
+            val = float(txt.replace(",", ""))
+            if val < 0:
+                raise ValueError
+        except ValueError:
+            msg = bot.send_message(message.chat.id, "❌ ভুল! একটি ধনাত্মক সংখ্যা দিন:")
+            _payment_admin_state[uid] = "set_min_withdraw"
+            bot.register_next_step_handler(msg, _payment_admin_input)
+            return
+        with _reward_settings_lock:
+            _reward_settings["min_withdraw"] = val
+        _save_reward_settings()
+        cur = get_currency()
+        bot.send_message(message.chat.id,
+            f"✅ মিনিমাম উইথড্র সেট হয়েছে: <code>{cur}{val:.2f}</code>",
+            parse_mode="HTML", reply_markup=types.ReplyKeyboardRemove())
+        _show_payment_admin(message)
+
+    elif mode and mode.startswith("manual_uid:"):
+        action = mode.split(":", 1)[1]  # "add" or "deduct"
+        try:
+            target_uid = int(txt.strip())
+        except ValueError:
+            msg = bot.send_message(
+                message.chat.id,
+                "❌ ভুল ID! শুধু সংখ্যা দিন (যেমন: <code>123456789</code>):",
+                parse_mode="HTML",
+            )
+            _payment_admin_state[uid] = f"manual_uid:{action}"
+            bot.register_next_step_handler(msg, _payment_admin_input)
+            return
+        cur = get_currency()
+        cur_bal = get_balance(target_uid)
+        action_word = "যোগ" if action == "add" else "কাটা"
+        msg = bot.send_message(
+            message.chat.id,
+            f"👤 UID: <code>{target_uid}</code>\n"
+            f"💰 বর্তমান ব্যালেন্স: <code>{cur}{cur_bal:.2f}</code>\n\n"
+            f"কত টাকা <b>{action_word}</b> করবে? (সংখ্যা লিখুন)\n"
+            f"যেমন: <code>50</code>",
+            parse_mode="HTML",
+        )
+        _payment_admin_state[uid] = f"manual_amount:{action}:{target_uid}"
+        bot.register_next_step_handler(msg, _payment_admin_input)
+
+    elif mode and mode.startswith("manual_amount:"):
+        parts = mode.split(":", 2)
+        action = parts[1]       # "add" or "deduct"
+        target_uid = int(parts[2])
+        try:
+            amount = float(txt.replace(",", "").strip())
+            if amount <= 0:
+                raise ValueError
+        except ValueError:
+            msg = bot.send_message(
+                message.chat.id,
+                "❌ ভুল! একটি ধনাত্মক সংখ্যা দিন:",
+                parse_mode="HTML",
+            )
+            _payment_admin_state[uid] = f"manual_amount:{action}:{target_uid}"
+            bot.register_next_step_handler(msg, _payment_admin_input)
+            return
+        cur = get_currency()
+        if action == "add":
+            new_bal = add_reward(target_uid, amount)
+            action_label = "যোগ হয়েছে ✅"
+            sign = "+"
+        else:
+            ok, new_bal = deduct_balance(target_uid, amount)
+            if not ok:
+                bot.send_message(
+                    message.chat.id,
+                    f"❌ ব্যালেন্স কম! UID <code>{target_uid}</code>-এর ব্যালেন্স পর্যাপ্ত নয়।",
+                    parse_mode="HTML",
+                )
+                _show_payment_admin(message)
+                return
+            action_label = "কাটা হয়েছে ✅"
+            sign = "-"
+        bot.send_message(
+            message.chat.id,
+            f"✅ <b>ব্যালেন্স আপডেট সফল!</b>\n\n"
+            f"👤 UID: <code>{target_uid}</code>\n"
+            f"💸 পরিমাণ: <b>{sign}{cur}{amount:.2f}</b> {action_label}\n"
+            f"💰 নতুন ব্যালেন্স: <code>{cur}{new_bal:.2f}</code>",
+            parse_mode="HTML",
+            reply_markup=types.ReplyKeyboardRemove(),
+        )
+        # Notify the user
+        try:
+            action_msg = "যোগ করা হয়েছে" if action == "add" else "কাটা হয়েছে"
+            bot.send_message(
+                target_uid,
+                f"💰 <b>ব্যালেন্স আপডেট!</b>\n\n"
+                f"আপনার অ্যাকাউন্টে <b>{sign}{cur}{amount:.2f}</b> {action_msg}।\n"
+                f"নতুন ব্যালেন্স: <code>{cur}{new_bal:.2f}</code>",
+                parse_mode="HTML",
+            )
+        except Exception:
+            pass
+        _show_payment_admin(message)
+
+
+def _show_pending_withdraws(message):
+    uid = message.from_user.id
+    if uid not in ADMIN_IDS:
+        return
+    cur = get_currency()
+    with _withdraw_lock:
+        pending = [r for r in _withdraw_requests if r["status"] == "pending"]
+    if not pending:
+        bot.send_message(message.chat.id, "✅ কোনো পেন্ডিং উইথড্র নেই।", parse_mode="HTML")
+        return
+    for req in pending[:10]:
+        markup = types.InlineKeyboardMarkup()
+        markup.add(
+            types.InlineKeyboardButton("✅ অনুমোদন", callback_data=f"wd_approve:{req['id']}"),
+            types.InlineKeyboardButton("❌ রিজেক্ট",  callback_data=f"wd_reject:{req['id']}"),
+        )
+        import datetime as _dt
+        ts = req.get("timestamp", 0)
+        dt_str = _dt.datetime.fromtimestamp(ts).strftime("%d/%m/%Y %H:%M") if ts else "?"
+        bot.send_message(
+            message.chat.id,
+            f"⏳ <b>উইথড্র রিকোয়েস্ট</b>\n\n"
+            f"👤 UID: <code>{req['uid']}</code>\n"
+            f"💵 পরিমাণ: <code>{cur}{req['amount']:.2f}</code>\n"
+            f"📲 মেথড: <b>{req['method']}</b>\n"
+            f"📋 অ্যাকাউন্ট: <code>{req['account']}</code>\n"
+            f"🕐 সময়: {dt_str}\n"
+            f"🔑 ID: <code>{req['id']}</code>",
+            parse_mode="HTML",
+            reply_markup=markup,
+        )
+
+
 def _go_admin_panel(message, text="🔥 <b>ADMIN PANEL</b>"):
     uid = message.from_user.id
     chat_id = message.chat.id
@@ -9341,7 +10453,8 @@ def _go_admin_panel(message, text="🔥 <b>ADMIN PANEL</b>"):
     m_admin.add("🔀 𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁")
     m_admin.add("🎛️ 𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴")
     m_admin.add("📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀")
-    m_admin.add("✨ 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗜𝗰𝗼𝗻𝘀", "🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶")
+    m_admin.add("🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶")
+    m_admin.add("💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀")
     m_admin.add("⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂")
     bot.send_message(
         message.chat.id,
@@ -9399,20 +10512,64 @@ def _cc_addrange_step(message):
     _go_admin_panel(message)
 
 
-# ── Edit Message Templates ──────────────────────────────────────────────────────
+# ── Edit Message Templates (combined with icon slots) ────────────────────────────
 
-def _show_edit_messages_menu(message):
-    markup = types.InlineKeyboardMarkup(row_width=1)
+# Maps each template to its related icon slots (for combined edit menu)
+_TEMPLATE_ICON_SLOT_MAP = {
+    "otp_group":      ["otp_key", "otp_world", "otp_sms"],
+    "otp_dm":         ["dm_number_pre", "dm_country_pre", "dm_country_post"],
+    "otp_dm_v2":      ["dm_number_pre", "dm_country_pre", "dm_country_post"],
+    "start":          ["start_header", "start_crown", "start_user", "start_id",
+                       "start_status", "start_workers", "start_powered"],
+    "verify_success": ["verify_title"],
+    "number_assigned":[],
+    "broadcast":      [],
+}
+
+
+def _show_edit_messages_menu(message, note=""):
+    """Combined Message Edit menu: template text editor + per-template icon slots."""
+    with _custom_emoji_lock:
+        slots_set = dict(_custom_emojis.get("msg_slots", {}))
+
+    markup = types.InlineKeyboardMarkup(row_width=2)
+    lines = [
+        "✏️ <b>Message Edit</b>\n"
+        "━━━━━━━━━━━━━━\n"
+        "<i>মেসেজ টেক্সট এডিট বা custom emoji icon সেট করো:</i>"
+    ]
+
+    seen_slots: set = set()
     for key, label in _TEMPLATE_LABELS.items():
-        markup.add(types.InlineKeyboardButton(label, callback_data=f"editmsg:{key}", style="danger"))
+        lines.append(f"\n📄 <b>{label}</b>")
+        markup.add(types.InlineKeyboardButton(f"✏️ Edit: {label}", callback_data=f"editmsg:{key}", style="danger"))
+
+        icon_keys = _TEMPLATE_ICON_SLOT_MAP.get(key, [])
+        for slot_key in icon_keys:
+            if slot_key not in _MSG_ICON_SLOTS or slot_key in seen_slots:
+                continue
+            seen_slots.add(slot_key)
+            default_char, slot_label = _MSG_ICON_SLOTS[slot_key]
+            custom = slots_set.get(slot_key)
+            if custom:
+                fb = custom.get("fb", default_char)
+                lines.append(f"  ✅ {fb} <i>{slot_label}</i>")
+            else:
+                lines.append(f"  🔘 {default_char} <i>{slot_label}</i>")
+            markup.add(
+                types.InlineKeyboardButton(f"✏️ {slot_label}", callback_data=f"msgicon_set:{slot_key}"),
+                types.InlineKeyboardButton("🔄 Reset", callback_data=f"msgicon_reset:{slot_key}"),
+            )
+
     markup.add(types.InlineKeyboardButton("🔄 সব Default এ Reset করো", callback_data="editmsg_reset_all", style="success"))
-    bot.send_message(
-        message.chat.id,
-        "✏️🔥 <b>মেসেজ ফরমেট এডিট</b> 🔥✏️\n\n"
-        "কোন মেসেজ এডিট করতে চাও সিলেক্ট করো:",
-        reply_markup=markup,
-        parse_mode="HTML",
-    )
+    text = "\n".join(lines)
+    if note:
+        text += f"\n\n✅ <i>{note}</i>"
+    text += "\n\n━━━━━━━━━━━━━━"
+    try:
+        bot.send_message(message.chat.id, text, reply_markup=markup, parse_mode="HTML")
+    except Exception as e:
+        print(f"[MSG-EDIT] Failed: {e}")
 
 
 def _ask_new_template(call, key):
@@ -9614,9 +10771,13 @@ _ALL_MENU_BTNS = {
     "📞 𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗜𝗗",
     "⚙️ 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀", "✏️ 𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀", "📡 𝗩𝟮 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗙𝗼𝗿𝗺𝗮𝘁", "🔀 𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁",
     "🎛️ 𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴", "📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀", "👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼", "⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂",
-    "🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟", "🔙 Admin Panel", "🔙 Admin Menu",
+    "🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟", "🔙 Admin Panel", "🔙 Admin Menu", "✨ 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗜𝗰𝗼𝗻𝘀",
     "🔘 Button Emoji Set", "🗑️ Button Emoji Del",
     "💬 Msg Emoji Set", "🗑️ Msg Emoji Del",
+    "🏳️ Flag Emoji Set", "🎯 Service Emoji Set",
+    "🌍 All Flags JSON Set", "📋 Flag JSON Export",
+    "🔢 IDs Only Set", "🗑️ Flag Emoji Del",
+    "🗑️ Service Emoji Del",
 }
 
 
