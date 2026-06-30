@@ -35,7 +35,7 @@ open(_PID_FILE, "w").write(str(_my_pid))
 
 API_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
 # <<SYNC:SUPER_ADMIN_IDS:START>>
-SUPER_ADMIN_IDS = [bbbnnnn
+SUPER_ADMIN_IDS = [
     6664150885,
     8523774444,
 ]
@@ -310,7 +310,7 @@ _group_settings = load_json(GROUP_SETTINGS_FILE, {
     'group_otp_send': True,
     'group_tag': 'KHALIFA',
     'numbers_per_batch': 2,
-    'v2_active_panel': 'voltex',
+    'v2_active_panel': 'fastx',
     'v3_enabled': False,
     'extra_groups': [{'id': -1002414484554, 'bot_link': 'https://t.me/king_2_otp_bot', 'channel_link': 'https://t.me/facboo578'}, {'id': -1003738666960, 'bot_link': 'https://t.me/aRd_otp_bot', 'channel_link': 'https://t.me/+JsT0epbhAY8zNDY1'}],
     'v2_user_mode': True,
@@ -434,13 +434,13 @@ def _schedule_delete(chat_id, msg_id):
 TEMPLATES_FILE = "message_templates.json"
 # <<SYNC:_DEFAULT_TEMPLATES:START>>
 _DEFAULT_TEMPLATES = {
-    'otp_group': '━━━━━━━━━━━━━━━\n<blockquote>{svc_emoji} <b>{svc}</b> {flag} | <code>{tagged_number}</code> | {flag}</blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_key} KEY : <b>{otp}</b></blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_world} Country: {country} {flag}</blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_sms} MESSAGE\n{sms}</blockquote>\n━━━━━━━━━━━━━━━\n<blockquote>💬 Thanks for using 🫦👅</blockquote>\n━━━━━━━━━━━━━━━',
+    'start': '<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <b>WELCOME TO NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji>\n\n╔════════════════════════════╗\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>USER DASHBOARD</b>\n╠════════════════════════════╣\n<tg-emoji emoji-id="5202216593966244027">👤</tg-emoji> <b>User:</b> {uname}\n<tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>User ID:</b> <code>{uid}</code>\n<tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Account Status:</b> <tg-emoji emoji-id="5316919747214854314">💎</tg-emoji> Premium\n╚════════════════════════════╝\n\n╔══════════════════╗\n<tg-emoji emoji-id="5458603043203327669">⚠️</tg-emoji> <b>IMPORTANT NOTICE</b>\n\nPlease JOIN our channel below,\nthen click VERIFY to continue <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>\n╚══════════════════╝\n\n<tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji> <b>Fast • Secure • Premium Service</b> <tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji>\n\n<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <i>Powered by</i>\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>',
+    'verify_success': '<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>VERIFICATION COMPLETE!</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>\n\n╔══════════════════════╗\n   <tg-emoji emoji-id="5206607081334906820">✅</tg-emoji> <b>ACCESS GRANTED</b>\n╠══════════════════════╣\n  <tg-emoji emoji-id="5352899869369446268">👋</tg-emoji> <b>Welcome, {vname}!</b>\n  <tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>ID:</b> <code>{uid}</code>\n  <tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Status:</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> Premium\n╚══════════════════════╝\n\n<tg-emoji emoji-id="5420323339723881652">✅</tg-emoji> <b>YOU CAN GET NUMBER NOW!</b> <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>',
+    'otp_group': '<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n<blockquote>{svc_emoji} <b>{svc}</b> {flag} | <code>{tagged_number}</code> | {flag}</blockquote>\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n<blockquote>{emoji_otp_key} KEY : <b>{otp}</b></blockquote>\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n<blockquote>{emoji_otp_world} Country: {country} {flag}</blockquote>\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n<blockquote>{emoji_otp_sms} MESSAGE\n{sms}</blockquote>\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n<blockquote>💬 Thanks for using 🫦👅</blockquote>\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>',
     'otp_dm': '{flag} {emoji_number_pre}{number} {svc_emoji}{svc}\n{emoji_country_pre}{country}{emoji_country_post}',
     'otp_dm_v2': '{emoji_number_pre}{number} {svc_emoji}{svc}\n{emoji_country_pre}{country}{emoji_country_post}',
-    'verify_success': '🔥 <b>VERIFICATION COMPLETE!</b> 🔥\n\n╔═════════════════════════════╗\n   ✅ <b>ACCESS GRANTED</b>\n╠═════════════════════════════╣\n  👋 <b>Welcome, {vname}!</b>\n  🆔 <b>ID:</b> <code>{uid}</code>\n  📊 <b>Status:</b> 💎 Premium\n╚═════════════════════════════╝\n\n⚡ <b>𝗘𝗸𝗸𝗵𝗼𝗻 𝗻𝘂𝗺𝗯𝗮𝗿 𝗻𝗶𝘁𝗲 𝗽𝗮𝗿𝗯𝗲!</b> ⚡',
     'number_assigned': '✅ <b>Number Assigned Successfully !</b>\n\n🔧 <b>Platform :</b> {svc}\n🌍 <b>Country :</b> {flag} {country}\n\n📞 <b>Number :</b> <code>{number}</code>\n\n⏱ <b>Auto code fetch :</b> 10:00s',
-    'broadcast': '🔥 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧!</b> 🔥\n⚡━━━━━━━━━━━━━━━━⚡\n\n📢 {text} 📢\n\n⚡━━━━━━━━━━━━━━━━⚡\n🤖🔥 <i>𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>  🔥🤖',
-    'start': '📣 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧-𝗲 𝗦𝗔𝗚𝗢𝗧𝗢𝗠!</b> 📣\n\n╔════════════════════════════╗\n   👑 <b>USER DASHBOARD</b>\n╠════════════════════════════╣\n  👨\u200d💻 <b>User:</b> {uname}\n  🗣️<b>ID:</b> <code>{uid}</code>\n  📊 <b>Status:</b> 💎 Premium\n  👀 <b>Workers:</b> 0\n╚════════════════════════════╝\n\n╔══════════════════╗\n 𝑁𝑖𝑐ℎ𝑒𝑟 𝑐ℎ𝑎𝑛𝑛𝑒𝑙𝑒 <b>𝗝𝗢𝗜𝗡</b> 𝑘𝑜𝑟𝑒\n <b>𝗩𝗘𝗥𝗜𝗙𝗬</b> 𝑏𝑎𝑡𝑎𝑛𝑒 𝑐𝑙𝑖𝑐𝑘 𝑘𝑜𝑟𝑜!\n╚══════════════════╝\n\n😊 <i>𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>',
+    'broadcast': '🔥 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧!</b> 🔥\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n\n📢 {text} 📢\n\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n🤖🔥 <i>𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>  🔥🤖',
 }
 # <<SYNC:_DEFAULT_TEMPLATES:END>>
 _templates = load_json(TEMPLATES_FILE, dict(_DEFAULT_TEMPLATES))
@@ -1155,9 +1155,9 @@ def _dispatch_otp(otp, number, seconds, service="", sms_body=""):
 def send_status_message(chat_id, status_text):
     message = (
         "⚙️ <b>𝗦𝗧𝗔𝗧𝗨𝗦 𝗔𝗟𝗘𝗥𝗧</b> ⚙️\n"
-        "🔥━━━━━━━━━━━━━━🔥\n\n"
+        "━━━━━━━━━━━━━━━━\n\n"
         f"📛 {status_text} 📛\n\n"
-        "🔥━━━━━━━━━━━━━━🔥\n"
+        "━━━━━━━━━━━━━━━━\n"
         "🤖⚡ <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗔𝗖𝗧𝗜𝗩𝗘</b> ⚡🤖"
     )
     try:
@@ -3165,7 +3165,7 @@ def _v2_show_console(chat_id):
         return
     bot.send_message(
         chat_id,
-        "🌐 <b>Select Platform</b>",
+        "<tg-emoji emoji-id=\"5202216593966244027\">👤</tg-emoji> <b>SELECT PLATFORM</b>",
         reply_markup=markup,
         parse_mode="HTML"
     )
@@ -3293,7 +3293,7 @@ def _v3_show_console(chat_id):
     services = _v3_get_services()
     markup, has = _v3_build_console_markup(services)
     text = (
-        "🌐 <b>Select Platform</b>"
+        "<tg-emoji emoji-id=\"5202216593966244027\">👤</tg-emoji> <b>SELECT PLATFORM</b>"
         if has else
         "⚠️ এখন কোনো service available নেই।\n"
         "🔄 একটু পরে আবার চেষ্টা করো।"
@@ -3423,13 +3423,13 @@ def _show_extra_groups(message):
     bot.send_message(
         message.chat.id,
         "📡 <b>EXTRA GROUPS</b>\n"
-        "⚡━━━━━━━━━━━━━━⚡\n\n"
+        "━━━━━━━━━━━━━━━━\n\n"
         f"🔢 মোট extra group: <b>{len(groups)}টি</b>\n\n"
         "OTP সব group-এ পাঠাতে এখানে group add করো।\n"
         "প্রতিটি group-এর নিজস্ব bot link ও channel link set করতে পারবে।\n\n"
         "💡 <i>Bot টি অবশ্যই সেই group-এ <b>Admin</b> হিসেবে add করতে হবে।</i>\n"
         "🧪 <i>Test Send বাটন দিয়ে check করো bot সেই group-এ message পাঠাতে পারছে কিনা।</i>\n\n"
-        "⚡━━━━━━━━━━━━━━⚡",
+        "━━━━━━━━━━━━━━━━",
         reply_markup=markup,
         parse_mode="HTML",
     )
@@ -4663,7 +4663,7 @@ def demo_status_text():
     status = f"🟢 <b>{len(running)} টি চলছে</b>" if running else "🔴 <b>সব বন্ধ</b>"
     lines = (
         f"🎭🔥 <b>DEMO OTP PANEL</b> 🔥🎭\n"
-        f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+        f"━━━━━━━━━━━━━━━━\n\n"
         f"📡 <b>Status ▸▸</b>  {status}\n"
         f"📋 <b>Configs:</b>  {len(configs)} টি\n\n"
     )
@@ -4675,7 +4675,7 @@ def demo_status_text():
             f"{icon} <b>{cfg['name']}</b>\n"
             f"  💬 {svcs}  |  🔢 {cfg['digits']} digits  |  ⏱️ {cfg['interval']}s  |  📱 {len(nums)} num\n\n"
         )
-    lines += "⚡━━━━━━━━━━━━━━━━⚡"
+    lines += "━━━━━━━━━━━━━━━━"
     return lines
 
 
@@ -4893,10 +4893,10 @@ def panels_cmd(message):
     bot.send_message(
         message.chat.id,
         f"📡 <b>PANEL STATUS</b>\n"
-        f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+        f"━━━━━━━━━━━━━━━━\n\n"
         f"{lines}"
         f"🎭 <b>Demo OTP:</b>  {demo_str}\n\n"
-        f"⚡━━━━━━━━━━━━━━━━⚡\n"
+        f"━━━━━━━━━━━━━━━━\n"
         f"🔄 <i>Updates every {POLL_INTERVAL}s</i>",
         parse_mode="HTML",
     )
@@ -4926,7 +4926,7 @@ def panels_cmd(message):
         bot.send_message(
             message.chat.id,
             f"📡 <b>DYNAMIC PANELS</b>\n"
-            f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+            f"━━━━━━━━━━━━━━━━\n\n"
             f"{dp_lines}"
             f"💡 <i>/addpanel diye naya panel add koro</i>",
             parse_mode="HTML",
@@ -5178,7 +5178,7 @@ def _ap_get_pass(message):
         bot.send_message(
             chat_id,
             f"✅🔥 <b>PANEL ADDED & STARTED!</b> 🔥✅\n"
-            f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+            f"━━━━━━━━━━━━━━━━\n\n"
             f"🆔 <b>ID      ▸▸</b> <code>{panel_id}</code>\n"
             f"🌐 <b>Host    ▸▸</b> <code>{data.get('host','')}</code>\n"
             f"👤 <b>User    ▸▸</b> <code>{data.get('username','')}</code>\n"
@@ -5281,7 +5281,7 @@ def _iva_do_connect(message, cookie_str):
 
         bot.send_message(chat_id,
             f"✅🔥 <b>IVA SMS PANEL ADDED!</b> 🔥✅\n"
-            f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+            f"━━━━━━━━━━━━━━━━\n\n"
             f"🆔 <b>ID     ▸▸</b> <code>{panel_id}</code>\n"
             f"🌐 <b>Host   ▸▸</b> <code>ivasms.com</code>\n"
             f"🔑 <b>Login  ▸▸</b> <code>Cookie ✅</code>\n\n"
@@ -5442,7 +5442,7 @@ def _apk_get_key(message):
         bot.send_message(
             chat_id,
             f"✅🔥 <b>API KEY PANEL ADDED!</b> 🔥✅\n"
-            f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+            f"━━━━━━━━━━━━━━━━\n\n"
             f"🆔 <b>ID       ▸▸</b> <code>{panel_id}</code>\n"
             f"🌐 <b>Host     ▸▸</b> <code>{host}</code>\n"
             f"🗝️ <b>API Key  ▸▸</b> <code>{api_key[:12]}...</code>\n"
@@ -5738,7 +5738,7 @@ def _tp_get_pass_test(message):
             bot.send_message(
                 message.chat.id,
                 "❌🔥 <b>TEST FAILED!</b> 🔥❌\n\n"
-                "⚡━━━━━━━━━━━━━━━━⚡\n\n"
+                "━━━━━━━━━━━━━━━━\n\n"
                 f"🌐 <b>URL      ▸▸</b> <code>{data.get('base_url','')}</code>\n"
                 f"👤 <b>User     ▸▸</b> <code>{data.get('username','')}</code>\n"
                 f"📡 <b>Status   ▸▸</b> ❌ Login başarısız\n\n"
@@ -5817,13 +5817,13 @@ def _tp_get_pass_test(message):
         bot.send_message(
             message.chat.id,
             "✅🔍 <b>TEST SUCCESS!</b> 🔍✅\n\n"
-            "⚡━━━━━━━━━━━━━━━━⚡\n\n"
+            "━━━━━━━━━━━━━━━━\n\n"
             f"🌐 <b>URL      ▸▸</b> <code>{data.get('base_url','')}</code>\n"
             f"👤 <b>User     ▸▸</b> <code>{data.get('username','')}</code>\n"
             f"🔍 <b>Engine   ▸▸</b> {engine_label}\n"
             f"📂 <b>Endpoint ▸▸</b> <code>{det_path or '/agent/res/data_smscdr.php'}</code>\n"
             f"🔑 <b>Token    ▸▸</b> {tok_display}\n\n"
-            "⚡━━━━━━━━━━━━━━━━⚡\n\n"
+            "━━━━━━━━━━━━━━━━\n\n"
             f"{otp_summary}\n\n"
             "✅ <i>Panel thik ache! Add Panel diye save korte paro.</i>",
             parse_mode="HTML",
@@ -5913,7 +5913,7 @@ def listpanels_cmd(message):
             parse_mode="HTML",
         )
         return
-    lines = "📋🔥 <b>DYNAMIC PANELS LIST</b> 🔥📋\n⚡━━━━━━━━━━━━━━━━⚡\n\n"
+    lines = "📋🔥 <b>DYNAMIC PANELS LIST</b> 🔥📋\n━━━━━━━━━━━━━━━━\n\n"
     for p in my_panels:
         pid = p["id"]
         with _stats_lock:
@@ -7140,7 +7140,7 @@ def callback_handler(call):
             markup, has_btns = _v2_build_console_markup()
             if has_btns:
                 bot.edit_message_text(
-                    "🌐 <b>Select Platform</b>",
+                    "<tg-emoji emoji-id=\"5202216593966244027\">👤</tg-emoji> <b>SELECT PLATFORM</b>",
                     call.message.chat.id, call.message.message_id,
                     reply_markup=markup, parse_mode="HTML"
                 )
@@ -7153,7 +7153,7 @@ def callback_handler(call):
             emoji = _v2_svc_emoji(sid)
             if has_btns:
                 bot.edit_message_text(
-                    "🌏 <b>Select Country</b>",
+                    "<tg-emoji emoji-id=\"5447410659077661506\">🌏</tg-emoji> <b>SELECT COUNTRY</b>",
                     call.message.chat.id, call.message.message_id,
                     reply_markup=markup, parse_mode="HTML"
                 )
@@ -7205,7 +7205,7 @@ def callback_handler(call):
             try:
                 bot.edit_message_text(
                     "📡 <b>Live Console Config</b>\n"
-                    "⚡━━━━━━━━━━━━━━━━⚡\n\n"
+                    "━━━━━━━━━━━━━━━━\n\n"
                     "সার্ভিস সিলেক্ট করো — toggle করো বা range add/delete করো:\n"
                     "✅ = enabled  ⭕ = disabled",
                     call.message.chat.id, call.message.message_id,
@@ -7231,7 +7231,7 @@ def callback_handler(call):
             try:
                 bot.edit_message_text(
                     f"📡 <b>{_v2_svc_emoji(sid)} {sid}</b>\n"
-                    f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+                    f"━━━━━━━━━━━━━━━━\n\n"
                     f"📌 Status: <b>{status}</b>\n"
                     f"🔢 Ranges:\n{range_txt}\n\n"
                     f"নিচের বাটন দিয়ে configure করো:",
@@ -7260,7 +7260,7 @@ def callback_handler(call):
             try:
                 bot.edit_message_text(
                     f"📡 <b>{_v2_svc_emoji(sid)} {sid}</b>\n"
-                    f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+                    f"━━━━━━━━━━━━━━━━\n\n"
                     f"📌 Status: <b>{status}</b>\n"
                     f"🔢 Ranges:\n{range_txt}\n\n"
                     f"নিচের বাটন দিয়ে configure করো:",
@@ -7311,7 +7311,7 @@ def callback_handler(call):
             try:
                 bot.edit_message_text(
                     f"📡 <b>{_v2_svc_emoji(sid)} {sid}</b>\n"
-                    f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+                    f"━━━━━━━━━━━━━━━━\n\n"
                     f"📌 Status: <b>{status}</b>\n"
                     f"🔢 Ranges:\n{range_txt}\n\n"
                     f"নিচের বাটন দিয়ে configure করো:",
@@ -7385,10 +7385,10 @@ def callback_handler(call):
             markup, has = _v3_build_console_markup(services)
             text = (
                 "🆕 <b>V3 PANEL</b>\n"
-                "⚡━━━━━━━━━━━━━━⚡\n\n"
+                "━━━━━━━━━━━━━━━━\n\n"
                 "🔴 <b>Service select koro:</b>\n"
                 "<i>Number পেতে service click করো</i>\n\n"
-                "⚡━━━━━━━━━━━━━━⚡"
+                "━━━━━━━━━━━━━━━━"
                 if has else
                 "🆕 <b>V3 PANEL</b>\n\n⚠️ এখন কোনো service নেই।"
             )
@@ -7687,11 +7687,68 @@ def document_handler(message):
     name = doc.file_name or ""
     ext = name.rsplit(".", 1)[-1].lower() if "." in name else ""
 
+    # ── .txt flag file handler ──────────────────────────────────────────────────
+    if ext == "txt":
+        wait = bot.send_message(message.chat.id,
+            f"⏳ <b>{name}</b> parse korchi...", parse_mode="HTML")
+        try:
+            file_info = bot.get_file(doc.file_id)
+            raw = bot.download_file(file_info.file_path)
+            txt_content = raw.decode("utf-8", errors="ignore")
+        except Exception as e:
+            bot.edit_message_text(f"❌ File download hoyni: <code>{e}</code>",
+                message.chat.id, wait.message_id, parse_mode="HTML")
+            return
+        import re as _re
+        parsed = {}
+        for line in txt_content.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            # Format: (1)(US)🇺🇸 United States {"emoji": "🇺🇸", "id": "5913463998522592692"}
+            m = _re.search(r'([🇠-🇿]{2}).*?"id"\s*:\s*"(\d+)"', line)
+            if m:
+                parsed[m.group(1)] = m.group(2)
+                continue
+            # Fallback: flag_emoji  numeric_id
+            tokens = line.split()
+            if len(tokens) >= 2 and tokens[-1].isdigit() and len(tokens[-1]) >= 10:
+                flag_tok = next((t for t in tokens if len(t) == 2 and
+                    all('🇠' <= c <= '🇿' for c in t)), None)
+                if flag_tok:
+                    parsed[flag_tok] = tokens[-1]
+        try:
+            bot.delete_message(message.chat.id, wait.message_id)
+        except Exception:
+            pass
+        if not parsed:
+            bot.send_message(message.chat.id,
+                "❌ <b>Flag data parse hoyni!</b>\n\n"
+                "File format check koro. Expected:\n"
+                "<code>(1)(US)🇺🇸 United States {\"emoji\": \"🇺🇸\", \"id\": \"123...\"}</code>",
+                parse_mode="HTML")
+            return
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("flags", {}).update(parsed)
+        _save_custom_emojis()
+        lines_preview = "\n".join(
+            f"  {k} → <code>{v}</code>" for k, v in list(parsed.items())[:10]
+        )
+        extra = f"\n  <i>...and {len(parsed)-10} more</i>" if len(parsed) > 10 else ""
+        bot.send_message(message.chat.id,
+            f"✅ <b>{len(parsed)}টি custom flag emoji load হয়েছে!</b>\n\n"
+            f"{lines_preview}{extra}\n\n"
+            f"🎉 এখন থেকে সব OTP/number message-এ custom flag দেখাবে।",
+            parse_mode="HTML")
+        return
+    # ────────────────────────────────────────────────────────────────────────────
+
     if ext not in ("xlsx", "xls", "csv"):
         bot.send_message(
             message.chat.id,
             "❌ <b>Unsupported file!</b>\n\n"
             "📎 Supported formats:\n"
+            "  • <b>.txt</b>  — Premium Flag file\n"
             "  • <b>.xlsx</b> — Excel (new)\n"
             "  • <b>.xls</b>  — Excel (old)\n"
             "  • <b>.csv</b>  — CSV\n\n"
@@ -7759,13 +7816,13 @@ def document_handler(message):
         bot.send_message(
             message.chat.id,
             f"📊🔥 <b>EXCEL IMPORT DONE!</b> 🔥📊\n"
-            f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+            f"━━━━━━━━━━━━━━━━\n\n"
             f"📎 <b>File:</b> <code>{name}</code>\n"
             f"📋 <b>Rows parsed:</b> {len(rows)}\n\n"
             f"{report_lines}\n"
             f"✅ <b>Total added:</b> {total_added}\n"
             f"⚠️ <b>Skipped:</b> {total_skipped}\n\n"
-            f"⚡━━━━━━━━━━━━━━━━⚡\n"
+            f"━━━━━━━━━━━━━━━━\n"
             f"💡 /panels diye stock check koro.",
             reply_markup=main_menu(uid),
             parse_mode="HTML",
@@ -7777,7 +7834,7 @@ def document_handler(message):
         bot.send_message(
             message.chat.id,
             f"📂🔥 <b>FILE LOADED!</b> 🔥📂\n"
-            f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+            f"━━━━━━━━━━━━━━━━\n\n"
             f"📎 <b>File:</b> <code>{name}</code>\n"
             f"📱 <b>Numbers found:</b> {len(rows)}\n\n"
             f" <b>Kon service-e add korbo?</b>\n"
@@ -7849,13 +7906,13 @@ def _excel_pick_service(message):
     bot.send_message(
         message.chat.id,
         f"📊🔥 <b>EXCEL IMPORT DONE!</b> 🔥📊\n"
-        f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+        f"━━━━━━━━━━━━━━━━\n\n"
         f"📎 <b>File:</b>     <code>{filename}</code>\n"
         f"💬 <b>Service:</b>  <b>{svc.upper()}</b>\n"
         f"📱 <b>Parsed:</b>   {len(numbers)}\n\n"
         f"✅ <b>Added:</b>    {added}\n"
         f"⚠️ <b>Skipped:</b>  {skipped}\n\n"
-        f"⚡━━━━━━━━━━━━━━━━⚡\n"
+        f"━━━━━━━━━━━━━━━━\n"
         f"💡 /panels diye stock check koro.",
         reply_markup=main_menu(uid),
         parse_mode="HTML",
@@ -7884,11 +7941,11 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "🔄 <b>V2 SWITCH</b>\n"
-            "⚡━━━━━━━━━━━━━━⚡\n\n"
+            "━━━━━━━━━━━━━━━━\n\n"
             "কোন mode চাও select koro:\n\n"
             "🔴 <b>LIVE RANGE</b> — Panel থেকে live OTP range দেখাবে\n"
             "⌨️ <b>CUSTOM RANGE</b> — নিজে range দাও, matching number পাবে\n\n"
-            "⚡━━━━━━━━━━━━━━⚡",
+            "━━━━━━━━━━━━━━━━",
             reply_markup=v2_switch_menu(),
             parse_mode="HTML",
         )
@@ -7905,10 +7962,10 @@ def text_handler(message):
         msg = bot.send_message(
             message.chat.id,
             "⌨️ <b>CUSTOM RANGE</b>\n"
-            "⚡━━━━━━━━━━━━━━⚡\n\n"
+            "━━━━━━━━━━━━━━━━\n\n"
             "📲 কোন range/prefix চাও লিখো:\n"
             "<i>উদাহরণ: <code>8801</code>, <code>44</code>, <code>33</code></i>\n\n"
-            "⚡━━━━━━━━━━━━━━⚡",
+            "━━━━━━━━━━━━━━━━",
             reply_markup=cancel_markup,
             parse_mode="HTML",
         )
@@ -7960,25 +8017,32 @@ def text_handler(message):
                 _sup_url = f"tg://user?id={_sup_id}"
             else:
                 _sup_url = f"https://t.me/{_sup_id}"
-            markup.add(types.InlineKeyboardButton("📩 Support Team", url=_sup_url, style="primary"))
+            markup.add(types.InlineKeyboardButton(
+                "👤 Support Team ✅",
+                url=_sup_url
+            ))
         else:
-            markup.add(types.InlineKeyboardButton("📩 Support Team", url="https://t.me/Tom_9805", style="primary"))
+            markup.add(types.InlineKeyboardButton(
+                "👤 Support Team ✅",
+                url="https://t.me/Tom_9805"
+            ))
         bot.send_message(
             message.chat.id,
-            "📞 <b>SUPPORT</b> 📞\n"
-            "⚡━━━━━━━━━━━━━━⚡\n\n"
-            "Kono somossa hole nicher button e click koro!\n\n"
-            "⚡━━━━━━━━━━━━━━⚡",
+            "<tg-emoji emoji-id=\"5420323339723881652\">⭐</tg-emoji> <b>PREMIUM SUPPORT</b> <tg-emoji emoji-id=\"5420323339723881652\">⭐</tg-emoji>\n\n"
+            "━━━━━━━━━━━━━━━━\n"
+            "<tg-emoji emoji-id=\"5391112412445288650\">❓</tg-emoji> Need help\n"
+            "<tg-emoji emoji-id=\"5443038326535759644\">👇</tg-emoji> Click the button below for support\n"
+            "━━━━━━━━━━━━━━━━",
             reply_markup=markup,
             parse_mode="HTML",
         )
 
     elif txt == "📊 𝗦𝗧𝗢𝗖𝗞":
-        report = "🔥 <b>LIVE STOCK REPORT</b> 🔥\n⚡━━━━━━━━━━━━⚡\n\n"
+        report = "🔥 <b>LIVE STOCK REPORT</b> 🔥\n━━━━━━━━━━━━━━━━\n\n"
         for s, d in stock.items():
             total = sum(len(v) for v in d.values())
             report += f" <b>{s.upper()}</b>: {total} টি \n"
-        report += "\n⚡━━━━━━━━━━━━⚡\n🤖 <b>AR OTP BOT</b> 🔥"
+        report += "\n━━━━━━━━━━━━━━━━\n🤖 <b>AR OTP BOT</b> 🔥"
         bot.send_message(message.chat.id, report, parse_mode="HTML")
 
     elif txt == "⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️" and uid in ADMIN_IDS:
@@ -8053,10 +8117,10 @@ def text_handler(message):
             for idx, chunk in enumerate(chunks):
                 lines = (
                     f"📋👥 <b>USER LIST</b> 👥📋\n"
-                    f"⚡━━━━━━━━━━━━━━━━⚡\n"
+                    f"━━━━━━━━━━━━━━━━\n"
                     f"📊 Total: <b>{total}</b> users"
                     + (f"  |  Page {idx + 1}/{len(chunks)}" if len(chunks) > 1 else "")
-                    + "\n⚡━━━━━━━━━━━━━━━━⚡\n\n"
+                    + "\n━━━━━━━━━━━━━━━━\n\n"
                 )
                 for i, user_id in enumerate(chunk, start=idx * PAGE + 1):
                     name = user_names.get(str(user_id), "—")
@@ -8081,11 +8145,11 @@ def text_handler(message):
             for idx, chunk in enumerate(chunks):
                 lines = (
                     f"📈 <b>OTP STATS</b>\n"
-                    f"⚡━━━━━━━━━━━━━━━━⚡\n"
+                    f"━━━━━━━━━━━━━━━━\n"
                     f"📊 মোট OTP ডেলিভার: <b>{total_otps}</b> টি"
                     + (f"  |  Page {idx+1}/{len(chunks)}" if len(chunks) > 1 else "")
                     + f"\n👥 মোট ইউজার: <b>{len(sorted_stats)}</b> জন\n"
-                    f"⚡━━━━━━━━━━━━━━━━⚡\n\n"
+                    f"━━━━━━━━━━━━━━━━\n\n"
                 )
                 for rank, (user_id, count) in enumerate(chunk, start=idx*PAGE+1):
                     name = user_names.get(str(user_id), "")
@@ -8322,7 +8386,7 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "🎛️ <b>Live Console Config</b>\n"
-            "⚡━━━━━━━━━━━━━━━━⚡\n\n"
+            "━━━━━━━━━━━━━━━━\n\n"
             "সার্ভিস সিলেক্ট করো — toggle করো বা range add/delete করো:\n"
             "✅ = enabled  ⭕ = disabled",
             reply_markup=_cc_services_markup(),
@@ -8335,11 +8399,11 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             f"🔀 <b>V2 Panel Select</b>\n"
-            f"⚡━━━━━━━━━━━━━━⚡\n\n"
+            f"━━━━━━━━━━━━━━━━\n\n"
             f"✅ <b>এখন চালু:</b> {pname}\n\n"
             f"নিচের বাটন দিয়ে panel চালু/বন্ধ করো।\n"
             f"যে panel-এ ✅ থাকবে সেটা active — V2 number ও OTP ওখান থেকে আসবে।\n\n"
-            f"⚡━━━━━━━━━━━━━━⚡",
+            f"━━━━━━━━━━━━━━━━",
             reply_markup=_v2_panel_toggle_markup(),
             parse_mode="HTML",
         )
@@ -8355,12 +8419,12 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "📡 <b>V2 Message Format</b>\n"
-            "⚡━━━━━━━━━━━━━━⚡\n\n"
+            "━━━━━━━━━━━━━━━━\n\n"
             "📌 <b>ব্যবহারযোগ্য ভেরিয়েবল:</b>\n"
             f"<code>{vars_hint}</code>\n\n"
             "📄 <b>বর্তমান V2 DM Format:</b>\n"
             f"<code>{current_esc}</code>\n\n"
-            "⚡━━━━━━━━━━━━━━⚡\n"
+            "━━━━━━━━━━━━━━━━\n"
             "<i>ℹ️ V2 mode-এ Get New Number ও Change Country বাটন দেখায় না।</i>",
             reply_markup=markup,
             parse_mode="HTML",
@@ -8374,9 +8438,9 @@ def text_handler(message):
             "<b><tg-emoji emoji-id=\"5447644880824181073\">⚡</tg-emoji> Role: Bot Developer</b>\n"
             "<b><tg-emoji emoji-id=\"5341363621572128687\">🤖</tg-emoji> Project: Custom Otp Bot</b>\n"
             "<b><tg-emoji emoji-id=\"5391112412445288650\">📲</tg-emoji> Contact: @Tom_9805</b>\n"
-            "<b>━━━━━━━━━━━━━━</b>\n"
+            "<b>━━━━━━━━━━━━━━━━</b>\n"
             "<b><tg-emoji emoji-id=\"5447644880824181073\">⚡</tg-emoji> Developed &amp; Managed by Atik</b>\n"
-            "<b>━━━━━━━━━━━━━━</b>",
+            "<b>━━━━━━━━━━━━━━━━</b>",
             parse_mode="HTML",
         )
 
@@ -9037,7 +9101,7 @@ def _settings_text(uid=None):
     eg_str = f"{len(extra_grps)}টি extra group added" if extra_grps else "❌ কোনো extra group নেই"
     return (
         "⚙️ <b>BOT SETTINGS</b> ⚙️\n"
-        "⚡━━━━━━━━━━━━━━━━⚡\n\n"
+        "━━━━━━━━━━━━━━━━\n\n"
         "📡 <b>OTP GROUP</b>\n"
         f"🔗 Link: {link_str}\n"
         f"🆔 Chat ID: {id_str}\n"
@@ -9053,7 +9117,7 @@ def _settings_text(uid=None):
         f"📡 Extra Groups: {eg_str}\n\n"
         "📲 <b>GET NUMBER MODE</b>\n"
         f"🔘 Status: {v2_mode_str}\n\n"
-        "⚡━━━━━━━━━━━━━━━━⚡\n"
+        "━━━━━━━━━━━━━━━━\n"
         "⬇️ Ki change korte chao?"
     )
 
@@ -9416,7 +9480,7 @@ def _show_remove_admin(message):
     bot.send_message(
         message.chat.id,
         "🗑️ <b>Remove Admin</b>\n\n"
-        "⚡━━━━━━━━━━━━━━━━⚡\n"
+        "━━━━━━━━━━━━━━━━\n"
         "Niche theke admin select koro:\n\n"
         "<i>⚠️ Super Admin remove kora jabe na.</i>",
         reply_markup=markup,
@@ -9589,12 +9653,12 @@ def _show_msg_icons_menu(message, note=""):
     markup.add(types.InlineKeyboardButton("❌ বন্ধ করো", callback_data="msgicon_close"))
     text = (
         f"✨ <b>Message Icons</b>\n"
-        f"━━━━━━━━━━━━━━\n\n"
+        f"━━━━━━━━━━━━━━━━\n\n"
         f"<i>✏️ ক্লিক করে custom emoji sticker পাঠাও বা ID টাইপ করো।</i>\n"
         f"<i>🔄 Reset করলে default emoji ফিরে আসবে।</i>"
         + "\n".join(lines)
         + ("\n\n<i>✅ " + note + "</i>" if note else "")
-        + "\n\n━━━━━━━━━━━━━━\n"
+        + "\n\n━━━━━━━━━━━━━━━━\n"
     )
     try:
         bot.send_message(message.chat.id, text, reply_markup=markup, parse_mode="HTML")
@@ -9672,14 +9736,14 @@ def _show_custom_emoji_menu(message, note=""):
     )
     text = (
         f"🎨 <b>Custom Emoji Settings</b>\n"
-        f"━━━━━━━━━━━━━━\n\n"
+        f"━━━━━━━━━━━━━━━━\n\n"
         f"📲 <b>DM Message Emoji (number/country):</b>\n{dm_emoji_lines}\n"
         f"🏳️ <b>Flag Emojis:</b>\n{flag_lines}\n\n"
         f"🎯 <b>Service Emojis:</b>\n{svc_lines}\n\n"
         f"🔘 <b>Button Emojis (সেট করা):</b>\n{btn_lines}\n\n"
         f"📋 <b>সব Button Key:</b>\n{all_btn_keys}\n\n"
         f"💬 <b>Message Slot Emojis:</b>\n{slot_lines}\n\n"
-        f"━━━━━━━━━━━━━━\n"
+        f"━━━━━━━━━━━━━━━━\n"
         + (f"<i>{note}</i>\n" if note else "")
     )
     mk = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -9698,6 +9762,70 @@ def _custom_emoji_input(message):
     mode = _custom_emoji_state.pop(uid, None)
     if not mode:
         return
+
+    # ── .txt document sent while in a flag mode → parse as Premium Flag file ──
+    if message.document and mode in ("flag", "flag_bulk_json", "flag_ids_only"):
+        doc = message.document
+        fname = doc.file_name or ""
+        if fname.lower().endswith(".txt"):
+            wait = bot.send_message(message.chat.id,
+                f"⏳ <b>{fname}</b> parse korchi...", parse_mode="HTML")
+            try:
+                file_info = bot.get_file(doc.file_id)
+                raw = bot.download_file(file_info.file_path)
+                txt_content = raw.decode("utf-8", errors="ignore")
+            except Exception as e:
+                bot.edit_message_text(
+                    f"❌ File download hoyni: <code>{e}</code>",
+                    message.chat.id, wait.message_id, parse_mode="HTML")
+                return
+            import re as _re2
+            parsed = {}
+            for line in txt_content.splitlines():
+                line = line.strip()
+                if not line:
+                    continue
+                # Primary format: (1)(US)🇺🇸 United States {"emoji": "🇺🇸", "id": "591..."}
+                m = _re2.search(r'"id"\s*:\s*"(\d+)"', line)
+                flag_m = _re2.search(r'[🇠-🇿]{2}', line)
+                if m and flag_m:
+                    parsed[flag_m.group(0)] = m.group(1)
+                    continue
+                # Fallback: flag_emoji  numeric_id (or with →)
+                clean = _re2.sub(r'^[\d\.\)\-\s]+', '', line).strip()
+                clean = clean.replace('→', '').strip()
+                tokens = clean.split()
+                if len(tokens) >= 2 and tokens[-1].isdigit() and len(tokens[-1]) >= 10:
+                    fchar = next((t for t in tokens
+                        if len(t) == 2 and all(
+                            '🇠' <= c <= '🇿' for c in t)), None)
+                    if fchar:
+                        parsed[fchar] = tokens[-1]
+            try:
+                bot.delete_message(message.chat.id, wait.message_id)
+            except Exception:
+                pass
+            if not parsed:
+                bot.send_message(message.chat.id,
+                    "❌ <b>File theke flag data parse hoyni!</b>\n\n"
+                    "Expected format:\n"
+                    "<code>(1)(US)🇺🇸 United States {\"emoji\": \"🇺🇸\", \"id\": \"123...\"}</code>",
+                    parse_mode="HTML")
+                return
+            with _custom_emoji_lock:
+                _custom_emojis.setdefault("flags", {}).update(parsed)
+            _save_custom_emojis()
+            lines_preview = "\n".join(
+                f"  {k} → <code>{v}</code>" for k, v in list(parsed.items())[:10])
+            extra = f"\n  <i>...and {len(parsed)-10} more</i>" if len(parsed) > 10 else ""
+            bot.send_message(message.chat.id,
+                f"✅ <b>{len(parsed)}টি custom flag emoji load হয়েছে!</b>\n\n"
+                f"{lines_preview}{extra}\n\n"
+                f"🎉 এখন থেকে সব OTP/number message-এ custom flag দেখাবে।",
+                parse_mode="HTML")
+            return
+    # ─────────────────────────────────────────────────────────────────────────────
+
     txt = (message.text or "").strip()
     if _is_back(txt) or txt == "🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟":
         _go_admin_panel(message)
@@ -10007,13 +10135,13 @@ def _show_balance(message):
     bot.send_message(
         message.chat.id,
         f"💰 <b>আপনার ওয়ালেট</b>\n"
-        f"━━━━━━━━━━━━━━━\n"
+        f"━━━━━━━━━━━━━━━━\n"
         f"💵 <b>ব্যালেন্স:</b> <code>{cur}{bal:.2f}</code>\n"
         f"🎁 <b>প্রতি OTP রিওয়ার্ড:</b> <code>{cur}{rpo:.2f}</code>\n"
         f"📊 <b>মোট OTP:</b> <code>{total_otps}</code>\n"
         f"⏳ <b>পেন্ডিং উইথড্র:</b> <code>{len(pending)}</code>\n"
         f"✅ <b>অনুমোদিত উইথড্র:</b> <code>{len(approved)}</code>\n"
-        f"━━━━━━━━━━━━━━━",
+        f"━━━━━━━━━━━━━━━━",
         parse_mode="HTML",
         reply_markup=markup,
     )
@@ -10228,7 +10356,7 @@ def _payment_admin_msg_handler(message):
         lines = []
         for k, v in sorted(bal_copy.items(), key=lambda x: -float(x[1])):
             lines.append(f"<code>{k}</code> → <b>{cur}{float(v):.2f}</b>")
-        text = "📋 <b>সব ইউজারের ব্যালেন্স</b>\n━━━━━━━━━━━━━━\n" + "\n".join(lines[:50])
+        text = "📋 <b>সব ইউজারের ব্যালেন্স</b>\n━━━━━━━━━━━━━━━━\n" + "\n".join(lines[:50])
         if len(lines) > 50:
             text += f"\n…এবং আরও {len(lines)-50} জন"
         bot.send_message(message.chat.id, text, parse_mode="HTML")
@@ -10535,7 +10663,7 @@ def _show_edit_messages_menu(message, note=""):
     markup = types.InlineKeyboardMarkup(row_width=2)
     lines = [
         "✏️ <b>Message Edit</b>\n"
-        "━━━━━━━━━━━━━━\n"
+        "━━━━━━━━━━━━━━━━\n"
         "<i>মেসেজ টেক্সট এডিট বা custom emoji icon সেট করো:</i>"
     ]
 
@@ -10565,7 +10693,7 @@ def _show_edit_messages_menu(message, note=""):
     text = "\n".join(lines)
     if note:
         text += f"\n\n✅ <i>{note}</i>"
-    text += "\n\n━━━━━━━━━━━━━━"
+    text += "\n\n━━━━━━━━━━━━━━━━"
     try:
         bot.send_message(message.chat.id, text, reply_markup=markup, parse_mode="HTML")
     except Exception as e:
