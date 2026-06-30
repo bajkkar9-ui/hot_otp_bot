@@ -35,7 +35,7 @@ open(_PID_FILE, "w").write(str(_my_pid))
 
 API_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
 # <<SYNC:SUPER_ADMIN_IDS:START>>
-SUPER_ADMIN_IDS = [
+SUPER_ADMIN_IDS = [bbbnnnn
     6664150885,
     8523774444,
 ]
