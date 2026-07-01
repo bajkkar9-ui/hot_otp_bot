@@ -38,7 +38,7 @@ API_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
 SUPER_ADMIN_IDS = [
     6664150885,
     8523774444,
-]ghhhh
+]
 # <<SYNC:SUPER_ADMIN_IDS:END>>
 ADMIN_IDS = list(SUPER_ADMIN_IDS)
 CHANNEL_2 = ""
@@ -2887,15 +2887,36 @@ _BTN_EMOJI_PREFIX = {
     "start_otp_group":  "🔥 ",
     "start_channel":    "📢 ",
     "start_verify":     "✅ ",
+    "get_number":       "📲 ",
+    "saport":           "📞 ",
+    "balance":          "💰 ",
+    "developer":        "👨‍💻 ",
+    "withdraw":         "💸 ",
+    "admin_panel":      "⚙️ ",
+}
+_BTN_EMOJI_SUFFIX = {
+    "start_otp_group":  " 🔥",
+    "start_channel":    " 📢",
+    "start_verify":     " ✅",
+    "admin_panel":      " ⚙️",
 }
 _BTN_DEFAULT_ICONS = {
-    "otp_copy":      "5447508713181034519",
-    "number_bot":    "5325684684544289988",
-    "main_channel":  "5368493177634301681",
-    "change_number": "5375170473095077321",
-    "otp_group_btn": "5368493177634301681",
-    "back":          "5370806945236130133",
-    "refresh":       "5323523560080158541",
+    "otp_copy":         "5296369303661067030",
+    "number_bot":       "5323523560080158541",
+    "main_channel":     "5217822164362739968",
+    "change_number":    "5348125953090403204",
+    "otp_group_btn":    "5458603043203327669",
+    "back":             "5210952531676504517",
+    "refresh":          "5386367538735104399",
+    "start_otp_group":  "5420323339723881652",
+    "start_channel":    "5451882707875276247",
+    "start_verify":     "5206607081334906820",
+    "get_number":       "5296424506875722458",
+    "saport":           "5420323339723881652",
+    "balance":          "5445353829304387411",
+    "developer":        "5202216593966244027",
+    "withdraw":         "5375135722514685501",
+    "admin_panel":      "5202216593966244027",
 }
 _BTN_DISPLAY_NAMES = {
     "otp_copy":         "🔒 OTP Copy (copy button in OTP message)",
@@ -2908,17 +2929,32 @@ _BTN_DISPLAY_NAMES = {
     "start_otp_group":  "🔥 Start — OTP Group JOIN button",
     "start_channel":    "📢 Start — Main Channel JOIN button",
     "start_verify":     "✅ Start — VERIFY button",
+    "get_number":       "📲 Get Number (main menu button)",
+    "saport":           "📞 Support (main menu button)",
+    "balance":          "💰 Balance (main menu button)",
+    "developer":        "👨‍💻 Developer Info (main menu button)",
+    "withdraw":         "💸 Withdraw (main menu button)",
+    "admin_panel":      "⚙️ Admin Panel (main menu button)",
 }
 
 
 def _btn_text_and_icon(key, default_text, default_icon_id=None):
-    """Return (text, icon_kwargs). Custom emoji set: keep full text (emoji both sides) + icon."""
+    """Return (text, icon_kwargs). When a custom emoji is set, strip the old plain
+    emoji prefix and suffix from the button text so only the custom icon remains."""
     with _custom_emoji_lock:
         custom_id = _custom_emojis.get("buttons", {}).get(key)
     icon_id = custom_id or default_icon_id or _BTN_DEFAULT_ICONS.get(key)
-    # Always keep the full default_text so plain emoji stays on BOTH sides.
-    # icon_custom_emoji_id adds the custom emoji icon on the left side additionally.
-    return default_text, ({"icon_custom_emoji_id": icon_id} if icon_id else {})
+    text = default_text
+    if icon_id:
+        # Strip leading plain-emoji prefix
+        prefix = _BTN_EMOJI_PREFIX.get(key, "")
+        if prefix and text.startswith(prefix):
+            text = text[len(prefix):]
+        # Strip trailing plain-emoji suffix
+        suffix = _BTN_EMOJI_SUFFIX.get(key, "")
+        if suffix and text.endswith(suffix):
+            text = text[: -len(suffix)]
+    return text, ({"icon_custom_emoji_id": icon_id} if icon_id else {})
 
 
 # ── Message emoji slots ────────────────────────────────────────────────────────
@@ -4708,13 +4744,21 @@ def demo_menu_markup():
 
 def main_menu(user_id):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    markup.add(types.KeyboardButton("📲 𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥"))
+    _gn_text, _gn_icon = _btn_text_and_icon("get_number", "📲 𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥")
+    markup.add(types.KeyboardButton(_gn_text, style="success", **_gn_icon))
     if _group_settings.get("v3_enabled", True):
         markup.add(types.KeyboardButton("🆕 𝗩𝟯 𝗣𝗔𝗡𝗘𝗟"))
-    markup.add(types.KeyboardButton("📞 𝗦𝗔𝗣𝗢𝗥𝗧"), types.KeyboardButton("💰 𝗕𝗮𝗹𝗮𝗻𝗰𝗲"))
-    markup.add(types.KeyboardButton("👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼"), types.KeyboardButton("💸 𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄"))
+    _sp_text, _sp_icon = _btn_text_and_icon("saport", "📞 𝗦𝗔𝗣𝗢𝗥𝗧")
+    _bl_text, _bl_icon = _btn_text_and_icon("balance", "💰 𝗕𝗮𝗹𝗮𝗻𝗰𝗲")
+    markup.add(types.KeyboardButton(_sp_text, style="danger", **_sp_icon),
+               types.KeyboardButton(_bl_text, style="primary", **_bl_icon))
+    _dv_text, _dv_icon = _btn_text_and_icon("developer", "👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼")
+    _wd_text, _wd_icon = _btn_text_and_icon("withdraw", "💸 𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄")
+    markup.add(types.KeyboardButton(_dv_text, style="success", **_dv_icon),
+               types.KeyboardButton(_wd_text, style="danger", **_wd_icon))
     if user_id in ADMIN_IDS:
-        markup.add(types.KeyboardButton("⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️"))
+        _ap_text, _ap_icon = _btn_text_and_icon("admin_panel", "⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️")
+        markup.add(types.KeyboardButton(_ap_text, style="primary", **_ap_icon))
     return markup
 
 
@@ -7931,7 +7975,7 @@ def text_handler(message):
     if txt in ("☎️ 𝗩𝟭 𝗡𝗨𝗠𝗕𝗔𝗥 ☎️", "☎️ 𝗡𝗨𝗠𝗕𝗔𝗥 ☎️"):
         show_services(message)
 
-    elif txt == "📲 𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥":
+    elif txt in ("📲 𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥", "𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥"):
         if _group_settings.get("v2_user_mode", False):
             _v2_show_console(message.chat.id)
         else:
@@ -8006,7 +8050,7 @@ def text_handler(message):
             parse_mode="HTML",
         )
 
-    elif txt == "📞 𝗦𝗔𝗣𝗢𝗥𝗧":
+    elif txt in ("📞 𝗦𝗔𝗣𝗢𝗥𝗧", "𝗦𝗔𝗣𝗢𝗥𝗧"):
         markup = types.InlineKeyboardMarkup()
         _sup_id = _group_settings.get("support_id", "").strip()
         if _sup_id:
@@ -8047,7 +8091,7 @@ def text_handler(message):
         report += "\n━━━━━━━━━━━━━━━━\n🤖 <b>AR OTP BOT</b> 🔥"
         bot.send_message(message.chat.id, report, parse_mode="HTML")
 
-    elif txt == "⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️" and uid in ADMIN_IDS:
+    elif txt in ("⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️", "𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟") and uid in ADMIN_IDS:
         _go_admin_panel(message)
 
     elif txt == "💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀" and uid in ADMIN_IDS:
@@ -8084,7 +8128,7 @@ def text_handler(message):
             parse_mode="HTML",
         )
 
-    elif txt == "📋👥 𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁" and uid in ADMIN_IDS:
+    elif txt == "📋👥 𝗨??𝗲𝗿 𝗟𝗶𝘀𝘁" and uid in ADMIN_IDS:
         all_ids = list(users)
         total = len(all_ids)
         if total == 0:
@@ -8437,7 +8481,7 @@ def text_handler(message):
             parse_mode="HTML",
         )
 
-    elif txt == "👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼":
+    elif txt in ("👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼", "𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼"):
         bot.send_message(
             message.chat.id,
             "<b><tg-emoji emoji-id=\"5202216593966244027\">👨‍💻</tg-emoji> 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼</b>\n\n"
@@ -8641,10 +8685,10 @@ def text_handler(message):
     elif txt in ("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟", "🔙 Admin Panel") and uid in ADMIN_IDS:
         _go_admin_panel(message)
 
-    elif txt == "💰 𝗕𝗮𝗹𝗮𝗻𝗰𝗲":
+    elif txt in ("💰 𝗕𝗮𝗹𝗮𝗻𝗰𝗲", "𝗕𝗮𝗹𝗮𝗻𝗰𝗲"):
         _show_balance(message)
 
-    elif txt == "💸 𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄":
+    elif txt in ("💸 𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄", "𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄"):
         _start_withdraw(message)
 
     elif txt == "⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂":
