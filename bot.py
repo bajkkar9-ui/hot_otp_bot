@@ -38,7 +38,7 @@ API_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
 SUPER_ADMIN_IDS = [
     6664150885,
     8523774444,
-]
+]ghhhh
 # <<SYNC:SUPER_ADMIN_IDS:END>>
 ADMIN_IDS = list(SUPER_ADMIN_IDS)
 CHANNEL_2 = ""
