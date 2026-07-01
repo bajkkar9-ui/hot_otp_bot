@@ -27,7 +27,7 @@ if os.path.exists(_PID_FILE):
                 os.kill(_old_pid, 9)
                 time.sleep(5)
                 print(f"[START] Killed old instance PID {_old_pid}")
-            except ProcessLookupError:gghhhh
+            except ProcessLookupError:
                 pass
     except Exception:
         pass
@@ -108,7 +108,6 @@ _BUILTIN_PANELS = [
     {'id': 'bp7', 'host': 'nexor-iprn.com', 'base_url': 'https://nexor-iprn.com', 'url_hint': 'https://nexor-iprn.com/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi12@', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp8', 'host': '51.77.52.79', 'base_url': 'http://51.77.52.79/ints', 'url_hint': 'http://51.77.52.79/ints/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi12', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp9', 'host': '51.210.208.26', 'base_url': 'http://51.210.208.26/ints', 'url_hint': 'http://51.210.208.26/ints/agent/SMSCDRStats', 'username': 'Dasbabu50_FD', 'password': 'Dasbabu50_FD', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
-    {'id': 'bp10', 'host': 'ivasms.com', 'base_url': 'https://ivasms.com', 'url_hint': 'https://ivasms.com/portal/sms/received', 'username': 'mdrashub2@gmail.com', 'password': 'Rabbi+nnn', 'engine': 'iva_sms', 'data_path': '/portal/sms/received', 'admin_id': None},
     {'id': 'bp11', 'host': '139.99.68.231', 'base_url': 'http://139.99.68.231/ints', 'url_hint': 'http://139.99.68.231/ints/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi12', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp12', 'host': '51.75.144.178', 'base_url': 'http://51.75.144.178/ints', 'url_hint': 'http://51.75.144.178/ints/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi12@', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'd20591', 'host': '54.39.104.241', 'base_url': 'http://54.39.104.241/ints', 'url_hint': 'http://54.39.104.241/ints/client/SMSCDRStats', 'username': 'Atik9898', 'password': 'Atik9898', 'engine': 'html_scrape', 'data_path': 'http://54.39.104.241/ints/client/SMSCDRStats', 'admin_id': 6664150885},
@@ -122,6 +121,7 @@ _BUILTIN_PANELS = [
     {'id': 'fastx1', 'host': 'fastxotps.com', 'base_url': 'https://fastxotps.com', 'url_hint': 'https://fastxotps.com/dashboard', 'username': 'MURAD', 'password': '', 'api_key': 'MURAD_979BB07726A593010D1BA4A2', 'api_key_param': 'api_key', 'engine': 'api_key', 'data_path': '/api/otps', 'admin_id': None},
     {'id': 'bp13', 'host': '168.119.13.175', 'base_url': 'http://168.119.13.175/ints', 'url_hint': 'http://168.119.13.175/ints/agent/SMSCDRStats', 'username': 'Rabbi1_FD', 'password': 'Rabbi12', 'engine': 'ints_smsranges', 'data_path': '/agent/res/data_smsranges.php', 'admin_id': None},
     {'id': 'mbcs1', 'host': 'mbcs-ms.com', 'base_url': 'https://mbcs-ms.com', 'url_hint': 'https://mbcs-ms.com/agent/SMSCDRReports', 'username': 'Rabbi', 'password': 'Rabbi12', 'engine': 'html_scrape', 'data_path': 'https://mbcs-ms.com/agent/SMSCDRReports', 'admin_id': None},
+    {'id': 'bp10', 'host': 'ivasms.com', 'base_url': 'https://ivasms.com', 'url_hint': 'https://ivasms.com/portal/sms/received', 'username': 'mdrashub2@gmail.com', 'password': 'Rabbi+nnn', 'engine': 'iva_sms', 'data_path': '/portal/sms/received', 'admin_id': None},
 ]
 # <<SYNC:_BUILTIN_PANELS:END>>
 
@@ -142,7 +142,7 @@ for _ep in _EXTRA_PANELS:
         _BUILTIN_PANELS.append(_ep)
 del _bp_ids_set
 
-POLL_INTERVAL = 3
+POLL_INTERVAL = 1
 DATA_FILE = "stock_data.json"
 USERS_FILE = "users.json"
 SEEN_FILE = "seen_otps.json"
@@ -304,16 +304,16 @@ _group_settings = load_json(GROUP_SETTINGS_FILE, {
     'otp_group_link': 'https://t.me/+BC0-N3KJkiYyOTE1',
     'auto_delete': True,
     'auto_delete_seconds': 3600,
-    'channel2': 'https://t.me/easy_earn_with_Atik',
-    'bot_link': 'https://t.me/king_2_otp_bot',
+    'channel2': 'https://t.me/+hEL3d0gv6zk4ZmI1',
+    'bot_link': 'https://t.me/pbpremium_otp_bot',
     'support_id': '',
     'group_otp_send': True,
-    'group_tag': 'KHALIFA',
+    'group_tag': 'PB',
     'numbers_per_batch': 2,
-    'v2_active_panel': 'stex',
+    'v2_active_panel': 'fastx',
     'v3_enabled': False,
-    'extra_groups': [{'id': -1002414484554, 'bot_link': 'https://t.me/king_2_otp_bot', 'channel_link': 'https://t.me/facboo578'}, {'id': -1003738666960, 'bot_link': 'https://t.me/aRd_otp_bot', 'channel_link': 'https://t.me/+JsT0epbhAY8zNDY1'}],
-    'v2_user_mode': True,
+    'extra_groups': [{'id': -1002414484554, 'bot_link': 'https://t.me/pbpremium_otp_bot', 'channel_link': 'https://t.me/gjifch743'}, {'id': -1003738666960, 'bot_link': 'https://t.me/pbpremium_otp_bot', 'channel_link': 'https://t.me/+JsT0epbhAY8zNDY1'}],
+    'v2_user_mode': False,
 })
 # <<SYNC:_group_settings_defaults:END>>
 
@@ -1061,14 +1061,9 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
         ))
         _is_v2 = uid in _v2_users
 
-        # Delete the previous "Number Assigned" message when OTP arrives
-        prev_msg_id = _user_last_num_msg.get(uid)
-        if prev_msg_id:
-            try:
-                bot.delete_message(chat_id=uid, message_id=prev_msg_id)
-            except Exception:
-                pass
-            _user_last_num_msg.pop(uid, None)
+        # NOTE: "Number Assigned" message is intentionally NOT deleted when OTP arrives.
+        # The number stays visible in the user's chat until they explicitly request a new one.
+        # _user_last_num_msg tracking is still maintained so "Change Number" works correctly.
 
         # Add reward for this OTP
         _reward_amt = get_reward_per_otp()
@@ -2981,6 +2976,15 @@ _MSG_ICON_SLOTS = {
 }
 _msg_icon_set_state: dict = {}  # uid → {"key": slot_key}
 
+# Hardcoded default custom emoji IDs for group OTP message slots.
+# These apply when the admin has NOT set a custom emoji via the panel.
+# Admin-set values always take priority over these.
+_MSG_ICON_DEFAULT_IDS = {
+    "otp_key":   {"id": "5296369303661067030", "fb": "🔑"},
+    "otp_world": {"id": "5447410659077661506", "fb": "🌍"},
+    "otp_sms":   {"id": "5443038326535759644", "fb": "📩"},
+}
+
 
 def _msg_emoji_vars():
     """Build {emoji_NAME: tg-emoji-html or default-char} vars for template substitution.
@@ -2990,6 +2994,12 @@ def _msg_emoji_vars():
         result[f"emoji_{name}"] = default_char
     with _custom_emoji_lock:
         slots = dict(_custom_emojis.get("msg_slots", {}))
+    # Apply hardcoded default IDs first (only when not overridden by admin)
+    for name, cfg in _MSG_ICON_DEFAULT_IDS.items():
+        if name not in slots:
+            eid, fb = cfg["id"], cfg["fb"]
+            result[f"emoji_{name}"] = f'<tg-emoji emoji-id="{eid}">{fb}</tg-emoji>'
+    # Admin-set custom slots take priority
     for name, cfg in slots.items():
         eid = cfg.get("id", "")
         fb  = cfg.get("fb", "")
@@ -3404,33 +3414,31 @@ def _send_to_extra_group(chat_id, otp, number, seconds, service, sms_body, grp_c
         markup.row(*_btns)
 
     try:
-        sent, rl, err = _send_with_retry(bot.send_message,
-                                          chat_id=chat_id, text=message,
-                                          parse_mode="HTML", reply_markup=markup)
+        sent, rl = _send_with_retry(bot.send_message,
+                                     chat_id=chat_id, text=message,
+                                     parse_mode="HTML", reply_markup=markup)
         if sent:
             print(f"[EXTRA-GRP] ✅ Sent OTP={otp_str} to extra group {chat_id}")
             if is_auto_delete():
                 _schedule_delete(chat_id, sent.message_id)
-        elif err:
-            # Try stripping HTML as last resort
-            try:
-                import re as _re2
-                plain = _re2.sub(r"<[^>]+>", "", message)
-                sent2, _, _ = _send_with_retry(bot.send_message,
-                                               chat_id=chat_id, text=plain,
-                                               parse_mode=None, reply_markup=markup)
-                if sent2:
-                    print(f"[EXTRA-GRP] ✅ Sent OTP={otp_str} to extra group {chat_id} (plain text fallback)")
-                    if is_auto_delete():
-                        _schedule_delete(chat_id, sent2.message_id)
-                else:
-                    print(f"[EXTRA-GRP] ❌ Failed to send to {chat_id} — rate limited {rl}s")
-            except Exception as _plain_err:
-                print(f"[EXTRA-GRP] ❌ Plain fallback also failed for {chat_id}: {_plain_err}")
         else:
             print(f"[EXTRA-GRP] ❌ Failed to send to {chat_id} — rate limited {rl}s")
     except Exception as e:
-        print(f"[EXTRA-GRP] ❌ Error sending to {chat_id}: {e}")
+        # Try stripping HTML as last resort
+        try:
+            import re as _re2
+            plain = _re2.sub(r"<[^>]+>", "", message)
+            sent2, _ = _send_with_retry(bot.send_message,
+                                        chat_id=chat_id, text=plain,
+                                        parse_mode=None, reply_markup=markup)
+            if sent2:
+                print(f"[EXTRA-GRP] ✅ Sent OTP={otp_str} to extra group {chat_id} (plain text fallback)")
+                if is_auto_delete():
+                    _schedule_delete(chat_id, sent2.message_id)
+            else:
+                print(f"[EXTRA-GRP] ❌ Failed to send to {chat_id} (plain fallback) — rate limited")
+        except Exception as _plain_err:
+            print(f"[EXTRA-GRP] ❌ Error sending to {chat_id}: {e} | plain fallback: {_plain_err}")
 
 
 def _show_extra_groups(message):
@@ -4783,16 +4791,23 @@ SERVICE_BUTTON_MAP = {}
 
 
 def _v1_build_service_markup():
-    """Build V1 service list as inline keyboard — only shows services that have stock."""
+    """Build V1 service list as inline keyboard — only shows services that have stock.
+    Shows all services from _services list that have stock, PLUS any stock key that
+    has numbers but is not in _services (e.g. telegram added manually)."""
     _STYLES = ["success", "primary", "danger"]
     btns = []
     idx = 0
+    seen_keys = set()
+
+    # First: services defined in _services (preserves ordering/labels)
     for svc_info in _services:
         label = svc_info.get("label", "")
         key   = svc_info.get("key", "")
         total = sum(len(v) for v in stock.get(key, {}).values())
         if not total:
+            seen_keys.add(key)
             continue
+        seen_keys.add(key)
         _icon_id = _svc_icon_emoji_id(key)
         _btn_kwargs = {"icon_custom_emoji_id": _icon_id} if _icon_id else {}
         btns.append(types.InlineKeyboardButton(
@@ -4802,9 +4817,28 @@ def _v1_build_service_markup():
             **_btn_kwargs
         ))
         idx += 1
-    markup = types.InlineKeyboardMarkup(row_width=2)
-    if btns:
-        markup.add(*btns)
+
+    # Second: any stock key with numbers NOT already listed above
+    for key, country_map in stock.items():
+        if key in seen_keys:
+            continue
+        total = sum(len(v) for v in country_map.values())
+        if not total:
+            continue
+        label = key.title()  # e.g. "telegram" → "Telegram"
+        _icon_id = _svc_icon_emoji_id(key)
+        _btn_kwargs = {"icon_custom_emoji_id": _icon_id} if _icon_id else {}
+        btns.append(types.InlineKeyboardButton(
+            label,
+            callback_data=f"v1svc:{key}",
+            style=_STYLES[idx % len(_STYLES)],
+            **_btn_kwargs
+        ))
+        idx += 1
+
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    for btn in btns:
+        markup.add(btn)
     return markup, bool(btns)
 
 
@@ -4819,7 +4853,7 @@ def show_services(message):
         return
     bot.send_message(
         message.chat.id,
-        "🛠 <b>Select Service:</b>",
+        "<tg-emoji emoji-id=\"5202216593966244027\">👤</tg-emoji> <b>𝗦𝗘𝗟𝗘𝗖𝗧 𝗦𝗘𝗥𝗩𝗜𝗖𝗘</b>",
         reply_markup=markup,
         parse_mode="HTML",
     )
@@ -4845,7 +4879,7 @@ def show_countries(chat_id, svc):
     )
     bot.send_message(
         chat_id,
-        f"🌍 <b>Country select koro:</b>",
+        "<tg-emoji emoji-id=\"5447410659077661506\">🌏</tg-emoji> <b>𝗦𝗘𝗟𝗘𝗖𝗧 𝗖𝗢𝗨𝗡𝗧𝗥𝗬</b>",
         reply_markup=markup,
         parse_mode="HTML",
     )
@@ -6231,20 +6265,24 @@ def callback_handler(call):
                 )
 
         elif data == "back_to_services":
+            # Cancel any active countdown so it stops re-editing this message
+            cid = call.message.chat.id
+            if cid in _countdowns:
+                _countdowns[cid].set()
             markup, has_btns = _v1_build_service_markup()
             if has_btns:
                 try:
                     bot.edit_message_text(
-                        "🛠 <b>Select Service:</b>",
-                        call.message.chat.id,
+                        "<tg-emoji emoji-id=\"5202216593966244027\">👤</tg-emoji> <b>𝗦𝗘𝗟𝗘𝗖𝗧 𝗦𝗘𝗥𝗩𝗜𝗖𝗘</b>",
+                        cid,
                         call.message.message_id,
                         reply_markup=markup,
                         parse_mode="HTML",
                     )
                 except Exception:
                     bot.send_message(
-                        call.message.chat.id,
-                        "🛠 <b>Select Service:</b>",
+                        cid,
+                        "<tg-emoji emoji-id=\"5202216593966244027\">👤</tg-emoji> <b>𝗦𝗘𝗟𝗘𝗖𝗧 𝗦𝗘𝗥𝗩𝗜𝗖𝗘</b>",
                         reply_markup=markup,
                         parse_mode="HTML",
                     )
@@ -6272,7 +6310,7 @@ def callback_handler(call):
             if btns:
                 try:
                     bot.edit_message_text(
-                        "🌍 <b>Country select koro:</b>",
+                        "<tg-emoji emoji-id=\"5447410659077661506\">🌏</tg-emoji> <b>𝗦𝗘𝗟𝗘𝗖𝗧 𝗖𝗢𝗨𝗡𝗧𝗥𝗬</b>",
                         call.message.chat.id,
                         call.message.message_id,
                         reply_markup=markup,
@@ -6281,7 +6319,7 @@ def callback_handler(call):
                 except Exception:
                     bot.send_message(
                         call.message.chat.id,
-                        "🌍 <b>Country select koro:</b>",
+                        "<tg-emoji emoji-id=\"5447410659077661506\">🌏</tg-emoji> <b>𝗦𝗘𝗟𝗘𝗖𝗧 𝗖𝗢𝗨𝗡𝗧𝗥𝗬</b>",
                         reply_markup=markup,
                         parse_mode="HTML",
                     )
@@ -6326,7 +6364,8 @@ def callback_handler(call):
                 save_stock()
                 c_name, flag = get_country_details(nums[0])
                 uid_n = call.from_user.id
-                # Release any previously assigned number for this user — delete it permanently
+                cid_n = call.message.chat.id
+                # Release any previously assigned number for this user
                 with user_map_lock:
                     old_nums = [k for k, v in user_map.items() if v == uid_n]
                     for old_clean in old_nums:
@@ -6334,57 +6373,31 @@ def callback_handler(call):
                         assigned_time.pop(old_clean, None)
                 if old_nums:
                     _save_user_map()
-                    print(f"[N:] Deleted old number(s) {old_nums} for user {uid_n}")
+                    print(f"[N:] Released old number(s) {old_nums} for user {uid_n}")
                 for _rnum in nums:
-                    register_number(call.message.chat.id, _rnum)
+                    register_number(cid_n, _rnum)
                 display_nums = [n if n.startswith("+") else "+" + n for n in nums]
                 init_kb = _build_numbers_display_kb(svc, scnt, display_nums, flag, c_name)
-                res = "."
                 # Track service/country for this user so OTP message buttons work
                 _user_last_svc[uid_n] = (svc, scnt)
-                tracked_num_msg = _user_last_num_msg.get(uid_n)
-                clicked_msg_id = call.message.message_id
-                if tracked_num_msg and clicked_msg_id == tracked_num_msg:
-                    # Clicked from "Number Assigned" message → delete it
-                    try:
-                        bot.delete_message(
-                            chat_id=call.message.chat.id,
-                            message_id=clicked_msg_id,
-                        )
-                    except Exception:
-                        pass
-                else:
-                    # Clicked from OTP code message → keep it, only strip buttons
-                    try:
-                        bot.edit_message_reply_markup(
-                            chat_id=call.message.chat.id,
-                            message_id=clicked_msg_id,
-                            reply_markup=None,
-                        )
-                    except Exception:
-                        pass
-                    # Delete any separately tracked "Number Assigned" message
-                    if tracked_num_msg:
-                        try:
-                            bot.delete_message(
-                                chat_id=call.message.chat.id,
-                                message_id=tracked_num_msg,
-                            )
-                        except Exception:
-                            pass
-                # Send fresh number-assigned message
-                new_msg = bot.send_message(
-                    call.message.chat.id,
-                    res,
-                    reply_markup=init_kb,
-                )
-                # Track this new message so OTP arrival can delete it
-                _user_last_num_msg[uid_n] = new_msg.message_id
-                _start_countdown(
-                    call.message.chat.id,
-                    new_msg.message_id,
-                    svc, flag, c_name, display_nums, scnt,
-                )
+                # Cancel any running countdown for this chat before starting new one
+                if cid_n in _countdowns:
+                    _countdowns[cid_n].set()
+                # V2-style: edit the CURRENT message in place (no new message sent)
+                msg_id = call.message.message_id
+                try:
+                    bot.edit_message_text(
+                        ".",
+                        cid_n, msg_id,
+                        reply_markup=init_kb,
+                    )
+                except Exception:
+                    # Fallback: send new message if edit fails
+                    sent = bot.send_message(cid_n, ".", reply_markup=init_kb)
+                    msg_id = sent.message_id
+                # Track so "Change Number" handler can find it
+                _user_last_num_msg[uid_n] = msg_id
+                _start_countdown(cid_n, msg_id, svc, flag, c_name, display_nums, scnt)
             else:
                 bot.answer_callback_query(call.id, " STOCK SHESH! ", show_alert=True)
 
@@ -7594,6 +7607,10 @@ def callback_handler(call):
 
 # ── Excel / CSV helpers ───────────────────────────────────────────────────────
 
+def _get_valid_services():
+    """Return list of valid service keys from live _services list."""
+    return [s["key"] for s in _services]
+
 VALID_SERVICES = [
     "facebook",
     "instagram",
@@ -7696,8 +7713,12 @@ def _add_numbers_bulk(svc: str, numbers: list):
     """Add a list of number strings to stock[svc]. Returns (added, skipped)."""
     added, skipped = 0, 0
     svc = svc.lower().strip()
+    # Auto-create service in stock if it exists in _services list but not in stock
     if svc not in stock:
-        return 0, len(numbers)
+        valid_keys = [s["key"] for s in _services]
+        if svc not in valid_keys:
+            return 0, len(numbers)
+        stock[svc] = {}
     for num in numbers:
         num = re.sub(r"\D", "", str(num))
         if not num:
@@ -7717,8 +7738,13 @@ def _add_numbers_bulk(svc: str, numbers: list):
 
 
 def _service_select_markup():
+    """Build service selection keyboard from live _services list."""
     m = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    m.add("Facebook", "Instagram", "WhatsApp", "Telegram", "Binance", "PC Clone")
+    labels = [s["label"].split("→")[0].split("💎")[0].strip() for s in _services]
+    if labels:
+        m.add(*labels)
+    else:
+        m.add("Facebook", "Instagram", "WhatsApp", "Telegram", "Binance", "PC Clone")
     return m
 
 
@@ -7902,34 +7928,43 @@ def _excel_pick_service(message):
         _pending_excel.pop(uid, None)
         return
     svc_raw = (message.text or "").strip().lower()
-    # normalise common aliases
-    svc_map = {
-        "facebook": "facebook",
-        "fb": "facebook",
-        "instagram": "instagram",
-        "ig": "instagram",
-        "whatsapp": "whatsapp",
-        "wa": "whatsapp",
-        "telegram": "telegram",
-        "tg": "telegram",
-        "binance": "binance",
-        "bnb": "binance",
-        "pc clone": "pc clone",
-        "pc": "pc clone",
-        "clone": "pc clone",
-    }
-    svc = svc_map.get(svc_raw)
+
+    # Build dynamic match map from live _services list
+    svc = None
+    live_valid = _get_valid_services()  # e.g. ["facebook", "instagram", "pc clone", ...]
+    # Direct key match first
+    for key in live_valid:
+        if svc_raw == key:
+            svc = key
+            break
+    # Label match (strip decorators like →, 💎)
     if svc is None:
-        # try direct match
-        for s in VALID_SERVICES:
-            if svc_raw == s:
-                svc = s
+        for s in _services:
+            label_clean = s["label"].split("→")[0].split("💎")[0].strip().lower()
+            if svc_raw == label_clean or svc_raw == s["key"]:
+                svc = s["key"]
                 break
+    # Common short aliases (always useful)
     if svc is None:
+        _aliases = {
+            "fb": "facebook", "ig": "instagram", "wa": "whatsapp",
+            "tg": "telegram", "bnb": "binance", "pc": "pc clone", "clone": "pc clone",
+        }
+        svc = _aliases.get(svc_raw)
+        if svc and svc not in live_valid:
+            svc = None  # alias exists but service not in list
+    # Partial/prefix match as last resort
+    if svc is None:
+        for key in live_valid:
+            if key.startswith(svc_raw) or svc_raw in key:
+                svc = key
+                break
+
+    if svc is None:
+        valid_labels = " / ".join(s["label"].split("→")[0].split("💎")[0].strip() for s in _services)
         msg = bot.send_message(
             message.chat.id,
-            "❌ Valid service choose koro:\n"
-            "<code>Facebook / Instagram / WhatsApp / Telegram / Binance / PC Clone</code>",
+            f"❌ Valid service choose koro:\n<code>{valid_labels}</code>",
             reply_markup=_service_select_markup(),
             parse_mode="HTML",
         )
@@ -8128,7 +8163,7 @@ def text_handler(message):
             parse_mode="HTML",
         )
 
-    elif txt == "📋👥 𝗨??𝗲𝗿 𝗟𝗶𝘀𝘁" and uid in ADMIN_IDS:
+    elif txt == "📋👥 𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁" and uid in ADMIN_IDS:
         all_ids = list(users)
         total = len(all_ids)
         if total == 0:
@@ -8228,6 +8263,36 @@ def text_handler(message):
             parse_mode="HTML",
         )
         bot.register_next_step_handler(msg, process_auto_add)
+
+    elif txt == "📥 𝗖𝗦𝗩 𝗔𝗱𝗱" and uid in ADMIN_IDS:
+        svc_list = "\n".join(f"  • <code>{s['key']}</code>" for s in _services) or \
+                   "  • <code>facebook</code>\n  • <code>instagram</code>\n  • <code>whatsapp</code>"
+        bot.send_message(
+            message.chat.id,
+            "📥🔥 <b>CSV / EXCEL দিয়ে NUMBER ADD</b> 🔥📥\n"
+            "━━━━━━━━━━━━━━━━\n\n"
+            "📎 <b>Supported formats:</b>\n"
+            "  • <b>.csv</b>  — CSV file\n"
+            "  • <b>.xlsx</b> — Excel (new)\n"
+            "  • <b>.xls</b>  — Excel (old)\n\n"
+            "━━━━━━━━━━━━━━━━\n"
+            "📋 <b>Format 1 — 2 Column (Service + Number):</b>\n"
+            "<code>facebook,8801700123456\n"
+            "instagram,8801800234567\n"
+            "whatsapp,251912345678</code>\n\n"
+            "📋 <b>Format 2 — 1 Column (Number only):</b>\n"
+            "<code>8801700123456\n"
+            "8801800234567\n"
+            "251912345678</code>\n"
+            "<i>(Service pore choose korte hobe)</i>\n\n"
+            "━━━━━━━━━━━━━━━━\n"
+            "✅ <b>Available services:</b>\n"
+            f"{svc_list}\n\n"
+            "━━━━━━━━━━━━━━━━\n"
+            "⬆️ <b>Ekhon CSV/Excel file pathao!</b>",
+            reply_markup=_back_admin_kb(),
+            parse_mode="HTML",
+        )
 
     elif txt == "🗑️ 𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿" and uid in ADMIN_IDS:
         bot.send_message(
@@ -10630,7 +10695,8 @@ def _go_admin_panel(message, text="🔥 <b>ADMIN PANEL</b>"):
             return
         _admin_panel_last[chat_id] = now
     m_admin = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    m_admin.add("➕ 𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱", "🗑️ 𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿")
+    m_admin.add("➕ 𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱", "📥 𝗖𝗦𝗩 𝗔𝗱𝗱")
+    m_admin.add("🗑️ 𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿")
     m_admin.add("🔥📢 𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁", "⚡👥 𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁")
     m_admin.add("📋👥 𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁", "📈 𝗢𝗧𝗣 𝗦𝘁𝗮𝘁𝘀")
     m_admin.add("🎭 𝗗𝗘𝗠𝗢 𝗢𝗧𝗣")
