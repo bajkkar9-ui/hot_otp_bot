@@ -40,7 +40,7 @@ SUPER_ADMIN_IDS = [
     8523774444,
 ]
 # <<SYNC:SUPER_ADMIN_IDS:END>>
-ADMIN_IDS = list(SUPER_ADMIN_IDS)
+ADMIN_IDS = list(SUPER_ADMIN_IDS)yyhhhh
 CHANNEL_2 = ""
 
 # ── Panel 1 (Mahofuza) ───────────────────────────────────────────────────────
