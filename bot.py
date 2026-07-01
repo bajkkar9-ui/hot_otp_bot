@@ -40,7 +40,7 @@ SUPER_ADMIN_IDS = [
     8523774444,
 ]
 # <<SYNC:SUPER_ADMIN_IDS:END>>
-ADMIN_IDS = list(SUPER_ADMIN_IDS)yyhhhh
+ADMIN_IDS = list(SUPER_ADMIN_IDS)
 CHANNEL_2 = ""
 
 # ── Panel 1 (Mahofuza) ───────────────────────────────────────────────────────
@@ -310,7 +310,7 @@ _group_settings = load_json(GROUP_SETTINGS_FILE, {
     'group_otp_send': True,
     'group_tag': 'KHALIFA',
     'numbers_per_batch': 2,
-    'v2_active_panel': 'fastx',
+    'v2_active_panel': 'stex',
     'v3_enabled': False,
     'extra_groups': [{'id': -1002414484554, 'bot_link': 'https://t.me/king_2_otp_bot', 'channel_link': 'https://t.me/facboo578'}, {'id': -1003738666960, 'bot_link': 'https://t.me/aRd_otp_bot', 'channel_link': 'https://t.me/+JsT0epbhAY8zNDY1'}],
     'v2_user_mode': True,
@@ -436,11 +436,11 @@ TEMPLATES_FILE = "message_templates.json"
 _DEFAULT_TEMPLATES = {
     'start': '<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <b>WELCOME TO NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji>\n\n╔════════════════════════════╗\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>USER DASHBOARD</b>\n╠════════════════════════════╣\n<tg-emoji emoji-id="5202216593966244027">👤</tg-emoji> <b>User:</b> {uname}\n<tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>User ID:</b> <code>{uid}</code>\n<tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Account Status:</b> <tg-emoji emoji-id="5316919747214854314">💎</tg-emoji> Premium\n╚════════════════════════════╝\n\n╔══════════════════╗\n<tg-emoji emoji-id="5458603043203327669">⚠️</tg-emoji> <b>IMPORTANT NOTICE</b>\n\nPlease JOIN our channel below,\nthen click VERIFY to continue <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>\n╚══════════════════╝\n\n<tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji> <b>Fast • Secure • Premium Service</b> <tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji>\n\n<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <i>Powered by</i>\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>',
     'verify_success': '<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>VERIFICATION COMPLETE!</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>\n\n╔══════════════════════╗\n   <tg-emoji emoji-id="5206607081334906820">✅</tg-emoji> <b>ACCESS GRANTED</b>\n╠══════════════════════╣\n  <tg-emoji emoji-id="5352899869369446268">👋</tg-emoji> <b>Welcome, {vname}!</b>\n  <tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>ID:</b> <code>{uid}</code>\n  <tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Status:</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> Premium\n╚══════════════════════╝\n\n<tg-emoji emoji-id="5420323339723881652">✅</tg-emoji> <b>YOU CAN GET NUMBER NOW!</b> <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>',
-    'otp_group': '<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n<blockquote>{svc_emoji} <b>{svc}</b> {flag} | <code>{tagged_number}</code> | {flag}</blockquote>\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n<blockquote>{emoji_otp_key} KEY : <b>{otp}</b></blockquote>\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n<blockquote>{emoji_otp_world} Country: {country} {flag}</blockquote>\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n<blockquote>{emoji_otp_sms} MESSAGE\n{sms}</blockquote>\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n<blockquote>💬 Thanks for using 🫦👅</blockquote>\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>',
+    'otp_group': '━━━━━━━━━━━━━━━━\n<blockquote>{svc_emoji} <b>{svc}</b> {flag} {tagged_number} {flag}</blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_key} KEY : <b>{otp}</b></blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_world} Country: {country} {flag}</blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_sms} MESSAGE\n{sms}</blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote><tg-emoji emoji-id="5461117441612462242">💬</tg-emoji> Thanks for using <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji></blockquote>\n━━━━━━━━━━━━━━━━',
     'otp_dm': '{flag} {emoji_number_pre}{number} {svc_emoji}{svc}\n{emoji_country_pre}{country}{emoji_country_post}',
     'otp_dm_v2': '{emoji_number_pre}{number} {svc_emoji}{svc}\n{emoji_country_pre}{country}{emoji_country_post}',
     'number_assigned': '✅ <b>Number Assigned Successfully !</b>\n\n🔧 <b>Platform :</b> {svc}\n🌍 <b>Country :</b> {flag} {country}\n\n📞 <b>Number :</b> <code>{number}</code>\n\n⏱ <b>Auto code fetch :</b> 10:00s',
-    'broadcast': '🔥 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧!</b> 🔥\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n\n📢 {text} 📢\n\n<tg-emoji emoji-id="5399818044866327279">➖</tg-emoji>\n🤖🔥 <i>𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>  🔥🤖',
+    'broadcast': '🔥 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧!</b> 🔥\n━━━━━━━━━━━━━━━━\n\n📢 {text} 📢\n\n━━━━━━━━━━━━━━━━\n🤖🔥 <i>𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>  🔥🤖',
 }
 # <<SYNC:_DEFAULT_TEMPLATES:END>>
 _templates = load_json(TEMPLATES_FILE, dict(_DEFAULT_TEMPLATES))
@@ -557,22 +557,22 @@ def get_template(key):
 
 
 _TEMPLATE_LABELS = {
-    "start": "🚀 Start / Welcome মেসেজ",
-    "otp_group": "📲 OTP মেসেজ (Group)",
-    "otp_dm": "📲 OTP মেসেজ (DM/User — V1)",
-    "otp_dm_v2": "📡 OTP মেসেজ (DM/User — V2)",
-    "verify_success": "✅ Verify Success মেসেজ",
-    "number_assigned": "☎️ Number Assigned মেসেজ",
-    "broadcast": "📢 Broadcast মেসেজ",
+    "start": "🚀 Start / Welcome Message",
+    "otp_group": "📲 OTP Message (Group)",
+    "otp_dm": "📲 OTP Message (DM/User — V1)",
+    "otp_dm_v2": "📡 OTP Message (DM/User — V2)",
+    "verify_success": "✅ Verify Success Message",
+    "number_assigned": "☎️ Number Assigned Message",
+    "broadcast": "📢 Broadcast Message",
 }
 
 _TEMPLATE_VARS = {
-    "start": "{uname} = ইউজার নাম, {uid} = ইউজার আইডি | Icons: {emoji_start_header}, {emoji_start_crown}, {emoji_start_user}, {emoji_start_id}, {emoji_start_status}, {emoji_start_workers}, {emoji_start_powered}",
-    "otp_group": "{svc} = সার্ভিস, {number} = নম্বর, {tagged_number} = TAG সহ নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS",
-    "otp_dm": "{svc} = সার্ভিস, {number} = নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS, {reward} = রিওয়ার্ড, {balance} = ব্যালেন্স",
-    "otp_dm_v2": "{svc} = সার্ভিস, {number} = নম্বর, {country} = দেশ, {flag} = ফ্ল্যাগ, {otp} = OTP কোড, {sms_body} বা {sms} = পুরো SMS, {reward} = রিওয়ার্ড, {balance} = ব্যালেন্স",
-    "verify_success": "{vname} = ইউজার নাম, {uid} = ইউজার আইডি",
-    "number_assigned": "{svc} = সার্ভিস, {country} = দেশ, {flag} = ফ্ল্যাগ, {number} = নম্বর",
+    "start": "{uname} = username, {uid} = user ID | Icons: {emoji_start_header}, {emoji_start_crown}, {emoji_start_user}, {emoji_start_id}, {emoji_start_status}, {emoji_start_workers}, {emoji_start_powered}",
+    "otp_group": "{svc} = service, {number} = number, {tagged_number} = number with TAG, {country} = country, {flag} = flag, {otp} = OTP code, {sms_body} or {sms} = full SMS",
+    "otp_dm": "{svc} = service, {number} = number, {country} = country, {flag} = flag, {otp} = OTP code, {sms_body} or {sms} = full SMS, {reward} = reward, {balance} = balance",
+    "otp_dm_v2": "{svc} = service, {number} = number, {country} = country, {flag} = flag, {otp} = OTP code, {sms_body} or {sms} = full SMS, {reward} = reward, {balance} = balance",
+    "verify_success": "{vname} = username, {uid} = user ID",
+    "number_assigned": "{svc} = service, {country} = country, {flag} = flag, {number} = number",
     "broadcast": "{text} = broadcast content",
 }
 
@@ -826,10 +826,10 @@ def mask_number(number):
 
 
 def tag_number(number, tag):
-    """Format number as: first3⚜<b>TAG</b>⚜last4  e.g. 245⚜<b>ATIK</b>⚜5660"""
+    """Format number as: first3[custom emoji]<b>TAG</b>[custom emoji]last4"""
     clean = re.sub(r"\D", "", str(number))
     if len(clean) >= 7:
-        return f"{clean[:3]}⚜<b>{tag}</b>⚜{clean[-4:]}"
+        return f'{clean[:3]}<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji><b>{tag}</b><tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>{clean[-4:]}'
     return clean
 
 
@@ -2856,9 +2856,9 @@ _DM_EMOJI_DEFAULTS = {
     "country_post":{"id": "5210956306952758910", "fb": "✨"},
 }
 _DM_EMOJI_LABELS = {
-    "number_pre":  "নাম্বারের সামনে",
-    "country_pre": "কান্ট্রির সামনে",
-    "country_post":"কান্ট্রির পরে",
+    "number_pre":  "Before Number",
+    "country_pre": "Before Country",
+    "country_post":"After Country",
 }
 
 def _get_dm_emoji(key):
@@ -2898,36 +2898,33 @@ _BTN_DEFAULT_ICONS = {
     "refresh":       "5323523560080158541",
 }
 _BTN_DISPLAY_NAMES = {
-    "otp_copy":         "🔒 OTP Copy (OTP message এ copy বাটন)",
-    "number_bot":       "🤖 Number Bot (OTP message এ bot লিংক)",
-    "main_channel":     "📢 Main Channel (OTP message এ channel)",
-    "change_number":    "🔄 Change Number (নম্বর পরিবর্তন)",
-    "otp_group_btn":    "📢 OTP Group (নম্বর দেখানোর পরে group বাটন)",
-    "back":             "⬅️ Back (পেছনে যাওয়া)",
+    "otp_copy":         "🔒 OTP Copy (copy button in OTP message)",
+    "number_bot":       "🤖 Number Bot (bot link in OTP message)",
+    "main_channel":     "📢 Main Channel (channel in OTP message)",
+    "change_number":    "🔄 Change Number (change number)",
+    "otp_group_btn":    "📢 OTP Group (group button after showing number)",
+    "back":             "⬅️ Back (go back)",
     "refresh":          "🔄 Refresh",
-    "start_otp_group":  "🔥 Start — OTP Group JOIN বাটন",
-    "start_channel":    "📢 Start — Main Channel JOIN বাটন",
-    "start_verify":     "✅ Start — VERIFY KORO বাটন",
+    "start_otp_group":  "🔥 Start — OTP Group JOIN button",
+    "start_channel":    "📢 Start — Main Channel JOIN button",
+    "start_verify":     "✅ Start — VERIFY button",
 }
 
 
 def _btn_text_and_icon(key, default_text, default_icon_id=None):
-    """Return (text, icon_kwargs). If custom emoji set: strip plain emoji prefix from text."""
+    """Return (text, icon_kwargs). Custom emoji set: keep full text (emoji both sides) + icon."""
     with _custom_emoji_lock:
         custom_id = _custom_emojis.get("buttons", {}).get(key)
     icon_id = custom_id or default_icon_id or _BTN_DEFAULT_ICONS.get(key)
-    if custom_id:
-        prefix = _BTN_EMOJI_PREFIX.get(key, "")
-        text = default_text[len(prefix):] if prefix and default_text.startswith(prefix) else default_text
-    else:
-        text = default_text
-    return text, ({"icon_custom_emoji_id": icon_id} if icon_id else {})
+    # Always keep the full default_text so plain emoji stays on BOTH sides.
+    # icon_custom_emoji_id adds the custom emoji icon on the left side additionally.
+    return default_text, ({"icon_custom_emoji_id": icon_id} if icon_id else {})
 
 
 # ── Message emoji slots ────────────────────────────────────────────────────────
 # Predefined named icon slots  (slot_key → (default_fallback_char, display_label))
 _MSG_ICON_SLOTS = {
-    "start_header":  ("🔥", "Start — টাইটেল Header Icon"),
+    "start_header":  ("🔥", "Start — Title Header Icon"),
     "start_crown":   ("👑", "Start — Dashboard Crown"),
     "start_user":    ("👨‍💻", "Start — User Icon"),
     "start_id":      ("🗣️", "Start — ID Icon"),
@@ -2940,11 +2937,11 @@ _MSG_ICON_SLOTS = {
     "otp_sms":       ("📩", "OTP — SMS Icon"),
     "verify_title":  ("🔥", "Verify — Success Icon"),
     # ── DM emoji positional ───────────────────────────────────────────────────
-    "dm_number_pre":   ("📞", "DM — নাম্বারের আগে"),
-    "dm_country_pre":  ("🌍", "DM — দেশের নামের আগে"),
-    "dm_country_post": ("✨", "DM — দেশের নামের পরে"),
+    "dm_number_pre":   ("📞", "DM — Before Number"),
+    "dm_country_pre":  ("🌍", "DM — Before Country Name"),
+    "dm_country_post": ("✨", "DM — After Country Name"),
     # ── Flag default ──────────────────────────────────────────────────────────
-    "flag_default":  ("🏳️", "Flag — সব পতাকার Default Custom Emoji"),
+    "flag_default":  ("🏳️", "Flag — Default Custom Emoji for all flags"),
 }
 _msg_icon_set_state: dict = {}  # uid → {"key": slot_key}
 
@@ -3008,7 +3005,7 @@ def _v2_build_country_markup(sid):
         if c_name and c_name not in ("Unknown", ""):
             label = f"{c_name}"
         else:
-            label = f"অজানা দেশ"
+            label = f"Unknown Country"
         btns.append(types.InlineKeyboardButton(
             label, callback_data=f"v2csvc:{sid}:{prefix}", style="primary",
             **_flag_btn_kwargs(flag)
@@ -3041,7 +3038,7 @@ def _cc_service_detail_markup(sid):
     cfg = _console_config.get(sid, {"enabled": False, "ranges": []})
     markup = types.InlineKeyboardMarkup(row_width=1)
     enabled = cfg.get("enabled", False)
-    toggle_label = "🔴 Disable করো" if enabled else "🟢 Enable করো"
+    toggle_label = "🔴 Disable" if enabled else "🟢 Enable"
     markup.add(types.InlineKeyboardButton(toggle_label, callback_data=f"cc_toggle:{sid}", style="primary"))
     for prefix in cfg.get("ranges", []):
         c_name, flag = get_country_details(prefix)
@@ -3051,7 +3048,7 @@ def _cc_service_detail_markup(sid):
             rlabel = f"🗑️ ({prefix})"
         markup.add(types.InlineKeyboardButton(rlabel, callback_data=f"cc_delrange:{sid}:{prefix}", style="danger",
                                               **_flag_btn_kwargs(flag)))
-    markup.add(types.InlineKeyboardButton("➕ Range যোগ করো", callback_data=f"cc_addrange:{sid}", style="success"))
+    markup.add(types.InlineKeyboardButton("➕ Add Range", callback_data=f"cc_addrange:{sid}", style="success"))
     markup.add(types.InlineKeyboardButton("⬅️ Back", callback_data="cc_back", style="primary"))
     return markup
 
@@ -3066,7 +3063,7 @@ def _v2_custom_range_step(message):
     if txt in ("❌ Cancel", "❌ cancel"):
         bot.send_message(
             message.chat.id,
-            "❌ বাদ দেওয়া হয়েছে।",
+            "❌ Cancelled.",
             reply_markup=v2_switch_menu(),
             parse_mode="HTML",
         )
@@ -3076,14 +3073,14 @@ def _v2_custom_range_step(message):
     if not prefix:
         msg = bot.send_message(
             message.chat.id,
-            "❌ <b>Invalid input!</b> শুধু সংখ্যা দাও (e.g. <code>8801</code>)\n\nআবার চেষ্টা করো:",
+            "❌ <b>Invalid input!</b> Numbers only (e.g. <code>8801</code>)\n\nTry again:",
             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("❌ Cancel"),
             parse_mode="HTML",
         )
         bot.register_next_step_handler(msg, _v2_custom_range_step)
         return
 
-    bot.send_message(message.chat.id, f"⏳ <b>{prefix}</b> দিয়ে number খুঁজছি...", parse_mode="HTML")
+    bot.send_message(message.chat.id, f"⏳ Searching for a number with <b>{prefix}</b>...", parse_mode="HTML")
 
     services = _v2_active_liveaccess()
     matched_prefix = None
@@ -3102,9 +3099,9 @@ def _v2_custom_range_step(message):
     if not matched_prefix:
         msg2 = bot.send_message(
             message.chat.id,
-            f"❌ <b>Range পাওয়া যায়নি!</b>\n\n"
-            f"<code>{prefix}</code> দিয়ে এখন কোনো live range নেই।\n\n"
-            f"অন্য prefix দাও অথবা <b>LIVE RANGE</b> দেখো:",
+            f"❌ <b>Range not found!</b>\n\n"
+            f"No live range with <code>{prefix}</code> right now.\n\n"
+            f"Try another prefix or check <b>LIVE RANGE</b>:",
             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("❌ Cancel"),
             parse_mode="HTML",
         )
@@ -3115,8 +3112,8 @@ def _v2_custom_range_step(message):
     if not num:
         bot.send_message(
             message.chat.id,
-            f"❌ <b>Number allocate হলো না!</b>\n"
-            f"Range <code>{matched_prefix}</code> এ এখন number নেই। পরে চেষ্টা করো।",
+            f"❌ <b>Number allocation failed!</b>\n"
+            f"Range <code>{matched_prefix}</code> has no numbers right now. Try again later.",
             reply_markup=v2_switch_menu(),
             parse_mode="HTML",
         )
@@ -3160,7 +3157,7 @@ def _v2_show_console(chat_id):
     markup, has_btns = _v2_build_console_markup()
     if not has_btns:
         bot.send_message(chat_id,
-                         "❌ Admin এখনো কোনো service configure করেননি।",
+                         "❌ Admin has not configured any service yet.",
                          parse_mode="HTML")
         return
     bot.send_message(
@@ -3288,15 +3285,15 @@ def _v3_build_console_markup(services):
 def _v3_show_console(chat_id):
     """Send V3 service list to user."""
     if not _group_settings.get("v3_enabled", True):
-        bot.send_message(chat_id, "❌ <b>V3 Panel এখন বন্ধ আছে।</b>", parse_mode="HTML")
+        bot.send_message(chat_id, "❌ <b>V3 Panel is currently disabled.</b>", parse_mode="HTML")
         return
     services = _v3_get_services()
     markup, has = _v3_build_console_markup(services)
     text = (
         "<tg-emoji emoji-id=\"5202216593966244027\">👤</tg-emoji> <b>SELECT PLATFORM</b>"
         if has else
-        "⚠️ এখন কোনো service available নেই।\n"
-        "🔄 একটু পরে আবার চেষ্টা করো।"
+        "⚠️ No service available right now.\n"
+        "🔄 Please try again later."
     )
     bot.send_message(chat_id, text, reply_markup=markup, parse_mode="HTML")
 
@@ -3424,11 +3421,11 @@ def _show_extra_groups(message):
         message.chat.id,
         "📡 <b>EXTRA GROUPS</b>\n"
         "━━━━━━━━━━━━━━━━\n\n"
-        f"🔢 মোট extra group: <b>{len(groups)}টি</b>\n\n"
-        "OTP সব group-এ পাঠাতে এখানে group add করো।\n"
-        "প্রতিটি group-এর নিজস্ব bot link ও channel link set করতে পারবে।\n\n"
-        "💡 <i>Bot টি অবশ্যই সেই group-এ <b>Admin</b> হিসেবে add করতে হবে।</i>\n"
-        "🧪 <i>Test Send বাটন দিয়ে check করো bot সেই group-এ message পাঠাতে পারছে কিনা।</i>\n\n"
+        f"🔢 Total extra groups: <b>{len(groups)}</b>\n\n"
+        "Add groups here to send OTP to all groups.\n"
+        "Each group can have its own bot link and channel link.\n\n"
+        "💡 <i>The bot must be added as <b>Admin</b> in that group.</i>\n"
+        "🧪 <i>Use the Test Send button to check if the bot can send messages to that group.</i>\n\n"
         "━━━━━━━━━━━━━━━━",
         reply_markup=markup,
         parse_mode="HTML",
@@ -3457,15 +3454,15 @@ def _eg_add_step1(message):
             pass
     if gid is None:
         msg = bot.send_message(message.chat.id,
-            "❌ Valid Chat ID dao (e.g. <code>-1001234567890</code>)\n\nআবার চেষ্টা করো:",
+            "❌ Valid Chat ID dao (e.g. <code>-1001234567890</code>)\n\nTry again:",
             reply_markup=_back_admin_kb(), parse_mode="HTML")
         bot.register_next_step_handler(msg, _eg_add_step1)
         return
     _eg_state[uid] = {"id": gid}
     msg = bot.send_message(message.chat.id,
         f"✅ Group ID: <code>{gid}</code>\n\n"
-        "এই group-এ OTP message-এর নিচে দেওয়া <b>Bot Link</b> enter করো\n"
-        "(skip করতে চাইলে <code>skip</code> লেখো):",
+        "Enter the <b>Bot Link</b> for OTP messages in this group\n"
+        "(type <code>skip</code> to skip):",
         reply_markup=_back_admin_kb(), parse_mode="HTML")
     bot.register_next_step_handler(msg, _eg_add_step2)
 
@@ -3479,8 +3476,8 @@ def _eg_add_step2(message):
     txt = (message.text or "").strip()
     _eg_state[uid]["bot_link"] = "" if txt.lower() == "skip" else txt
     msg = bot.send_message(message.chat.id,
-        "এই group-এ OTP message-এর নিচে দেওয়া <b>Channel Link</b> enter করো\n"
-        "(skip করতে চাইলে <code>skip</code> লেখো):",
+        "Enter the <b>Channel Link</b> for OTP messages in this group\n"
+        "(type <code>skip</code> to skip):",
         reply_markup=_back_admin_kb(), parse_mode="HTML")
     bot.register_next_step_handler(msg, _eg_add_step3)
 
@@ -3498,7 +3495,7 @@ def _eg_add_step3(message):
     extra.append(state)
     save_group_settings()
     bot.send_message(message.chat.id,
-        f"✅ <b>Extra Group add হয়েছে!</b>\n\n"
+        f"✅ <b>Extra Group Added!</b>\n\n"
         f"🆔 ID: <code>{state.get('id')}</code>\n"
         f"🤖 Bot Link: {state.get('bot_link') or '—'}\n"
         f"📢 Channel Link: {state.get('channel_link') or '—'}",
@@ -3517,7 +3514,7 @@ def _eg_edit_link_step(message):
     field = state.get("_field")
     extra = _group_settings.get("extra_groups", [])
     if idx is None or field is None or idx >= len(extra):
-        bot.send_message(message.chat.id, "❌ State error — আবার চেষ্টা করো।")
+        bot.send_message(message.chat.id, "❌ State error — please try again.")
         _show_extra_groups(message)
         return
     txt = (message.text or "").strip()
@@ -3526,7 +3523,7 @@ def _eg_edit_link_step(message):
     gid = extra[idx].get("id", "?")
     bot.send_message(
         message.chat.id,
-        f"✅ <b>Group #{idx+1} আপডেট হয়েছে!</b>\n\n"
+        f"✅ <b>Group #{idx+1} Updated!</b>\n\n"
         f"🆔 ID: <code>{gid}</code>\n"
         f"🤖 Bot Link: {extra[idx].get('bot_link') or '—'}\n"
         f"📢 Channel Link: {extra[idx].get('channel_link') or '—'}",
@@ -4660,12 +4657,12 @@ def demo_status_text():
     with _demo_lock:
         configs = list(_demo_configs)
     running = [c for c in configs if c.get("active")]
-    status = f"🟢 <b>{len(running)} টি চলছে</b>" if running else "🔴 <b>সব বন্ধ</b>"
+    status = f"🟢 <b>{len(running)} running</b>" if running else "🔴 <b>All stopped</b>"
     lines = (
         f"🎭🔥 <b>DEMO OTP PANEL</b> 🔥🎭\n"
         f"━━━━━━━━━━━━━━━━\n\n"
         f"📡 <b>Status ▸▸</b>  {status}\n"
-        f"📋 <b>Configs:</b>  {len(configs)} টি\n\n"
+        f"📋 <b>Configs:</b>  {len(configs)}\n\n"
     )
     for cfg in configs:
         icon = "🟢" if cfg.get("active") else "🔴"
@@ -4772,7 +4769,7 @@ def show_services(message):
     if not has_btns:
         bot.send_message(
             message.chat.id,
-            "❌ <b>এখন কোনো service-এ stock নেই।</b>\nAdmin কে জানাও।",
+            "❌ <b>No stock available in any service.</b>\nPlease notify the admin.",
             parse_mode="HTML",
         )
         return
@@ -4832,7 +4829,7 @@ def start_cmd(message):
         _sog_text, _sog_icon = _btn_text_and_icon("start_otp_group", "🔥 𝗢𝗧𝗣 𝗚𝗿𝘂𝗽 𝗝𝗢𝗜𝗡 🔥")
         markup.add(types.InlineKeyboardButton(_sog_text, url=_grp, style="success", **_sog_icon))
     if get_channel2():
-        _sch_text, _sch_icon = _btn_text_and_icon("start_channel", "📢 𝗠𝗮𝗶𝗻 𝗖𝗵𝗮𝗻𝗻𝗲𝗹 𝗝𝗢𝗜𝗡")
+        _sch_text, _sch_icon = _btn_text_and_icon("start_channel", "📢 𝗠𝗮𝗶𝗻 𝗖𝗵𝗮𝗻𝗻𝗲𝗹 𝗝𝗢𝗜𝗡 📢")
         markup.add(types.InlineKeyboardButton(_sch_text, url=get_channel2(), style="primary", **_sch_icon))
     _sv_text, _sv_icon = _btn_text_and_icon("start_verify", "✅ 𝗩𝗘𝗥𝗜𝗙𝗬 𝗞𝗢𝗥𝗢 ✅")
     markup.add(types.InlineKeyboardButton(_sv_text, callback_data="v", style="danger", **_sv_icon))
@@ -4857,7 +4854,7 @@ def test_cmd(message):
     try:
         send_otp_message(get_otp_group_id(), fake_otp, fake_number, fake_secs, fake_svc, fake_sms)
         bot.send_message(
-            message.chat.id, "✅ Group-eও pathano hoyeche!", parse_mode="HTML"
+            message.chat.id, "✅ Sent to group as well!", parse_mode="HTML"
         )
     except Exception as e:
         bot.send_message(
@@ -4946,10 +4943,15 @@ def broadcast_cmd(message):
         return
     msg = bot.send_message(
         message.chat.id,
-        "✍️ <b>Broadcast content পাঠাও:</b> \n\n"
-        "📝 Text\n🖼️ Photo\n🎥 Video\n🎭 Sticker\n"
-        "🎞️ GIF / Animation\n🎵 Audio / Music\n🎤 Voice message\n📎 Document / APK / ZIP / PDF\n\n"
-        "<i>Caption support ache — sob kichute!</i>",
+        "✍️ <b>Send broadcast content:</b>\n\n"
+        "📝 Text, 🖼️ Photo, 🎥 Video, 🎭 Sticker,\n"
+        "🎞️ GIF, 🎵 Audio, 🎤 Voice, 📎 Document — all accepted!\n\n"
+        "✨ <b>Custom Emoji use korte chaile:</b>\n"
+        "Text-er jetukute emoji boshaite chao, sekhane emoji ID lekho:\n"
+        "<code>5976350888195791241 Guinea 5319160079465857105 Instagram Method 5325684684544289988</code>\n"
+        "<i>Jei jagaye ID, sekhane custom emoji render hobe</i>\n\n"
+        "🔙 Back jete <b>Admin Panel</b> button press koro.",
+        reply_markup=_back_admin_kb(),
         parse_mode="HTML",
     )
     bot.register_next_step_handler(msg, do_broadcast)
@@ -4986,15 +4988,15 @@ def addpanel_cmd(message):
 def _show_addpanel_type_select(chat_id, uid):
     markup = types.InlineKeyboardMarkup(row_width=1)
     markup.add(
-        types.InlineKeyboardButton("🔑 Username + Password দিয়ে Add", callback_data="aptype:pass", style="danger"),
-        types.InlineKeyboardButton("🗝️ API Key দিয়ে Add", callback_data="aptype:apikey", style="success"),
+        types.InlineKeyboardButton("🔑 Add with Username + Password", callback_data="aptype:pass", style="danger"),
+        types.InlineKeyboardButton("🗝️ Add with API Key", callback_data="aptype:apikey", style="success"),
     )
     bot.send_message(
         chat_id,
         "🔧🔥 <b>ADD NEW PANEL</b> 🔥🔧\n\n"
-        "Panel কীভাবে add করতে চাও?\n\n"
-        "🔑 <b>Username + Password</b> — সাধারণ login করে add\n"
-        "🗝️ <b>API Key</b> — panel-এর API key দিয়ে add",
+        "How do you want to add the panel?\n\n"
+        "🔑 <b>Username + Password</b> — login and add\n"
+        "🗝️ <b>API Key</b> — add using panel API key",
         reply_markup=markup,
         parse_mode="HTML",
     )
@@ -5042,14 +5044,14 @@ def _ap_get_url(message):
             "🌐 <b>IVA SMS Panel detect hoise!</b>\n\n"
             "⚠️ Railway server IP theke email/password login Cloudflare block kore.\n"
             "<b>Browser cookie diye login korte hobe.</b>\n\n"
-            "📋 <b>Cookie পাওয়ার নিয়ম:</b>\n"
-            "1. Phone/PC-এ Chrome-এ <b>ivasms.com</b> login করো\n"
-            "2. এই link open করো browser-এ:\n"
+        "📋 <b>How to get Cookie:</b>\n"
+        "1. Login to <b>ivasms.com</b> in Chrome\n"
+        "2. Open this link in browser:\n"
             "   <code>javascript:document.cookie</code>\n"
-            "   (address bar-এ paste করো)\n"
-            "   <b>অথবা</b> PC-তে: F12 → Application → Cookies → https://ivasms.com\n"
-            "3. <code>laravel_session</code> value copy করো\n\n"
-            "🍪 এখন cookie paste করো:\n"
+        "   (paste in address bar)\n"
+        "   <b>OR</b> on PC: F12 → Application → Cookies → https://ivasms.com\n"
+        "3. Copy <code>laravel_session</code> value\n\n"
+        "🍪 Now paste the cookie:\n"
             "<code>laravel_session=eyJ...</code>",
             reply_markup=_back_admin_kb(),
             parse_mode="HTML",
@@ -5143,19 +5145,19 @@ def _ap_get_pass(message):
             force_markup = types.InlineKeyboardMarkup(row_width=1)
             force_markup.add(
                 types.InlineKeyboardButton(
-                    "⚠️ Force Add করো (Login Skip)",
+                    "⚠️ Force Add (Skip Login)",
                     callback_data=f"forceadd:{panel_id}", style="primary"
                 )
             )
             force_markup.add(
-                types.InlineKeyboardButton("❌ বাদ দাও", callback_data=f"forceadd_cancel:{panel_id}", style="danger")
+                types.InlineKeyboardButton("❌ Cancel", callback_data=f"forceadd_cancel:{panel_id}", style="danger")
             )
             bot.send_message(
                 chat_id,
-                "⚠️ <b>Login Verify করা গেলো না!</b>\n\n"
-                "Railway server-er IP অনেক panel block করে।\n"
-                "তবুও panel credentials সেভ করতে চাইলে\n"
-                "<b>Force Add</b> করো — panel নিজেই পরে login করার চেষ্টা করবে।\n\n"
+        "⚠️ <b>Login Verification Failed!</b>\n\n"
+        "Many panels block Railway server IPs.\n"
+        "If you still want to save the panel credentials,\n"
+        "<b>Force Add</b> — the panel will try to login automatically later.\n\n"
                 f"🌐 Host: <code>{data.get('host', '')}</code>\n"
                 f"👤 User: <code>{data.get('username', '')}</code>",
                 reply_markup=force_markup,
@@ -5219,12 +5221,12 @@ def _iva_ap_get_cookie(message):
         msg = bot.send_message(message.chat.id,
             "❌ <b>Cookie dao!</b>\n\n"
             "Format: <code>laravel_session=eyJ0...</code>\n\n"
-            "📱 <b>Phone-এ কীভাবে পাবে:</b>\n"
-            "1. Chrome-এ ivasms.com login করো\n"
-            "2. Address bar-এ type করো:\n"
+        "📱 <b>How to get on Phone:</b>\n"
+        "1. Login to ivasms.com in Chrome\n"
+        "2. Type in address bar:\n"
             "   <code>javascript:alert(document.cookie)</code>\n"
-            "3. Popup-এ যা আসবে সেটা copy করো\n\n"
-            "💻 <b>PC-তে:</b> F12 → Application → Cookies → ivasms.com → laravel_session copy",
+        "3. Copy whatever appears in the popup\n\n"
+            "💻 <b>On PC:</b> F12 → Application → Cookies → ivasms.com → laravel_session copy",
             reply_markup=_back_admin_kb(), parse_mode="HTML",
             disable_web_page_preview=True)
         bot.register_next_step_handler(msg, _iva_ap_get_cookie)
@@ -5305,9 +5307,9 @@ def _apk_start(message):
     _apk_state[uid] = {}
     msg = bot.send_message(
         message.chat.id,
-        "🗝️🔥 <b>API KEY দিয়ে PANEL ADD</b> 🔥🗝️\n\n"
-        "📡 <b>Step 1/2:</b> Panel-এর URL পাঠাও\n\n"
-        "✅ <b>যেকোনো format চলবে:</b>\n"
+        "🗝️🔥 <b>ADD PANEL WITH API KEY</b> 🔥🗝️\n\n"
+        "📡 <b>Step 1/2:</b> Send the Panel URL\n\n"
+        "✅ <b>Any format accepted:</b>\n"
         "• <code>http://1.2.3.4</code>\n"
         "• <code>http://1.2.3.4/api</code>\n"
         "• <code>https://mypanel.com</code>\n"
@@ -5332,7 +5334,7 @@ def _apk_get_url(message):
     if not re.match(r"https?://", url, re.IGNORECASE):
         msg = bot.send_message(
             message.chat.id,
-            "❌ Valid URL দাও! (http:// বা https:// দিয়ে শুরু করো)",
+            "❌ Enter a valid URL! (must start with http:// or https://)",
             reply_markup=_back_admin_kb(), parse_mode="HTML",
         )
         bot.register_next_step_handler(msg, _apk_get_url)
@@ -5352,8 +5354,8 @@ def _apk_get_url(message):
     msg = bot.send_message(
         message.chat.id,
         f"✅ URL: <code>{base_url}</code>\n\n"
-        "🗝️ <b>Step 2/2:</b> Panel-এর <b>API Key</b> পাঠাও:\n\n"
-        "<i>Panel-এর settings/profile/API section থেকে copy করো।</i>",
+        "🗝️ <b>Step 2/2:</b> Send the panel's <b>API Key</b>:\n\n"
+        "<i>Copy from panel settings/profile/API section.</i>",
         reply_markup=_back_admin_kb(),
         parse_mode="HTML",
     )
@@ -5372,7 +5374,7 @@ def _apk_get_key(message):
         return
     api_key = (message.text or "").strip()
     if not api_key:
-        msg = bot.send_message(message.chat.id, "❌ API Key দাও:", reply_markup=_back_admin_kb())
+        msg = bot.send_message(message.chat.id, "❌ Enter API Key:", reply_markup=_back_admin_kb())
         bot.register_next_step_handler(msg, _apk_get_key)
         return
 
@@ -5383,8 +5385,8 @@ def _apk_get_key(message):
 
     wait_msg = bot.send_message(
         chat_id,
-        "⏳🔍 <b>API Key test করছি...</b>\n"
-        "<i>Common endpoints probe করছি, একটু অপেক্ষা করো...</i>",
+        "⏳🔍 <b>Testing API Key...</b>\n"
+        "<i>Probing common endpoints, please wait...</i>",
         parse_mode="HTML",
     )
 
@@ -5402,21 +5404,21 @@ def _apk_get_key(message):
             markup = types.InlineKeyboardMarkup(row_width=1)
             markup.add(
                 types.InlineKeyboardButton(
-                    "⚠️ Force Add করো (Endpoint Manual দেব)",
+                    "⚠️ Force Add (Set Endpoint Manually)",
                     callback_data=f"apkforce:{panel_id}|{base_url}|{api_key}", style="success"
                 ),
-                types.InlineKeyboardButton("❌ বাদ দাও", callback_data=f"apkforce_cancel", style="primary"),
+                types.InlineKeyboardButton("❌ Cancel", callback_data=f"apkforce_cancel", style="primary"),
             )
             bot.send_message(
                 chat_id,
-                "⚠️ <b>API Endpoint auto-detect হলো না!</b>\n\n"
+        "⚠️ <b>API Endpoint auto-detect failed!</b>\n\n"
                 f"🌐 Host: <code>{host}</code>\n"
                 f"🗝️ Key: <code>{api_key[:8]}...</code>\n\n"
-                "সম্ভাব্য কারণ:\n"
-                "• এই panel-এ API নেই\n"
-                "• API key ভুল\n"
-                "• Panel-এর custom endpoint আছে\n\n"
-                "তবুও force add করতে চাইলে, পরে <b>/editpanel</b> দিয়ে endpoint দিতে পারবে।",
+        "Possible reasons:\n"
+        "• This panel has no API\n"
+        "• Wrong API key\n"
+        "• Panel has a custom endpoint\n\n"
+        "You can still force add and set the endpoint later with <b>/editpanel</b>.",
                 reply_markup=markup,
                 parse_mode="HTML",
             )
@@ -5448,7 +5450,7 @@ def _apk_get_key(message):
             f"🗝️ <b>API Key  ▸▸</b> <code>{api_key[:12]}...</code>\n"
             f"📂 <b>Endpoint ▸▸</b> <code>{det_path}</code>\n"
             f"🔐 <b>Auth     ▸▸</b> <code>{det_param}</code>\n\n"
-            f"📡 Monitor thread started! /panels দিয়ে status দেখো।",
+            f"📡 Monitor thread started! Check status with /panels.",
             parse_mode="HTML",
         )
 
@@ -5492,12 +5494,12 @@ def _iva_cookie_cmd(message):
         f"🍪 <b>IVA SMS — Cookie Login</b>\n"
         f"Panel ID: <code>{iva_panel['id']}</code>\n\n"
         f"📋 <b>Steps:</b>\n"
-        f"1. Chrome/Firefox-এ <a href='https://ivasms.com/portal/login'>ivasms.com</a> login করো\n"
+        f"1. Login to <a href='https://ivasms.com/portal/login'>ivasms.com</a> in Chrome/Firefox\n"
         f"2. F12 → Application → Cookies → ivasms.com\n"
-        f"3. <code>laravel_session</code> value copy করো\n"
-        f"4. নিচে paste করো:\n\n"
+        f"3. Copy <code>laravel_session</code> value\n"
+        f"4. Paste below:\n\n"
         f"<code>laravel_session=XXXXXXX</code>\n\n"
-        f"<i>(cf_clearance থাকলে সেটাও add করো: <code>cf_clearance=XXX; laravel_session=XXX</code>)</i>",
+        f"<i>(If cf_clearance exists, add it too: <code>cf_clearance=XXX; laravel_session=XXX</code>)</i>",
         reply_markup=_back_admin_kb(),
         parse_mode="HTML",
         disable_web_page_preview=True,
@@ -5628,7 +5630,7 @@ def _iva_test_cmd(message):
             send_otp_message(uid, otp, number, 0, svc, sms_txt or "")
 
         bot.send_message(message.chat.id,
-            f"🔥 <b>Done!</b> {len(items)} ta OTP group+DM-e pathanো hoise.\n"
+            f"🔥 <b>Done!</b> {len(items)} OTP(s) sent to group+DM.\n"
             f"IVA panel <b>OK</b> ache! 🟢",
             parse_mode="HTML")
 
@@ -5805,13 +5807,13 @@ def _tp_get_pass_test(message):
             otp_summary = "⚠️ <i>Panel e aj kono OTP record nei (empty).</i>"
         elif not target_group:
             otp_summary = (
-                f"⚠️ <b>{total_found}টা OTP</b> panel e ache kintu kono group configure kora nei!\n"
+                f"⚠️ <b>{total_found} OTP(s)</b> found in panel but no group is configured!\n"
                 "Settings theke group set koro."
             )
         else:
             otp_summary = (
-                f"📤 <b>{sent_count}টা OTP</b> group e send kora hoise "
-                f"({total_found}টার moddhe theke)."
+                f"📤 <b>{sent_count} OTP(s)</b> sent to group "
+                f"(out of {total_found})."
             )
 
         bot.send_message(
@@ -5968,25 +5970,25 @@ def callback_handler(call):
         # ── Force Add Panel (Railway IP blocked) ─────────────────────────────
         if data.startswith("forceadd:"):
             if call.from_user.id not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!")
+                bot.answer_callback_query(call.id, "❌ No permission!")
                 return
             pid = data.split(":", 1)[1]
             panel = _pending_force_add.pop(pid, None)
             if not panel:
-                bot.answer_callback_query(call.id, "❌ Panel data expire হয়ে গেছে। আবার চেষ্টা করো।")
+                bot.answer_callback_query(call.id, "❌ Panel data expired. Please try again.")
                 return
             _dynamic_panels.append(panel)
             save_dynamic_panels()
             _start_dynamic_panel(panel)
-            bot.answer_callback_query(call.id, "✅ Panel Force Add হয়েছে!")
+            bot.answer_callback_query(call.id, "✅ Panel Force Added!")
             try:
                 bot.edit_message_text(
                     f"✅🔥 <b>PANEL FORCE ADDED!</b>\n\n"
                     f"🆔 <b>ID:</b> <code>{pid}</code>\n"
                     f"🌐 <b>Host:</b> <code>{panel.get('host', '')}</code>\n"
                     f"👤 <b>User:</b> <code>{panel.get('username', '')}</code>\n\n"
-                    f"⚠️ Login এখনো verify হয়নি — panel নিজেই login করার চেষ্টা করবে।\n"
-                    f"/panels দিয়ে status দেখো।",
+        f"⚠️ Login not verified yet — the panel will try to login automatically.\n"
+        f"Check status with /panels.",
                     call.message.chat.id,
                     call.message.message_id,
                     parse_mode="HTML",
@@ -5998,10 +6000,10 @@ def callback_handler(call):
         if data.startswith("forceadd_cancel:"):
             pid = data.split(":", 1)[1]
             _pending_force_add.pop(pid, None)
-            bot.answer_callback_query(call.id, "বাদ দেওয়া হয়েছে।")
+            bot.answer_callback_query(call.id, "Cancelled.")
             try:
                 bot.edit_message_text(
-                    "❌ Panel add বাতিল করা হয়েছে।\n/addpanel দিয়ে আবার চেষ্টা করো।",
+        "❌ Panel add cancelled.\n/addpanel to try again.",
                     call.message.chat.id,
                     call.message.message_id,
                     parse_mode="HTML",
@@ -6014,7 +6016,7 @@ def callback_handler(call):
         if data == "aptype:pass":
             uid = call.from_user.id
             if uid not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!")
+                bot.answer_callback_query(call.id, "❌ No permission!")
                 return
             bot.answer_callback_query(call.id)
             try:
@@ -6025,13 +6027,13 @@ def callback_handler(call):
             msg = bot.send_message(
                 call.message.chat.id,
                 "🔧🔥 <b>ADD NEW PANEL</b> 🔥🔧\n\n"
-                "📡 <b>Step 1/3:</b> Panel-এর URL পাঠাও\n\n"
-                "✅ <b>যেকোনো format চলবে:</b>\n"
+        "📡 <b>Step 1/3:</b> Send the Panel URL\n\n"
+        "✅ <b>Any format accepted:</b>\n"
                 "• <code>http://1.2.3.4</code>\n"
                 "• <code>http://1.2.3.4/ints</code>\n"
                 "• <code>http://1.2.3.4/konekta</code>\n"
                 "• <code>https://truesms.net</code>\n\n"
-                "🤖 <i>Login, captcha, endpoint সব auto-detect হবে!</i>",
+                "🤖 <i>Login, captcha, and endpoint will all be auto-detected!</i>",
                 reply_markup=_back_admin_kb(),
                 parse_mode="HTML",
             )
@@ -6041,7 +6043,7 @@ def callback_handler(call):
         if data == "aptype:apikey":
             uid = call.from_user.id
             if uid not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!")
+                bot.answer_callback_query(call.id, "❌ No permission!")
                 return
             bot.answer_callback_query(call.id)
             try:
@@ -6051,9 +6053,9 @@ def callback_handler(call):
             _apk_state[uid] = {}
             msg = bot.send_message(
                 call.message.chat.id,
-                "🗝️🔥 <b>API KEY দিয়ে PANEL ADD</b> 🔥🗝️\n\n"
-                "📡 <b>Step 1/2:</b> Panel-এর URL পাঠাও\n\n"
-                "✅ <b>যেকোনো format চলবে:</b>\n"
+        "🗝️🔥 <b>ADD PANEL WITH API KEY</b> 🔥🗝️\n\n"
+        "📡 <b>Step 1/2:</b> Send the Panel URL\n\n"
+        "✅ <b>Any format accepted:</b>\n"
                 "• <code>http://1.2.3.4</code>\n"
                 "• <code>http://1.2.3.4/api</code>\n"
                 "• <code>https://mypanel.com</code>\n"
@@ -6067,9 +6069,9 @@ def callback_handler(call):
         if data.startswith("apkforce:"):
             uid = call.from_user.id
             if uid not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!")
+                bot.answer_callback_query(call.id, "❌ No permission!")
                 return
-            bot.answer_callback_query(call.id, "✅ Force Add হচ্ছে...")
+            bot.answer_callback_query(call.id, "✅ Force Adding...")
             try:
                 rest = data[len("apkforce:"):].split("|", 2)
                 panel_id = rest[0]
@@ -6102,8 +6104,8 @@ def callback_handler(call):
                     f"🆔 <b>ID:</b> <code>{panel_id}</code>\n"
                     f"🌐 <b>Host:</b> <code>{host}</code>\n"
                     f"🗝️ <b>Key:</b> <code>{api_key[:12]}...</code>\n\n"
-                    f"⚠️ Endpoint auto-detect হয়নি — default <code>/api/sms</code> দিয়ে চলবে।\n"
-                    f"/panels দিয়ে status দেখো।",
+        f"⚠️ Endpoint auto-detect failed — using default <code>/api/sms</code>.\n"
+        f"Check status with /panels.",
                     call.message.chat.id,
                     call.message.message_id,
                     parse_mode="HTML",
@@ -6113,10 +6115,10 @@ def callback_handler(call):
             return
 
         if data == "apkforce_cancel":
-            bot.answer_callback_query(call.id, "বাদ দেওয়া হয়েছে।")
+            bot.answer_callback_query(call.id, "Cancelled.")
             try:
                 bot.edit_message_text(
-                    "❌ API Key panel add বাতিল।\n/addpanel দিয়ে আবার চেষ্টা করো।",
+        "❌ API Key panel add cancelled.\n/addpanel to try again.",
                     call.message.chat.id,
                     call.message.message_id,
                     parse_mode="HTML",
@@ -6204,7 +6206,7 @@ def callback_handler(call):
                     )
                 bot.answer_callback_query(call.id)
             else:
-                bot.answer_callback_query(call.id, "❌ এখন কোনো service-এ stock নেই।", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ No stock available in any service.", show_alert=True)
 
         elif data.startswith("v1svc:"):
             svc_key = data.split(":", 1)[1]
@@ -6241,7 +6243,7 @@ def callback_handler(call):
                     )
                 bot.answer_callback_query(call.id)
             else:
-                bot.answer_callback_query(call.id, "❌ এই service-এ stock নেই!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ No stock in this service!", show_alert=True)
 
         elif data.startswith("s:"):
             svc = data.split(":")[1]
@@ -6370,7 +6372,7 @@ def callback_handler(call):
                     if len(cb.encode()) <= 64:
                         markup.add(
                             types.InlineKeyboardButton(
-                                f"🗑️ {cnt}  ({len(nums)} টি)", callback_data=cb, style="success",
+                                f"🗑️ {cnt}  ({len(nums)} )", callback_data=cb, style="success",
                                 **_flag_btn_kwargs(flag)
                             )
                         )
@@ -6405,8 +6407,8 @@ def callback_handler(call):
                 f"⚠️ <b>CONFIRM DELETE</b> ⚠️\n\n"
                 f"💬 <b>Service ▸▸</b>  {svc.upper()}\n"
                 f"🌍 <b>Country ▸▸</b>  {_resolve_flag(flag)} {cnt}\n"
-                f"📱 <b>Numbers ▸▸</b>  {count} টি\n\n"
-                f" Sure? Ei {count} টি number delete hoye jabe!",
+                f"📱 <b>Numbers ▸▸</b>  {count} \n\n"
+                f" Sure? Ei {count}  numbers will be deleted!",
                 call.message.chat.id,
                 call.message.message_id,
                 reply_markup=markup,
@@ -6430,7 +6432,7 @@ def callback_handler(call):
                 f"✅🔥 <b>DELETE COMPLETE!</b> 🔥✅\n\n"
                 f"💬 <b>Service ▸▸</b>  {svc.upper()}\n"
                 f"🌍 <b>Country ▸▸</b>  {cnt}\n"
-                f"📱 <b>Deleted  ▸▸</b>  {removed} টি number\n\n"
+                f"📱 <b>Deleted  ▸▸</b>  {removed} number(s)\n\n"
                 f"⚡ <i>Stock update hoyeche!</i>",
                 call.message.chat.id,
                 call.message.message_id,
@@ -6453,7 +6455,7 @@ def callback_handler(call):
             )
             bot.edit_message_text(
                 f"☠️⚠️ <b>CLEAR ALL CONFIRM</b> ⚠️☠️\n\n"
-                f" Total <b>{total} টি</b> number delete hobe!\n"
+                f" Total <b>{total}</b> numbers will be deleted!\n"
                 f"⚡ Sob service-er sob country mochhe jabe!\n\n"
                 f"🔥 Sure? Eta undo kora jabe na!",
                 call.message.chat.id,
@@ -6614,14 +6616,14 @@ def callback_handler(call):
                         cfg_name = cfg["name"]
                         break
                 else:
-                    bot.answer_callback_query(call.id, "❌ Config পাওয়া যায়নি!", show_alert=True)
+                    bot.answer_callback_query(call.id, "❌ Config not found!", show_alert=True)
                     return
             if action == "start":
                 _demo_next_fire[cid] = 0
-                status_msg = f"🟢 <b>{cfg_name} চালু হয়েছে!</b>"
+                status_msg = f"🟢 <b>{cfg_name} started!</b>"
             else:
                 _demo_next_fire.pop(cid, None)
-                status_msg = f"🔴 <b>{cfg_name} বন্ধ হয়েছে!</b>"
+                status_msg = f"🔴 <b>{cfg_name} stopped!</b>"
             bot.answer_callback_query(call.id, status_msg.replace("<b>", "").replace("</b>", ""), show_alert=False)
             try:
                 bot.edit_message_text(
@@ -6655,7 +6657,7 @@ def callback_handler(call):
                 _demo_next_fire.pop(cid, None)
                 try:
                     bot.edit_message_text(
-                        f"✅🔥 <b>Config মুছে গেছে!</b>\n\n" + demo_status_text(),
+                        f"✅🔥 <b>Config deleted!</b>\n\n" + demo_status_text(),
                         call.message.chat.id,
                         call.message.message_id,
                         parse_mode="HTML",
@@ -6663,7 +6665,7 @@ def callback_handler(call):
                 except Exception:
                     pass
             else:
-                bot.answer_callback_query(call.id, "❌ Config পাওয়া যায়নি!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Config not found!", show_alert=True)
 
         elif data.startswith("msgicon_set:"):
             if call.from_user.id not in ADMIN_IDS:
@@ -6685,8 +6687,8 @@ def callback_handler(call):
                 f"📌 <b>Slot:</b> <code>{{emoji_{slot_key}}}</code>\n"
                 f"🏷️ <b>Label:</b> {label}\n"
                 f"🔘 <b>Default:</b> {default_char}\n\n"
-                f"Custom emoji sticker পাঠাও (Telegram premium emoji), অথবা emoji ID নম্বর লিখো:\n"
-                f"<i>/back লিখো বাতিল করতে</i>",
+                f"Custom emoji sticker send (Telegram premium emoji), or enter the emoji ID:\n"
+                f"<i>Type /back to cancel</i>",
                 parse_mode="HTML",
                 reply_markup=_back_admin_kb(),
             )
@@ -6701,9 +6703,9 @@ def callback_handler(call):
                 removed = _custom_emojis.get("msg_slots", {}).pop(slot_key, None)
             if removed:
                 _save_custom_emojis()
-                bot.answer_callback_query(call.id, f"✅ '{slot_key}' reset হয়েছে!", show_alert=False)
+                bot.answer_callback_query(call.id, f"✅ '{slot_key}' reset to default!", show_alert=False)
             else:
-                bot.answer_callback_query(call.id, "ইতিমধ্যে default আছে।", show_alert=False)
+                bot.answer_callback_query(call.id, "Already at default.", show_alert=False)
             try:
                 bot.delete_message(call.message.chat.id, call.message.message_id)
             except Exception:
@@ -6718,12 +6720,12 @@ def callback_handler(call):
         elif data == "wd_cancel":
             uid = call.from_user.id
             _withdraw_state.pop(uid, None)
-            bot.answer_callback_query(call.id, "❌ বাতিল করা হয়েছে।")
+            bot.answer_callback_query(call.id, "❌ Cancelled.")
             try:
                 bot.delete_message(call.message.chat.id, call.message.message_id)
             except Exception:
                 pass
-            bot.send_message(call.message.chat.id, "❌ উইথড্র বাতিল।",
+            bot.send_message(call.message.chat.id, "❌ Withdraw cancelled.",
                              reply_markup=main_menu(uid), parse_mode="HTML")
 
         elif data.startswith("wd_method:"):
@@ -6731,20 +6733,20 @@ def callback_handler(call):
             method = data.split(":", 1)[1]
             state = _withdraw_state.get(uid)
             if not state:
-                bot.answer_callback_query(call.id, "❌ Session শেষ। আবার চেষ্টা করো।")
+                bot.answer_callback_query(call.id, "❌ Session expired. Please try again.")
                 return
             state["method"] = method
-            bot.answer_callback_query(call.id, f"✅ {method} সিলেক্ট হয়েছে।")
+            bot.answer_callback_query(call.id, f"✅ {method} selected.")
             try:
                 bot.delete_message(call.message.chat.id, call.message.message_id)
             except Exception:
                 pass
             msg = bot.send_message(
                 call.message.chat.id,
-                f"📲 <b>{method}</b> অ্যাকাউন্ট নম্বর/ঠিকানা লিখুন:\n\n"
-                f"যেমন bKash: <code>01XXXXXXXXX</code>",
+                f"📲 <b>{method}</b> account number/address:\n\n"
+                f"Example bKash: <code>01XXXXXXXXX</code>",
                 parse_mode="HTML",
-                reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("❌ বাতিল"),
+                reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("❌ Cancel"),
             )
             bot.register_next_step_handler(msg, _wd_account_step)
 
@@ -6752,14 +6754,14 @@ def callback_handler(call):
             uid = call.from_user.id
             state = _withdraw_state.pop(uid, None)
             if not state:
-                bot.answer_callback_query(call.id, "❌ Session শেষ। আবার চেষ্টা করো।")
+                bot.answer_callback_query(call.id, "❌ Session expired. Please try again.")
                 return
             amount  = state.get("amount", 0)
             method  = state.get("method", "?")
             account = state.get("account", "?")
             ok, new_bal = deduct_balance(uid, amount)
             if not ok:
-                bot.answer_callback_query(call.id, "❌ ব্যালেন্স কম!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Insufficient balance!", show_alert=True)
                 try:
                     bot.delete_message(call.message.chat.id, call.message.message_id)
                 except Exception:
@@ -6776,38 +6778,38 @@ def callback_handler(call):
             with _withdraw_lock:
                 _withdraw_requests.append(req)
             _save_withdraws()
-            bot.answer_callback_query(call.id, "✅ রিকোয়েস্ট জমা হয়েছে!")
+            bot.answer_callback_query(call.id, "✅ Request submitted!")
             try:
                 bot.delete_message(call.message.chat.id, call.message.message_id)
             except Exception:
                 pass
             bot.send_message(
                 call.message.chat.id,
-                f"✅ <b>উইথড্র রিকোয়েস্ট জমা হয়েছে!</b>\n\n"
-                f"💵 পরিমাণ: <code>{cur}{amount:.2f}</code>\n"
-                f"📲 মেথড: <b>{method}</b>\n"
-                f"📋 অ্যাকাউন্ট: <code>{account}</code>\n"
-                f"💰 অবশিষ্ট ব্যালেন্স: <code>{cur}{new_bal:.2f}</code>\n\n"
-                f"Admin অনুমোদনের পরে পেমেন্ট পাবেন।",
+                f"✅ <b>Withdraw Request Submitted!</b>\n\n"
+                f"💵 Amount: <code>{cur}{amount:.2f}</code>\n"
+                f"📲 Method: <b>{method}</b>\n"
+                f"📋 Account: <code>{account}</code>\n"
+                f"💰 Remaining Balance: <code>{cur}{new_bal:.2f}</code>\n\n"
+                f"Payment will be made after admin approval.",
                 parse_mode="HTML",
                 reply_markup=main_menu(uid),
             )
             # Notify all admins
             admin_markup = types.InlineKeyboardMarkup()
             admin_markup.add(
-                types.InlineKeyboardButton("✅ অনুমোদন", callback_data=f"wd_approve:{req_id}"),
-                types.InlineKeyboardButton("❌ রিজেক্ট",  callback_data=f"wd_reject:{req_id}"),
+                types.InlineKeyboardButton("✅ Approve", callback_data=f"wd_approve:{req_id}"),
+                types.InlineKeyboardButton("❌ Reject",  callback_data=f"wd_reject:{req_id}"),
             )
             uname = call.from_user.username or call.from_user.first_name or str(uid)
             for admin_id in ADMIN_IDS:
                 try:
                     bot.send_message(
                         admin_id,
-                        f"⏳ <b>নতুন উইথড্র রিকোয়েস্ট!</b>\n\n"
+                        f"⏳ <b>New Withdraw Request!</b>\n\n"
                         f"👤 User: @{uname} (<code>{uid}</code>)\n"
-                        f"💵 পরিমাণ: <code>{cur}{amount:.2f}</code>\n"
-                        f"📲 মেথড: <b>{method}</b>\n"
-                        f"📋 অ্যাকাউন্ট: <code>{account}</code>\n"
+                        f"💵 Amount: <code>{cur}{amount:.2f}</code>\n"
+                        f"📲 Method: <b>{method}</b>\n"
+                        f"📋 Account: <code>{account}</code>\n"
                         f"🔑 ID: <code>{req_id}</code>",
                         parse_mode="HTML",
                         reply_markup=admin_markup,
@@ -6817,7 +6819,7 @@ def callback_handler(call):
 
         elif data.startswith("wd_approve:"):
             if call.from_user.id not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!")
+                bot.answer_callback_query(call.id, "❌ No permission!")
                 return
             req_id = data.split(":", 1)[1]
             req = None
@@ -6828,15 +6830,15 @@ def callback_handler(call):
                         req = r
                         break
             if not req:
-                bot.answer_callback_query(call.id, "❌ Request পাওয়া যায়নি বা ইতিমধ্যে প্রসেস হয়েছে।", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Request not found or already processed.", show_alert=True)
                 return
             _save_withdraws()
             cur = get_currency()
-            bot.answer_callback_query(call.id, "✅ অনুমোদন দেওয়া হয়েছে!")
+            bot.answer_callback_query(call.id, "✅ Approved!")
             try:
                 bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
                 bot.edit_message_text(
-                    call.message.text + "\n\n✅ <b>অনুমোদিত!</b>",
+                    call.message.text + "\n\n✅ <b>Approved!</b>",
                     call.message.chat.id, call.message.message_id, parse_mode="HTML"
                 )
             except Exception:
@@ -6844,11 +6846,11 @@ def callback_handler(call):
             try:
                 bot.send_message(
                     req["uid"],
-                    f"✅ <b>উইথড্র অনুমোদিত হয়েছে!</b>\n\n"
-                    f"💵 পরিমাণ: <code>{cur}{req['amount']:.2f}</code>\n"
-                    f"📲 মেথড: <b>{req['method']}</b>\n"
-                    f"📋 অ্যাকাউন্ট: <code>{req['account']}</code>\n\n"
-                    f"শীঘ্রই পেমেন্ট পাবেন। ধন্যবাদ! 🎉",
+                    f"✅ <b>Withdraw Approved!</b>\n\n"
+                    f"💵 Amount: <code>{cur}{req['amount']:.2f}</code>\n"
+                    f"📲 Method: <b>{req['method']}</b>\n"
+                    f"📋 Account: <code>{req['account']}</code>\n\n"
+                    f"Payment will be sent shortly. Thank you! 🎉",
                     parse_mode="HTML",
                 )
             except Exception:
@@ -6856,7 +6858,7 @@ def callback_handler(call):
 
         elif data.startswith("wd_reject:"):
             if call.from_user.id not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!")
+                bot.answer_callback_query(call.id, "❌ No permission!")
                 return
             req_id = data.split(":", 1)[1]
             req = None
@@ -6867,17 +6869,17 @@ def callback_handler(call):
                         req = r
                         break
             if not req:
-                bot.answer_callback_query(call.id, "❌ Request পাওয়া যায়নি বা ইতিমধ্যে প্রসেস হয়েছে।", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Request not found or already processed.", show_alert=True)
                 return
             # Refund the balance
             add_reward(req["uid"], req["amount"])
             _save_withdraws()
             cur = get_currency()
-            bot.answer_callback_query(call.id, "❌ রিজেক্ট করা হয়েছে, ব্যালেন্স ফেরত দেওয়া হয়েছে।")
+            bot.answer_callback_query(call.id, "❌ Rejected, balance refunded.")
             try:
                 bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
                 bot.edit_message_text(
-                    call.message.text + "\n\n❌ <b>রিজেক্ট করা হয়েছে।</b>",
+                    call.message.text + "\n\n❌ <b>Rejected.</b>",
                     call.message.chat.id, call.message.message_id, parse_mode="HTML"
                 )
             except Exception:
@@ -6885,9 +6887,9 @@ def callback_handler(call):
             try:
                 bot.send_message(
                     req["uid"],
-                    f"❌ <b>উইথড্র রিজেক্ট হয়েছে।</b>\n\n"
-                    f"💵 পরিমাণ: <code>{cur}{req['amount']:.2f}</code> আপনার ব্যালেন্সে ফেরত দেওয়া হয়েছে।\n\n"
-                    f"সমস্যার জন্য admin-এর সাথে যোগাযোগ করুন।",
+                    f"❌ <b>Withdraw Rejected.</b>\n\n"
+                    f"💵 Amount: <code>{cur}{req['amount']:.2f}</code> has been refunded to your balance.\n\n"
+                    f"Please contact the admin for assistance.",
                     parse_mode="HTML",
                 )
             except Exception:
@@ -6917,7 +6919,7 @@ def callback_handler(call):
             if key in _DEFAULT_TEMPLATES:
                 _templates[key] = _DEFAULT_TEMPLATES[key]
                 save_templates()
-                bot.answer_callback_query(call.id, f"✅ '{key}' Default এ Reset হয়েছে!", show_alert=True)
+                bot.answer_callback_query(call.id, f"✅ '{key}' reset to default!", show_alert=True)
             else:
                 bot.answer_callback_query(call.id, "❌ Unknown template!", show_alert=True)
 
@@ -6928,8 +6930,8 @@ def callback_handler(call):
             save_templates()
             try:
                 bot.edit_message_text(
-                    "✅🔥 <b>সব মেসেজ Default এ Reset হয়েছে!</b>\n\n"
-                    "<i>এখন থেকে সব মেসেজ Default ফরমেটে যাবে।</i>",
+        "✅🔥 <b>All messages reset to default!</b>\n\n"
+        "<i>All messages will now use the default format.</i>",
                     call.message.chat.id,
                     call.message.message_id,
                     parse_mode="HTML",
@@ -7073,7 +7075,7 @@ def callback_handler(call):
             services = _v2_active_liveaccess()
             svc_data = next((s for s in services if s.get("sid") == sid), None)
             if not svc_data:
-                bot.answer_callback_query(call.id, "❌ Service পাওয়া যায়নি!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Service not found!", show_alert=True)
                 return
             ranges = svc_data.get("ranges", [])
             markup = types.InlineKeyboardMarkup(row_width=2)
@@ -7093,7 +7095,7 @@ def callback_handler(call):
             bot.edit_message_text(
                 f"📡 <b>V2 — {_v2_svc_emoji(sid)} {sid}</b>\n\n"
                 f"🔢 <b>Range select koro:</b>\n"
-                f"<i>এই range-এ live OTP আসছে — click করলে number পাবে</i>",
+                f"<i>Live OTP available in this range — click to get a number</i>",
                 call.message.chat.id, call.message.message_id,
                 reply_markup=markup, parse_mode="HTML"
             )
@@ -7103,7 +7105,7 @@ def callback_handler(call):
             parts = data.split(":")
             prefix = parts[1] if len(parts) > 1 else ""
             sid = parts[2] if len(parts) > 2 else "?"
-            bot.answer_callback_query(call.id, "⏳ Number নিচ্ছি...", show_alert=False)
+            bot.answer_callback_query(call.id, "⏳ Getting number...", show_alert=False)
             uid_v2 = call.from_user.id
             n_batch = get_numbers_per_batch()
             v2_nums = []
@@ -7134,7 +7136,7 @@ def callback_handler(call):
                     reply_markup=refresh_kb
                 )
             else:
-                bot.answer_callback_query(call.id, "❌ Number পাওয়া যায়নি! পরে চেষ্টা করো।", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Number not found! Try again later.", show_alert=True)
 
         elif data == "v2back":
             markup, has_btns = _v2_build_console_markup()
@@ -7145,7 +7147,7 @@ def callback_handler(call):
                     reply_markup=markup, parse_mode="HTML"
                 )
             else:
-                bot.answer_callback_query(call.id, "❌ Admin এখনো কোনো service configure করেননি।", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Admin has not configured any service yet.", show_alert=True)
 
         elif data.startswith("v2svc_cc:"):
             sid = data.split(":", 1)[1]
@@ -7158,14 +7160,14 @@ def callback_handler(call):
                     reply_markup=markup, parse_mode="HTML"
                 )
             else:
-                bot.answer_callback_query(call.id, "❌ এই service-এ কোনো range নেই।", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ No range in this service.", show_alert=True)
             bot.answer_callback_query(call.id)
 
         elif data.startswith("v2csvc:"):
             parts = data.split(":")
             sid    = parts[1] if len(parts) > 1 else "?"
             prefix = parts[2] if len(parts) > 2 else ""
-            bot.answer_callback_query(call.id, "⏳ Number নিচ্ছি...", show_alert=False)
+            bot.answer_callback_query(call.id, "⏳ Getting number...", show_alert=False)
             uid_v2  = call.from_user.id
             n_batch = get_numbers_per_batch()
             v2_nums = []
@@ -7196,17 +7198,17 @@ def callback_handler(call):
                     reply_markup=refresh_kb
                 )
             else:
-                bot.answer_callback_query(call.id, "❌ Number পাওয়া যায়নি! পরে চেষ্টা করো।", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Number not found! Try again later.", show_alert=True)
 
         elif data == "cc_back" or data == "cc_show":
             if call.from_user.id not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ No permission!", show_alert=True)
                 return
             try:
                 bot.edit_message_text(
                     "📡 <b>Live Console Config</b>\n"
                     "━━━━━━━━━━━━━━━━\n\n"
-                    "সার্ভিস সিলেক্ট করো — toggle করো বা range add/delete করো:\n"
+                    "Select service — toggle or add/delete range:\n"
                     "✅ = enabled  ⭕ = disabled",
                     call.message.chat.id, call.message.message_id,
                     reply_markup=_cc_services_markup(), parse_mode="HTML"
@@ -7217,7 +7219,7 @@ def callback_handler(call):
 
         elif data.startswith("cc_svc:"):
             if call.from_user.id not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ No permission!", show_alert=True)
                 return
             sid = data.split(":", 1)[1]
             cfg = _console_config.get(sid, {})
@@ -7227,14 +7229,14 @@ def callback_handler(call):
             range_txt = "\n".join(
                 f"  • {get_country_details(p)[1]} {get_country_details(p)[0]} ({p})"
                 for p in ranges
-            ) if ranges else "  (কোনো range নেই)"
+            ) if ranges else "  (no range)"
             try:
                 bot.edit_message_text(
                     f"📡 <b>{_v2_svc_emoji(sid)} {sid}</b>\n"
                     f"━━━━━━━━━━━━━━━━\n\n"
                     f"📌 Status: <b>{status}</b>\n"
                     f"🔢 Ranges:\n{range_txt}\n\n"
-                    f"নিচের বাটন দিয়ে configure করো:",
+                    f"Use the buttons below to configure:",
                     call.message.chat.id, call.message.message_id,
                     reply_markup=_cc_service_detail_markup(sid), parse_mode="HTML"
                 )
@@ -7244,7 +7246,7 @@ def callback_handler(call):
 
         elif data.startswith("cc_toggle:"):
             if call.from_user.id not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ No permission!", show_alert=True)
                 return
             sid = data.split(":", 1)[1]
             cfg = _console_config.setdefault(sid, {"enabled": False, "ranges": []})
@@ -7256,14 +7258,14 @@ def callback_handler(call):
             range_txt = "\n".join(
                 f"  • {get_country_details(p)[1]} {get_country_details(p)[0]} ({p})"
                 for p in ranges
-            ) if ranges else "  (কোনো range নেই)"
+            ) if ranges else "  (no range)"
             try:
                 bot.edit_message_text(
                     f"📡 <b>{_v2_svc_emoji(sid)} {sid}</b>\n"
                     f"━━━━━━━━━━━━━━━━\n\n"
                     f"📌 Status: <b>{status}</b>\n"
                     f"🔢 Ranges:\n{range_txt}\n\n"
-                    f"নিচের বাটন দিয়ে configure করো:",
+                    f"Use the buttons below to configure:",
                     call.message.chat.id, call.message.message_id,
                     reply_markup=_cc_service_detail_markup(sid), parse_mode="HTML"
                 )
@@ -7272,16 +7274,16 @@ def callback_handler(call):
 
         elif data.startswith("cc_addrange:"):
             if call.from_user.id not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ No permission!", show_alert=True)
                 return
             sid = data.split(":", 1)[1]
             _cc_addrange_state[call.from_user.id] = sid
             bot.answer_callback_query(call.id)
             msg = bot.send_message(
                 call.message.chat.id,
-                f"📲 <b>{sid}</b> এর জন্য range prefix লিখো:\n"
-                f"<i>উদাহরণ: <code>880</code> (Bangladesh), <code>91</code> (India)</i>\n\n"
-                f"শুধু সংখ্যা লিখো:",
+                f"📲 <b>{sid}</b>  range prefix:\n"
+                f"<i>Example: <code>880</code> (Bangladesh), <code>91</code> (India)</i>\n\n"
+                f"Numbers only:",
                 reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("❌ Cancel"),
                 parse_mode="HTML"
             )
@@ -7289,7 +7291,7 @@ def callback_handler(call):
 
         elif data.startswith("cc_delrange:"):
             if call.from_user.id not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ No permission!", show_alert=True)
                 return
             parts = data.split(":")
             sid    = parts[1] if len(parts) > 1 else ""
@@ -7298,15 +7300,15 @@ def callback_handler(call):
             if prefix in cfg.get("ranges", []):
                 cfg["ranges"].remove(prefix)
                 save_console_config()
-                bot.answer_callback_query(call.id, f"🗑️ ({prefix}) মুছে গেছে!", show_alert=False)
+                bot.answer_callback_query(call.id, f"🗑️ ({prefix}) deleted!", show_alert=False)
             else:
-                bot.answer_callback_query(call.id, "❌ Range পাওয়া যায়নি!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Range not found!", show_alert=True)
                 return
             ranges = cfg.get("ranges", [])
             range_txt = "\n".join(
                 f"  • {get_country_details(p)[1]} {get_country_details(p)[0]} ({p})"
                 for p in ranges
-            ) if ranges else "  (কোনো range নেই)"
+            ) if ranges else "  (no range)"
             status = "✅ Enabled" if cfg.get("enabled") else "⭕ Disabled"
             try:
                 bot.edit_message_text(
@@ -7314,7 +7316,7 @@ def callback_handler(call):
                     f"━━━━━━━━━━━━━━━━\n\n"
                     f"📌 Status: <b>{status}</b>\n"
                     f"🔢 Ranges:\n{range_txt}\n\n"
-                    f"নিচের বাটন দিয়ে configure করো:",
+                    f"Use the buttons below to configure:",
                     call.message.chat.id, call.message.message_id,
                     reply_markup=_cc_service_detail_markup(sid), parse_mode="HTML"
                 )
@@ -7323,7 +7325,7 @@ def callback_handler(call):
 
         elif data.startswith("v2panel_set:"):
             if call.from_user.id not in ADMIN_IDS:
-                bot.answer_callback_query(call.id, "❌ Permission নেই!", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ No permission!", show_alert=True)
                 return
             new_pid = data.split(":", 1)[1]
             valid_ids = {p["id"] for p in _V2_PANELS_REGISTRY}
@@ -7333,12 +7335,12 @@ def callback_handler(call):
             _group_settings["v2_active_panel"] = new_pid
             save_group_settings()
             pname = _v2_active_panel_name()
-            bot.answer_callback_query(call.id, f"✅ {pname} চালু হয়েছে!", show_alert=False)
+            bot.answer_callback_query(call.id, f"✅ {pname} started!", show_alert=False)
             try:
                 bot.edit_message_text(
                     f"📡 <b>V2 Active Panel</b>\n\n"
-                    f"✅ <b>{pname}</b> এখন চালু আছে।\n\n"
-                    f"<i>V2 LIVE RANGE ও OTP forwarding এই panel থেকে হবে।</i>",
+        f"✅ <b>{pname}</b> is now active.\n\n"
+        f"<i>V2 LIVE RANGE and OTP forwarding will come from this panel.</i>",
                     call.message.chat.id, call.message.message_id,
                     reply_markup=_v2_panel_toggle_markup(),
                     parse_mode="HTML"
@@ -7348,7 +7350,7 @@ def callback_handler(call):
 
         elif data.startswith("v3svc:"):
             sid = data.split(":", 1)[1]
-            bot.answer_callback_query(call.id, "⏳ Number নিচ্ছি...", show_alert=False)
+            bot.answer_callback_query(call.id, "⏳ Getting number...", show_alert=False)
             uid_v3 = call.from_user.id
             n_batch = get_numbers_per_batch()
             v3_nums = []
@@ -7378,7 +7380,7 @@ def callback_handler(call):
                     reply_markup=refresh_kb
                 )
             else:
-                bot.answer_callback_query(call.id, "❌ Number পাওয়া যায়নি! পরে চেষ্টা করো।", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Number not found! Try again later.", show_alert=True)
 
         elif data == "v3back":
             services = _v3_get_services()
@@ -7387,10 +7389,10 @@ def callback_handler(call):
                 "🆕 <b>V3 PANEL</b>\n"
                 "━━━━━━━━━━━━━━━━\n\n"
                 "🔴 <b>Service select koro:</b>\n"
-                "<i>Number পেতে service click করো</i>\n\n"
+                "<i>Click a service to get a number</i>\n\n"
                 "━━━━━━━━━━━━━━━━"
                 if has else
-                "🆕 <b>V3 PANEL</b>\n\n⚠️ এখন কোনো service নেই।"
+                "🆕 <b>V3 PANEL</b>\n\n⚠️ No service available."
             )
             try:
                 bot.edit_message_text(text, call.message.chat.id, call.message.message_id,
@@ -7406,8 +7408,8 @@ def callback_handler(call):
             msg = bot.send_message(call.message.chat.id,
                 "➕ <b>Extra Group Add</b>\n\n"
                 "Group-er <b>Chat ID</b> dao:\n"
-                "<i>উদাহরণ: <code>-1001234567890</code></i>\n\n"
-                "💡 Chat ID পেতে group-এ @userinfobot add করো।",
+                "<i>Example: <code>-1001234567890</code></i>\n\n"
+                "💡 To get Chat ID, add @userinfobot to the group.",
                 reply_markup=_back_admin_kb(), parse_mode="HTML")
             bot.register_next_step_handler(msg, _eg_add_step1)
 
@@ -7422,7 +7424,7 @@ def callback_handler(call):
                 bot.answer_callback_query(call.id, f"✅ Group {removed.get('id')} removed!", show_alert=True)
                 _show_extra_groups(call.message)
             else:
-                bot.answer_callback_query(call.id, "❌ Group পাওয়া যায়নি।", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Group not found.", show_alert=True)
 
         elif data.startswith("eg_setbot:"):
             if call.from_user.id not in ADMIN_IDS:
@@ -7454,37 +7456,37 @@ def callback_handler(call):
             if 0 <= idx < len(extra):
                 g = extra[idx]
                 gid = g.get("id")
-                bot.answer_callback_query(call.id, "🧪 Test message পাঠানো হচ্ছে...")
+                bot.answer_callback_query(call.id, "🧪 Sending test message...")
                 try:
                     bot.send_message(
                         gid,
                         f"🧪 <b>Test Message</b>\n\n"
-                        f"✅ Bot সফলভাবে এই group-এ message পাঠাতে পারছে!\n"
+                        f"✅ Bot is successfully sending messages to this group!\n"
                         f"🆔 Group ID: <code>{gid}</code>\n\n"
-                        f"<i>OTP আসলে এখানেই পাঠানো হবে।</i>",
+                        f"<i>OTP will be sent here when received.</i>",
                         parse_mode="HTML",
                     )
                     bot.send_message(
                         call.message.chat.id,
-                        f"✅ <b>Group #{idx+1} Test সফল!</b>\n\n"
+                        f"✅ <b>Group #{idx+1} Test Successful!</b>\n\n"
                         f"🆔 ID: <code>{gid}</code>\n"
-                        f"Bot সেই group-এ message পাঠাতে পারছে। OTP আসলে সেখানে যাবে।",
+                        f"Bot can send messages to that group. OTP will be sent there.",
                         parse_mode="HTML",
                     )
                 except Exception as e:
                     bot.send_message(
                         call.message.chat.id,
-                        f"❌ <b>Group #{idx+1} Test ব্যর্থ!</b>\n\n"
+                        f"❌ <b>Group #{idx+1} Test Failed!</b>\n\n"
                         f"🆔 ID: <code>{gid}</code>\n"
                         f"⚠️ Error: <code>{str(e)[:200]}</code>\n\n"
-                        f"<b>সমাধান:</b>\n"
-                        f"• Bot টিকে ওই group-এ <b>Admin</b> হিসেবে add করো\n"
-                        f"• Group ID সঠিক কিনা চেক করো\n"
-                        f"• Group ID সাধারণত <code>-100XXXXXXXXXX</code> format-এ হয়",
+                        f"<b>Solution:</b>\n"
+                        f"• Add the bot as <b>Admin</b> in that group\n"
+                        f"• Check if the Group ID is correct\n"
+                        f"• Group ID is usually in <code>-100XXXXXXXXXX</code> format",
                         parse_mode="HTML",
                     )
             else:
-                bot.answer_callback_query(call.id, "❌ Group পাওয়া যায়নি।", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ Group not found.", show_alert=True)
 
         elif data.startswith("eg_info:"):
             idx = int(data.split(":", 1)[1])
@@ -7517,7 +7519,7 @@ def callback_handler(call):
                 call.message.chat.id,
                 f"🌸 <b>Number Tag Set/Change</b>\n\n"
                 f"🔹 <b>Bortoman Tag:</b> <code>{cur_tag}</code>\n"
-                f"📱 Preview: <b>245⚜{cur_tag}⚜5660</b>\n\n"
+                f'📱 Preview: <b>245<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>{cur_tag}<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>5660</b>\n\n'
                 f"Notun tag dao (shudhu text, kono emoji na):\n"
                 f"<i>Example: ATIK, BOT, OTP, KING</i>",
                 reply_markup=_back_admin_kb(),
@@ -7533,10 +7535,10 @@ def callback_handler(call):
             msg = bot.send_message(
                 call.message.chat.id,
                 f"🔢 <b>Numbers Per User — Set</b>\n\n"
-                f"🔹 <b>বর্তমান সেটিং:</b> <code>{cur_batch}টি</code>\n\n"
-                f"একজন ইউজার একবারে কয়টা নাম্বার পাবে সেটা লিখো:\n"
-                f"<i>Example: 1, 2, 3, 5 (সর্বোচ্চ 10)</i>\n\n"
-                f"⚠️ এই সেটিং V1, V2 সব-এর জন্য প্রযোজ্য।",
+                f"🔹 <b>Current Setting:</b> <code>{cur_batch}</code>\n\n"
+                f"How many numbers can a user get at once?\n"
+                f"<i>Example: 1, 2, 3, 5 (max 10)</i>\n\n"
+                f"⚠️ This setting applies to all V1, V2.",
                 reply_markup=_back_admin_kb(),
                 parse_mode="HTML",
             )
@@ -7736,9 +7738,9 @@ def document_handler(message):
         )
         extra = f"\n  <i>...and {len(parsed)-10} more</i>" if len(parsed) > 10 else ""
         bot.send_message(message.chat.id,
-            f"✅ <b>{len(parsed)}টি custom flag emoji load হয়েছে!</b>\n\n"
+            f"✅ <b>{len(parsed)} custom flag emoji(s) loaded!</b>\n\n"
             f"{lines_preview}{extra}\n\n"
-            f"🎉 এখন থেকে সব OTP/number message-এ custom flag দেখাবে।",
+            f"🎉 Custom flags will now appear in all OTP/number messages.",
             parse_mode="HTML")
         return
     # ────────────────────────────────────────────────────────────────────────────
@@ -7942,9 +7944,9 @@ def text_handler(message):
             message.chat.id,
             "🔄 <b>V2 SWITCH</b>\n"
             "━━━━━━━━━━━━━━━━\n\n"
-            "কোন mode চাও select koro:\n\n"
-            "🔴 <b>LIVE RANGE</b> — Panel থেকে live OTP range দেখাবে\n"
-            "⌨️ <b>CUSTOM RANGE</b> — নিজে range দাও, matching number পাবে\n\n"
+        "Select mode:\n\n"
+        "🔴 <b>LIVE RANGE</b> — Shows live OTP range from panel\n"
+        "⌨️ <b>CUSTOM RANGE</b> — Enter range manually, get matching number\n\n"
             "━━━━━━━━━━━━━━━━",
             reply_markup=v2_switch_menu(),
             parse_mode="HTML",
@@ -7963,8 +7965,8 @@ def text_handler(message):
             message.chat.id,
             "⌨️ <b>CUSTOM RANGE</b>\n"
             "━━━━━━━━━━━━━━━━\n\n"
-            "📲 কোন range/prefix চাও লিখো:\n"
-            "<i>উদাহরণ: <code>8801</code>, <code>44</code>, <code>33</code></i>\n\n"
+            "📲 the range/prefix you want:\n"
+            "<i>Example: <code>8801</code>, <code>44</code>, <code>33</code></i>\n\n"
             "━━━━━━━━━━━━━━━━",
             reply_markup=cancel_markup,
             parse_mode="HTML",
@@ -8041,7 +8043,7 @@ def text_handler(message):
         report = "🔥 <b>LIVE STOCK REPORT</b> 🔥\n━━━━━━━━━━━━━━━━\n\n"
         for s, d in stock.items():
             total = sum(len(v) for v in d.values())
-            report += f" <b>{s.upper()}</b>: {total} টি \n"
+            report += f" <b>{s.upper()}</b>: {total}  \n"
         report += "\n━━━━━━━━━━━━━━━━\n🤖 <b>AR OTP BOT</b> 🔥"
         bot.send_message(message.chat.id, report, parse_mode="HTML")
 
@@ -8051,19 +8053,24 @@ def text_handler(message):
     elif txt == "💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀" and uid in ADMIN_IDS:
         _payment_admin_msg_handler(message)
 
-    elif txt in ("💵 রিওয়ার্ড সেট করো", "💱 কারেন্সি সেট করো",
-                 "📉 মিনিমাম উইথড্র সেট করো", "📋 সব ব্যালেন্স দেখো",
-                 "➕ ম্যানুয়াল ব্যালেন্স অ্যাড", "➖ ম্যানুয়াল ব্যালেন্স কাটো") and uid in ADMIN_IDS:
+    elif txt in ("💵 Set Reward", "💱 Set Currency",
+                 "📉 Set Minimum Withdraw", "📋 View All Balances",
+                 "➕ Add Balance Manually", "➖ Deduct Balance Manually") and uid in ADMIN_IDS:
         _payment_admin_msg_handler(message)
 
-    elif txt.startswith("⏳ পেন্ডিং উইথড্র") and uid in ADMIN_IDS:
+    elif txt.startswith("⏳ Pending Withdraw") and uid in ADMIN_IDS:
         _payment_admin_msg_handler(message)
 
     elif txt == "🔥📢 𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁" and uid in ADMIN_IDS:
         msg = bot.send_message(
             message.chat.id,
-            "✍️ <b>Broadcast content পাঠাও:</b> \n\n"
-            "📝 Text, 🖼️ Photo, 🎥 Video, or 🎭 Sticker (with optional caption) — সব accept হবে!\n\n"
+            "✍️ <b>Send broadcast content:</b>\n\n"
+            "📝 Text, 🖼️ Photo, 🎥 Video, 🎭 Sticker,\n"
+            "🎞️ GIF, 🎵 Audio, 🎤 Voice, 📎 Document — all accepted!\n\n"
+            "✨ <b>Custom Emoji use korte chaile:</b>\n"
+            "Text-er jetukute emoji boshaite chao, sekhane emoji ID lekho:\n"
+            "<code>5976350888195791241 Guinea 5319160079465857105 Instagram Method 5325684684544289988</code>\n"
+            "<i>Jei jagaye ID, sekhane custom emoji render hobe</i>\n\n"
             "🔙 Back jete <b>Admin Panel</b> button press koro.",
             reply_markup=_back_admin_kb(),
             parse_mode="HTML",
@@ -8073,7 +8080,7 @@ def text_handler(message):
     elif txt == "⚡👥 𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁" and uid in ADMIN_IDS:
         bot.send_message(
             message.chat.id,
-            f" <b>TOTAL USERS</b> \n\n⚡ <b>{len(users)}</b> জন আছে! 🔥",
+            f" <b>TOTAL USERS</b> \n\n⚡ <b>{len(users)}</b> users! 🔥",
             parse_mode="HTML",
         )
 
@@ -8134,7 +8141,7 @@ def text_handler(message):
             bot.send_message(
                 message.chat.id,
                 "📈 <b>OTP STATS</b>\n\n"
-                "⚠️ এখনো কোনো OTP ডেলিভার হয়নি।",
+                "⚠️ No OTP delivered yet.",
                 parse_mode="HTML",
             )
         else:
@@ -8146,9 +8153,9 @@ def text_handler(message):
                 lines = (
                     f"📈 <b>OTP STATS</b>\n"
                     f"━━━━━━━━━━━━━━━━\n"
-                    f"📊 মোট OTP ডেলিভার: <b>{total_otps}</b> টি"
+                    f"📊 Total OTPs Delivered: <b>{total_otps}</b>"
                     + (f"  |  Page {idx+1}/{len(chunks)}" if len(chunks) > 1 else "")
-                    + f"\n👥 মোট ইউজার: <b>{len(sorted_stats)}</b> জন\n"
+                    + f"\n👥 Total Users: <b>{len(sorted_stats)}</b> more\n"
                     f"━━━━━━━━━━━━━━━━\n\n"
                 )
                 for rank, (user_id, count) in enumerate(chunk, start=idx*PAGE+1):
@@ -8163,7 +8170,7 @@ def text_handler(message):
                         except Exception:
                             name = str(user_id)
                     medal = "🥇" if rank == 1 else "🥈" if rank == 2 else "🥉" if rank == 3 else f"{rank}."
-                    lines += f"{medal} <code>{user_id}</code> — <b>{count}</b> টি OTP\n    👤 {name}\n\n"
+                    lines += f"{medal} <code>{user_id}</code> — <b>{count}</b>  OTP(s)\n    👤 {name}\n\n"
                 bot.send_message(message.chat.id, lines, parse_mode="HTML")
 
     elif txt == "➕ 𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱" and uid in ADMIN_IDS:
@@ -8299,7 +8306,7 @@ def text_handler(message):
                 ))
             bot.send_message(
                 message.chat.id,
-                "🗑️🔥 <b>Config মুছো</b>\n\nকোন config মুছবে?",
+        "🗑️🔥 <b>Delete Config</b>\n\nWhich config do you want to delete?",
                 reply_markup=markup,
                 parse_mode="HTML",
             )
@@ -8387,7 +8394,7 @@ def text_handler(message):
             message.chat.id,
             "🎛️ <b>Live Console Config</b>\n"
             "━━━━━━━━━━━━━━━━\n\n"
-            "সার্ভিস সিলেক্ট করো — toggle করো বা range add/delete করো:\n"
+            "Select service — toggle or add/delete range:\n"
             "✅ = enabled  ⭕ = disabled",
             reply_markup=_cc_services_markup(),
             parse_mode="HTML",
@@ -8400,9 +8407,9 @@ def text_handler(message):
             message.chat.id,
             f"🔀 <b>V2 Panel Select</b>\n"
             f"━━━━━━━━━━━━━━━━\n\n"
-            f"✅ <b>এখন চালু:</b> {pname}\n\n"
-            f"নিচের বাটন দিয়ে panel চালু/বন্ধ করো।\n"
-            f"যে panel-এ ✅ থাকবে সেটা active — V2 number ও OTP ওখান থেকে আসবে।\n\n"
+        f"✅ <b>Currently Active:</b> {pname}\n\n"
+        f"Use the buttons below to enable/disable panel.\n"
+        f"The panel with ✅ is active — V2 numbers and OTP will come from there.\n\n"
             f"━━━━━━━━━━━━━━━━",
             reply_markup=_v2_panel_toggle_markup(),
             parse_mode="HTML",
@@ -8415,17 +8422,17 @@ def text_handler(message):
         vars_hint = _TEMPLATE_VARS.get("otp_dm_v2", "")
         markup = types.InlineKeyboardMarkup(row_width=1)
         markup.add(types.InlineKeyboardButton("✏️ Edit V2 DM Format", callback_data="editmsg:otp_dm_v2", style="danger"))
-        markup.add(types.InlineKeyboardButton("🔄 Default এ Reset", callback_data="editmsg_reset:otp_dm_v2", style="success"))
+        markup.add(types.InlineKeyboardButton("🔄 Reset to Default", callback_data="editmsg_reset:otp_dm_v2", style="success"))
         bot.send_message(
             message.chat.id,
             "📡 <b>V2 Message Format</b>\n"
             "━━━━━━━━━━━━━━━━\n\n"
-            "📌 <b>ব্যবহারযোগ্য ভেরিয়েবল:</b>\n"
+            "📌 <b>Available variables:</b>\n"
             f"<code>{vars_hint}</code>\n\n"
-            "📄 <b>বর্তমান V2 DM Format:</b>\n"
+        "📄 <b>Current V2 DM Format:</b>\n"
             f"<code>{current_esc}</code>\n\n"
             "━━━━━━━━━━━━━━━━\n"
-            "<i>ℹ️ V2 mode-এ Get New Number ও Change Country বাটন দেখায় না।</i>",
+            "<i>ℹ️ In V2 mode, Get New Number and Change Country buttons are not shown.</i>",
             reply_markup=markup,
             parse_mode="HTML",
         )
@@ -8455,11 +8462,11 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "🏳️ <b>Flag Emoji Set</b>\n\n"
-            "Flag emoji আর তার custom emoji ID পাঠাও:\n\n"
-            "<b>একটি:</b> <code>🇧🇩 5432198765432198765</code>\n\n"
-            "<b>বাল্ক (numbered list):</b>\n"
+        "Send flag emoji and its custom emoji ID:\n\n"
+        "<b>Single:</b> <code>🇧🇩 5432198765432198765</code>\n\n"
+        "<b>Bulk (numbered list):</b>\n"
             "<code>1. 🇧🇩 5432198765432198765\n2. 🇺🇸 5976694588658686266</code>\n\n"
-            "<i>অথবা সব flag একসাথে দিতে 🌍 All Flags JSON Set ব্যবহার করো।</i>",
+            "<i>Or use 🌍 All Flags JSON Set to add all flags at once.</i>",
             parse_mode="HTML"
         )
         bot.register_next_step_handler(message, _custom_emoji_input)
@@ -8472,17 +8479,17 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "🌍 <b>All Flags JSON Set</b>\n\n"
-            "একটি JSON পাঠাও যাতে <b>সব</b> flag emoji আর তাদের custom ID থাকবে।\n\n"
-            "<b>ফরম্যাট:</b>\n"
+        "Send a JSON with <b>all</b> flag emojis and their custom IDs.\n\n"
+        "<b>Format:</b>\n"
             "<code>{\n"
             '  "🇧🇩": "5432198765432198765",\n'
             '  "🇺🇸": "5976694588658686266",\n'
             '  "🇮🇳": "5195261305332736014"\n'
             "}</code>\n\n"
-            "📌 <b>বর্তমান flags (JSON):</b>\n"
+        "📌 <b>Current flags (JSON):</b>\n"
             f"<pre>{cur_preview}</pre>\n\n"
-            "<i>নতুন JSON পাঠালে বর্তমানের সাথে merge হবে (overwrite নয়)।\n"
-            "সব মুছে নতুন করতে আগে 🗑️ Flag Emoji Del দিয়ে মুছো।</i>",
+        "<i>New JSON will be merged with existing (not overwritten).\n"
+        "To reset, use 🗑️ Flag Emoji Del first to clear all.</i>",
             parse_mode="HTML"
         )
         bot.register_next_step_handler(message, _custom_emoji_input)
@@ -8492,16 +8499,16 @@ def text_handler(message):
             cur = dict(_custom_emojis.get("flags", {}))
         if not cur:
             bot.send_message(message.chat.id,
-                "📋 এখনো কোনো flag emoji সেট নেই।\n\n"
-                "🌍 All Flags JSON Set দিয়ে যোগ করো।")
+                "📋 No flag emoji set yet.\n\n"
+                "🌍 Use All Flags JSON Set to add.")
         else:
             exported = json.dumps(cur, ensure_ascii=False, indent=2)
             bot.send_message(
                 message.chat.id,
                 f"📋 <b>Current Flag Emojis JSON</b>\n\n"
                 f"<pre>{exported}</pre>\n\n"
-                f"<i>মোট {len(cur)}টি flag সেট আছে।\n"
-                f"Copy করে edit করে 🌍 All Flags JSON Set-এ paste করো।</i>",
+                f"<i>Total {len(cur)} flags set.\n"
+                f"Copy, edit, and paste in 🌍 All Flags JSON Set.</i>",
                 parse_mode="HTML"
             )
         _show_custom_emoji_menu(message)
@@ -8511,13 +8518,13 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "🔢 <b>Flag IDs Only Set</b>\n\n"
-            "শুধু custom emoji ID-গুলো paste করো (একটি করে প্রতি লাইনে)।\n"
-            "Bot নিজেই Telegram থেকে বের করবে কোনটা কোন দেশের flag।\n\n"
-            "<b>ফরম্যাট:</b>\n"
+            "Paste only the custom emoji IDs (one per line).\n"
+            "The bot will automatically detect which country each flag belongs to.\n\n"
+        "<b>Format:</b>\n"
             "<code>5432198765432198765\n"
             "5976694588658686266\n"
             "5195261305332736014</code>\n\n"
-            "<i>একসাথে সর্বোচ্চ 200টি ID দিতে পারবে।</i>",
+            "<i>You can send up to 200 IDs at once.</i>",
             reply_markup=_back_admin_kb(),
             parse_mode="HTML"
         )
@@ -8528,9 +8535,9 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "🎯 <b>Service Emoji Set</b>\n\n"
-            "Service নাম আর custom emoji ID পাঠাও:\n\n"
-            "<b>ফরম্যাট:</b> <code>INSTAGRAM 5319160079465857105</code>\n\n"
-            "<i>Service name সব CAPITAL-এ লিখো।</i>",
+            "Send the service name and custom emoji ID:\n\n"
+            "<b>Format:</b> <code>INSTAGRAM 5319160079465857105</code>\n\n"
+            "<i>Service name must be in ALL CAPS.</i>",
             parse_mode="HTML"
         )
         bot.register_next_step_handler(message, _custom_emoji_input)
@@ -8543,13 +8550,13 @@ def text_handler(message):
             lines = "\n".join(f"<code>{k}</code>" for k in flags_set)
             bot.send_message(
                 message.chat.id,
-                f"🗑️ <b>Flag Emoji Delete</b>\n\nমুছতে চাও কোন flag emoji?\n\n{lines}\n\n"
-                "Flag emoji পাঠাও (শুধু emoji, যেমন: <code>🇧🇩</code>):",
+        f"🗑️ <b>Delete Flag Emoji</b>\n\nWhich flag emoji to delete?\n\n{lines}\n\n"
+                "Send the flag emoji (emoji only, e.g. <code>🇧🇩</code>):",
                 parse_mode="HTML"
             )
             bot.register_next_step_handler(message, _custom_emoji_input)
         else:
-            bot.send_message(message.chat.id, "❌ কোনো flag emoji সেট নেই।")
+            bot.send_message(message.chat.id, "❌ No flag emoji is set.")
 
     elif txt == "🗑️ Service Emoji Del" and uid in ADMIN_IDS:
         _custom_emoji_state[uid] = "del_service"
@@ -8559,13 +8566,13 @@ def text_handler(message):
             lines = "\n".join(f"<code>{k}</code>" for k in svcs_set)
             bot.send_message(
                 message.chat.id,
-                f"🗑️ <b>Service Emoji Delete</b>\n\nমুছতে চাও কোন service?\n\n{lines}\n\n"
-                "Service নাম পাঠাও (যেমন: <code>INSTAGRAM</code>):",
+        f"🗑️ <b>Delete Service Emoji</b>\n\nWhich service to delete?\n\n{lines}\n\n"
+                "Send the service name (e.g. <code>INSTAGRAM</code>):",
                 parse_mode="HTML"
             )
             bot.register_next_step_handler(message, _custom_emoji_input)
         else:
-            bot.send_message(message.chat.id, "❌ কোনো service emoji সেট নেই।")
+            bot.send_message(message.chat.id, "❌ No service emoji is set.")
 
     elif txt == "🔘 Button Emoji Set" and uid in ADMIN_IDS:
         _custom_emoji_state[uid] = "btn"
@@ -8573,11 +8580,11 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             f"🔘 <b>Button Emoji Set</b>\n\n"
-            f"Button key আর custom emoji ID পাঠাও:\n\n"
-            f"<b>ফরম্যাট:</b> <code>button_key emoji_id</code>\n\n"
+        f"Send button key and custom emoji ID:\n\n"
+        f"<b>Format:</b> <code>button_key emoji_id</code>\n\n"
             f"<b>Available buttons:</b>\n{available}\n\n"
-            f"<b>উদাহরণ:</b>\n<code>change_number 5375170473095077321</code>\n\n"
-            f"<i>Custom emoji সেট হলে button text থেকে plain emoji automatically সরে যাবে।</i>",
+        f"<b>Example:</b>\n<code>change_number 5375170473095077321</code>\n\n"
+            f"<i>Once custom emoji is set, the plain emoji will automatically be removed from button text.</i>",
             parse_mode="HTML"
         )
         bot.register_next_step_handler(message, _custom_emoji_input)
@@ -8590,27 +8597,27 @@ def text_handler(message):
             lines = "\n".join(f"<code>{k}</code> → <code>{v}</code>" for k, v in btns_set.items())
             bot.send_message(
                 message.chat.id,
-                f"🗑️ <b>Button Emoji Delete</b>\n\nমুছতে চাও কোন button?\n\n{lines}\n\n"
-                "Button key পাঠাও (যেমন: <code>change_number</code>):",
+        f"🗑️ <b>Delete Button Emoji</b>\n\nWhich button to delete?\n\n{lines}\n\n"
+                "Send the button key (e.g. <code>change_number</code>):",
                 parse_mode="HTML"
             )
             bot.register_next_step_handler(message, _custom_emoji_input)
         else:
-            bot.send_message(message.chat.id, "❌ কোনো button emoji সেট নেই।")
+            bot.send_message(message.chat.id, "❌ No button emoji is set.")
 
     elif txt == "💬 Msg Emoji Set" and uid in ADMIN_IDS:
         _custom_emoji_state[uid] = "msg_slot"
         with _custom_emoji_lock:
             slots_set = dict(_custom_emojis.get("msg_slots", {}))
-        slot_list = "\n".join(f"  <code>{{emoji_{k}}}</code> → {v.get('fb','')}" for k, v in slots_set.items()) or "  (কিছু নেই)"
+        slot_list = "\n".join(f"  <code>{{emoji_{k}}}</code> → {v.get('fb','')}" for k, v in slots_set.items()) or "  (none)"
         bot.send_message(
             message.chat.id,
             f"💬 <b>Message Emoji Set</b>\n\n"
-            f"বর্তমান slots:\n{slot_list}\n\n"
-            f"নতুন slot যোগ করতে পাঠাও:\n\n"
-            f"<b>ফরম্যাট:</b> <code>slot_name emoji_id fallback_emoji</code>\n\n"
-            f"<b>উদাহরণ:</b>\n<code>fire 5432198765432198765 🔥</code>\n\n"
-            f"এরপর যেকোনো message template-এ <code>{{emoji_fire}}</code> লিখলে custom emoji দেখাবে।",
+            f"Current slots:\n{slot_list}\n\n"
+            f"To add a new slot, send:\n\n"
+            f"<b>Format:</b> <code>slot_name emoji_id fallback_emoji</code>\n\n"
+        f"<b>Example:</b>\n<code>fire 5432198765432198765 🔥</code>\n\n"
+        f"Then use <code>{{emoji_fire}}</code> in any message template to show the custom emoji.",
             parse_mode="HTML"
         )
         bot.register_next_step_handler(message, _custom_emoji_input)
@@ -8623,13 +8630,13 @@ def text_handler(message):
             lines = "\n".join(f"<code>{k}</code> → {v.get('fb','')}" for k, v in slots_set.items())
             bot.send_message(
                 message.chat.id,
-                f"🗑️ <b>Message Emoji Delete</b>\n\nমুছতে চাও কোন slot?\n\n{lines}\n\n"
-                "Slot নাম পাঠাও (যেমন: <code>fire</code>):",
+        f"🗑️ <b>Delete Message Emoji</b>\n\nWhich slot to delete?\n\n{lines}\n\n"
+                "Send the slot name (e.g. <code>fire</code>):",
                 parse_mode="HTML"
             )
             bot.register_next_step_handler(message, _custom_emoji_input)
         else:
-            bot.send_message(message.chat.id, "❌ কোনো message emoji slot সেট নেই।")
+            bot.send_message(message.chat.id, "❌ No message emoji slot is set.")
 
     elif txt in ("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟", "🔙 Admin Panel") and uid in ADMIN_IDS:
         _go_admin_panel(message)
@@ -8705,7 +8712,7 @@ def _demo_cfg_number(message):
     preview = "\n".join(shown)
     if len(valid) > SHOW_MAX:
         preview += f"\n  ... +{len(valid) - SHOW_MAX} more"
-    feedback = f"✅ <b>{len(valid)} টি number set hoiche:</b>\n{preview}\n"
+    feedback = f"✅ <b>{len(valid)} number(s) set:</b>\n{preview}\n"
     if invalid:
         inv_preview = invalid[:5]
         feedback += (
@@ -8757,18 +8764,18 @@ def _demo_cfg_service_ask(message):
     svc_markup.add("Telegram", "PC Clone", "Twitter")
     svc_markup.add("Tiktok", "Snapchat", "Gmail")
     if current:
-        svc_markup.add("✅ হয়েছে (Done)")
+        svc_markup.add("✅ Done")
     svc_markup.add("🔙 Admin Panel")
     if current:
         svc_list = "\n".join(f"  ✅ {s}" for s in current)
         prompt = (
             f"✅ <b>Selected services ({len(current)}):</b>\n{svc_list}\n\n"
-            f"➕ <b>আরো service যোগ করো</b> অথবা <b>✅ হয়েছে</b> চাপো:"
+            f"➕ <b>Add more services</b> or press <b>✅ Done</b>:"
         )
     else:
         prompt = (
             "💬 <b>Service choose koro</b>\n\n"
-            "<i>একাধিক service add করা যাবে — সব শেষে '✅ হয়েছে' চাপো।</i>"
+            "<i>You can add multiple services — press '✅ Done' when finished.</i>"
         )
     msg = bot.send_message(message.chat.id, prompt, reply_markup=svc_markup, parse_mode="HTML")
     bot.register_next_step_handler(msg, _demo_cfg_service_multi)
@@ -8783,12 +8790,12 @@ def _demo_cfg_service_multi(message):
     uid = message.from_user.id
     txt = (message.text or "").strip()
 
-    if txt in ("✅ হয়েছে (Done)", "✅ হয়েছে"):
+    if txt in ("✅ Done", "✅ Done"):
         svcs = _demo_svc_state.get(uid, [])
         if not svcs:
             bot.send_message(
                 message.chat.id,
-                "⚠️ <b>কমপক্ষে একটা service select করো!</b>",
+                "⚠️ <b>Please select at least one service!</b>",
                 parse_mode="HTML",
             )
             _demo_cfg_service_ask(message)
@@ -8816,7 +8823,7 @@ def _demo_cfg_service_multi(message):
     if txt in current:
         bot.send_message(
             message.chat.id,
-            f"⚠️ <b>{txt}</b> already added আছে! আরো যোগ করো বা <b>✅ হয়েছে</b> চাপো।",
+            f"⚠️ <b>{txt}</b> is already added! Add more or press <b>✅ Done</b>.",
             parse_mode="HTML",
         )
     else:
@@ -8865,8 +8872,8 @@ def _demo_cfg_interval(message):
     svcs_str = ", ".join(services)
     bot.send_message(
         message.chat.id,
-        f"✅🔥 <b>{cfg_name} যোগ হয়েছে!</b>\n\n"
-        f"  📱 Numbers: {len(numbers)} টি\n"
+        f"✅🔥 <b>{cfg_name} added!</b>\n\n"
+        f"  📱 Numbers: {len(numbers)}\n"
         f"  🔢 Digits: {digits}\n"
         f"  💬 Services: {svcs_str}\n"
         f"  ⏱️ Interval: {iv}s\n\n"
@@ -8876,8 +8883,22 @@ def _demo_cfg_interval(message):
     )
 
 
+def _inject_custom_emojis(text):
+    """Replace every 17-20 digit numeric ID in text with a <tg-emoji> tag.
+    Example: '5976350888195791241 Guinea' → '<tg-emoji ...>✨</tg-emoji> Guinea'
+    """
+    if not text:
+        return text
+    import re as _re
+    return _re.sub(
+        r'\b(\d{17,20})\b',
+        lambda m: f'<tg-emoji emoji-id="{m.group(1)}">✨</tg-emoji>',
+        text,
+    )
+
+
 def make_broadcast_msg(text):
-    return get_template("broadcast").format(text=text)
+    return get_template("broadcast").format(text=_inject_custom_emojis(text or ""))
 
 
 def do_broadcast(message):
@@ -8917,13 +8938,14 @@ def do_broadcast(message):
         )
         return
 
-    cap = (
-        lambda m: make_broadcast_msg(m.caption) if m.caption else make_broadcast_msg("")
-    )
+    _raw_cap = message.caption or ""
+
+    def cap(m):
+        return make_broadcast_msg(_raw_cap)
 
     bot.send_message(
         message.chat.id,
-        f"⏳🔥 <b>{len(users)} জনকে পাঠানো হচ্ছে...</b> 🔥⏳",
+        f"⏳🔥 <b>Sending to {len(users)} users...</b> 🔥⏳",
         parse_mode="HTML",
     )
 
@@ -8978,8 +9000,8 @@ def do_broadcast(message):
     bot.send_message(
         message.chat.id,
         f" <b>BROADCAST COMPLETE!</b> \n\n"
-        f"✅ <b>𝗦𝗼𝗳𝗼𝗹:</b> {success} জন 🔥\n"
-        f"❌ <b>𝗕𝗮𝗿𝘁𝗵𝗼:</b> {fail} জন ",
+        f"✅ <b>𝗦𝗼𝗳𝗼𝗹:</b> {success} more 🔥\n"
+        f"❌ <b>𝗕𝗮𝗿𝘁𝗵𝗼:</b> {fail} more ",
         parse_mode="HTML",
     )
     _go_admin_panel(message)
@@ -9096,9 +9118,9 @@ def _settings_text(uid=None):
     v3_on = _group_settings.get("v3_enabled", True)
     v3_str = "🟢 ON" if v3_on else "🔴 OFF"
     v2_mode = _group_settings.get("v2_user_mode", False)
-    v2_mode_str = "🟢 ON (Get Number button দেখাবে)" if v2_mode else "🔴 OFF (V1+V2 Switch দেখাবে)"
+    v2_mode_str = "🟢 ON (Shows Get Number button)" if v2_mode else "🔴 OFF (Shows V1+V2 Switch)"
     extra_grps = _group_settings.get("extra_groups", [])
-    eg_str = f"{len(extra_grps)}টি extra group added" if extra_grps else "❌ কোনো extra group নেই"
+    eg_str = f"{len(extra_grps)}extra group(s) added" if extra_grps else "❌ No extra group added"
     return (
         "⚙️ <b>BOT SETTINGS</b> ⚙️\n"
         "━━━━━━━━━━━━━━━━\n\n"
@@ -9107,8 +9129,8 @@ def _settings_text(uid=None):
         f"🆔 Chat ID: {id_str}\n"
         f"⏱️ Auto Delete: {auto_str}\n"
         f"📤 Group OTP Send: {grp_send_str}\n"
-        f"⚜ Number Tag: <b>{grp_tag}</b> (245⚜{grp_tag}⚜5660)\n"
-        f"🔢 Numbers Per User: <b>{n_batch}টি</b>\n\n"
+        f'👑 Number Tag: <b>{grp_tag}</b> (245<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>{grp_tag}<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>5660)\n'
+        f"🔢 Numbers Per User: <b>{n_batch}</b>\n\n"
         "📢 <b>LINKS</b>\n"
         f"📢 Join Channel: {ch2_str}\n"
         f"🤖 Bot Link: {bot_str}\n\n"
@@ -9142,10 +9164,10 @@ def _settings_markup():
         types.InlineKeyboardButton(grp_send_label, callback_data="toggle_grp_send", style="danger"),
     )
     markup.add(
-        types.InlineKeyboardButton(f"⚜ Number Tag: {grp_tag}", callback_data="set_group_tag", style="success"),
+        types.InlineKeyboardButton(f"👑 Number Tag: {grp_tag}", callback_data="set_group_tag", style="success"),
     )
     markup.add(
-        types.InlineKeyboardButton(f"🔢 Numbers Per User: {n_batch}টি", callback_data="set_num_batch", style="primary"),
+        types.InlineKeyboardButton(f"🔢 Numbers Per User: {n_batch}", callback_data="set_num_batch", style="primary"),
     )
     markup.add(
         types.InlineKeyboardButton("📢 Join Channel", callback_data="set_channel2", style="danger"),
@@ -9367,8 +9389,8 @@ def _sett_get_group_tag(message):
     _go_admin_panel(
         message,
         f"✅ <b>NUMBER TAG UPDATED!</b>\n\n"
-        f"⚜ <b>Notun Tag:</b> <code>{val}</code>\n"
-        f"📱 Preview: <b>245⚜{val}⚜5660</b>\n\n"
+        f'👑 <b>New Tag:</b> <code>{val}</code>\n'
+        f'📱 Preview: <b>245<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>{val}<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>5660</b>\n\n'
         f"<i>Ekhon theke group-e number ei format-e dekhabe!</i>",
     )
 
@@ -9390,7 +9412,7 @@ def _sett_get_num_batch(message):
     except ValueError:
         msg = bot.send_message(
             message.chat.id,
-            "❌ 1 থেকে 10 এর মধ্যে একটা সংখ্যা দাও:\n<i>Example: 1, 2, 3, 5</i>",
+        "❌ Enter a number between 1 and 10:\n<i>Example: 1, 2, 3, 5</i>",
             reply_markup=_back_admin_kb(),
             parse_mode="HTML",
         )
@@ -9401,8 +9423,8 @@ def _sett_get_num_batch(message):
     _go_admin_panel(
         message,
         f"✅ <b>NUMBERS PER USER UPDATED!</b>\n\n"
-        f"🔢 <b>নতুন সেটিং:</b> <code>{val}টি</code>\n\n"
-        f"<i>এখন থেকে প্রতি ইউজার একবারে {val}টি নাম্বার পাবে।</i>",
+        f"🔢 <b>New Setting:</b> <code>{val}</code>\n\n"
+        f"<i>Each user will now get {val} number(s) at a time.</i>",
     )
 
 
@@ -9583,8 +9605,8 @@ def _resend_old_otps(message):
 
         bot.send_message(
             cid,
-            f"📤 <b>{total}টা real OTP paoa gese!</b>\n"
-            f"<i>Max {MAX_SEND}টা pathano hobe.</i>",
+        f"📤 <b>{total} real OTP(s) found!</b>\n"
+        f"<i>Max {MAX_SEND} will be sent.</i>",
             parse_mode="HTML",
         )
 
@@ -9604,7 +9626,7 @@ def _resend_old_otps(message):
         bot.send_message(
             cid,
             f"{status_icon}\n\n"
-            f"📊 <b>Mোট real OTP:</b> {total}\n"
+            f"📊 <b>Total real OTPs:</b> {total}\n"
             f"📤 <b>Sent:</b> {sent}\n"
             f"❌ <b>Failed:</b> {failed}",
             parse_mode="HTML",
@@ -9619,7 +9641,7 @@ _MSG_ICON_GROUPS = [
     ("📲 DM Message Emoji", ["dm_number_pre", "dm_country_pre", "dm_country_post"]),
     ("🏳️ Flag Emoji", ["flag_default"]),
     ("📱 OTP Messages", ["otp_phone", "otp_key", "otp_world", "otp_sms"]),
-    ("🚀 Start Screen", ["start_header", "start_crown", "start_user", "start_id", "start_status", "start_workers", "start_powered"]),
+    ("?? Start Screen", ["start_header", "start_crown", "start_user", "start_id", "start_status", "start_workers", "start_powered"]),
     ("✅ Verify Screen", ["verify_title"]),
 ]
 
@@ -9650,12 +9672,12 @@ def _show_msg_icons_menu(message, note=""):
                     types.InlineKeyboardButton(f"✏️ {label}", callback_data=f"msgicon_set:{key}"),
                     types.InlineKeyboardButton("—", callback_data="msgicon_noop"),
                 )
-    markup.add(types.InlineKeyboardButton("❌ বন্ধ করো", callback_data="msgicon_close"))
+    markup.add(types.InlineKeyboardButton("❌ Close", callback_data="msgicon_close"))
     text = (
         f"✨ <b>Message Icons</b>\n"
         f"━━━━━━━━━━━━━━━━\n\n"
-        f"<i>✏️ ক্লিক করে custom emoji sticker পাঠাও বা ID টাইপ করো।</i>\n"
-        f"<i>🔄 Reset করলে default emoji ফিরে আসবে।</i>"
+        f"<i>✏️ Click to send a custom emoji sticker or type the ID.</i>\n"
+        f"<i>🔄 Reset to restore the default emoji.</i>"
         + "\n".join(lines)
         + ("\n\n<i>✅ " + note + "</i>" if note else "")
         + "\n\n━━━━━━━━━━━━━━━━\n"
@@ -9692,8 +9714,8 @@ def _set_msg_icon_step(message):
         else:
             msg = bot.send_message(
                 message.chat.id,
-                "❌ Custom emoji পাওয়া যায়নি!\n\n"
-                "Telegram premium custom emoji sticker পাঠাও, অথবা emoji ID নম্বর দাও।\n\nআবার চেষ্টা করো:",
+        "❌ Custom emoji not found!\n\n"
+        "Send a Telegram premium custom emoji sticker, or enter the emoji ID.\n\nTry again:",
                 parse_mode="HTML",
                 reply_markup=_back_admin_kb(),
             )
@@ -9703,7 +9725,7 @@ def _set_msg_icon_step(message):
     with _custom_emoji_lock:
         _custom_emojis.setdefault("msg_slots", {})[slot_key] = {"id": custom_emoji_id, "fb": fallback_char}
     _save_custom_emojis()
-    _show_edit_messages_menu(message, note=f"✅ <b>{label}</b> — custom emoji সেট হয়েছে!")
+    _show_edit_messages_menu(message, note=f"✅ <b>{label}</b> — custom emoji set!")
 
 
 def _show_custom_emoji_menu(message, note=""):
@@ -9716,12 +9738,12 @@ def _show_custom_emoji_menu(message, note=""):
         dm_e_set    = dict(_custom_emojis.get("dm_emoji", {}))
 
     if len(flags_set) > 8:
-        flag_lines = f"  ✅ মোট <b>{len(flags_set)}টি</b> flag custom emoji সেট আছে\n  (📋 Flag JSON Export দিয়ে সব দেখো)"
+        flag_lines = f"  ✅ Total <b>{len(flags_set)}</b> flag custom emojis set\n  (📋 Use Flag JSON Export to view all)"
     else:
-        flag_lines = "\n".join(f"  {k} → <code>{v}</code>" for k, v in flags_set.items()) or "  (কিছু নেই — 🏳️ Flag Emoji Set দিয়ে যোগ করো)"
-    svc_lines  = "\n".join(f"  {k} → <code>{v}</code>" for k, v in svcs_set.items())  or "  (কিছু নেই)"
-    btn_lines  = "\n".join(f"  <code>{k}</code> → <code>{v}</code>" for k, v in btns_set.items()) or "  (কিছু নেই)"
-    slot_lines = "\n".join(f"  {{emoji_{k}}} → {v.get('fb','?')} (id:<code>{v.get('id','')}</code>)" for k, v in slots_set.items()) or "  (কিছু নেই)"
+        flag_lines = "\n".join(f"  {k} → <code>{v}</code>" for k, v in flags_set.items()) or "  (none — use 🏳️ Flag Emoji Set to add)"
+    svc_lines  = "\n".join(f"  {k} → <code>{v}</code>" for k, v in svcs_set.items())  or "  (none)"
+    btn_lines  = "\n".join(f"  <code>{k}</code> → <code>{v}</code>" for k, v in btns_set.items()) or "  (none)"
+    slot_lines = "\n".join(f"  {{emoji_{k}}} → {v.get('fb','?')} (id:<code>{v.get('id','')}</code>)" for k, v in slots_set.items()) or "  (none)"
 
     dm_emoji_lines = ""
     for key, defs in _DM_EMOJI_DEFAULTS.items():
@@ -9740,8 +9762,8 @@ def _show_custom_emoji_menu(message, note=""):
         f"📲 <b>DM Message Emoji (number/country):</b>\n{dm_emoji_lines}\n"
         f"🏳️ <b>Flag Emojis:</b>\n{flag_lines}\n\n"
         f"🎯 <b>Service Emojis:</b>\n{svc_lines}\n\n"
-        f"🔘 <b>Button Emojis (সেট করা):</b>\n{btn_lines}\n\n"
-        f"📋 <b>সব Button Key:</b>\n{all_btn_keys}\n\n"
+        f"🔘 <b>Button Emojis (set):</b>\n{btn_lines}\n\n"
+        f"📋 <b>All Button Keys:</b>\n{all_btn_keys}\n\n"
         f"💬 <b>Message Slot Emojis:</b>\n{slot_lines}\n\n"
         f"━━━━━━━━━━━━━━━━\n"
         + (f"<i>{note}</i>\n" if note else "")
@@ -9819,9 +9841,9 @@ def _custom_emoji_input(message):
                 f"  {k} → <code>{v}</code>" for k, v in list(parsed.items())[:10])
             extra = f"\n  <i>...and {len(parsed)-10} more</i>" if len(parsed) > 10 else ""
             bot.send_message(message.chat.id,
-                f"✅ <b>{len(parsed)}টি custom flag emoji load হয়েছে!</b>\n\n"
+                f"✅ <b>{len(parsed)} custom flag emoji(s) loaded!</b>\n\n"
                 f"{lines_preview}{extra}\n\n"
-                f"🎉 এখন থেকে সব OTP/number message-এ custom flag দেখাবে।",
+                f"🎉 Custom flags will now appear in all OTP/number messages.",
                 parse_mode="HTML")
             return
     # ─────────────────────────────────────────────────────────────────────────────
@@ -9851,11 +9873,11 @@ def _custom_emoji_input(message):
                 parsed[tokens[0]] = tokens[-1]
         if not parsed:
             bot.send_message(message.chat.id,
-                "❌ ফরম্যাট ভুল!\n\n"
-                "<b>ফরম্যাট (যেকোনো একটি):</b>\n"
+        "❌ Wrong format!\n\n"
+        "<b>Format (any one):</b>\n"
                 "<code>🇧🇩 5432198765432198765</code>\n"
                 "<code>🇧🇩 → 5432198765432198765</code>\n\n"
-                "<b>বাল্ক:</b>\n<code>1. 🇧🇩 → 5432198765432198765\n2. 🇺🇸 → 5976694588658686266</code>\n\nআবার পাঠাও:",
+                "<b>Bulk:</b>\n<code>1. 🇧🇩 → 5432198765432198765\n2. 🇺🇸 → 5976694588658686266</code>\n\nSend again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
@@ -9863,7 +9885,7 @@ def _custom_emoji_input(message):
             _custom_emojis.setdefault("flags", {}).update(parsed)
         _save_custom_emojis()
         added = "\n".join(f"  {k} → <code>{v}</code>" for k, v in parsed.items())
-        _show_custom_emoji_menu(message, note=f"✅ {len(parsed)}টি flag সেট হয়েছে:\n{added}")
+        _show_custom_emoji_menu(message, note=f"✅ {len(parsed)}flag(s) set:\n{added}")
 
     elif mode == "flag_bulk_json":
         # Accept a JSON object: {"🇧🇩": "123456789", "🇺🇸": "987654321", ...}
@@ -9886,7 +9908,7 @@ def _custom_emoji_input(message):
                 if v_str.isdigit():
                     parsed[k.strip()] = v_str
                 else:
-                    err_msg += f"⚠️ <code>{k}</code> — ID ভুল (<code>{v}</code>), skip করা হয়েছে\n"
+                    err_msg += f"⚠️ <code>{k}</code> — Invalid ID (<code>{v}</code>), skipped\n"
         except json.JSONDecodeError:
             # Fall back to line-by-line parsing
             lines = [l.strip() for l in txt.splitlines() if l.strip()]
@@ -9898,15 +9920,15 @@ def _custom_emoji_input(message):
 
         if not parsed:
             bot.send_message(message.chat.id,
-                "❌ কিছু parse করা যায়নি!\n\n"
-                "<b>JSON ফরম্যাট:</b>\n"
+        "❌ Could not parse anything!\n\n"
+        "<b>JSON Format:</b>\n"
                 "<code>{\n"
                 '  "🇧🇩": "5432198765432198765",\n'
                 '  "🇺🇸": "5976694588658686266"\n'
                 "}</code>\n\n"
-                "<b>Line-by-line ফরম্যাটও চলবে:</b>\n"
+                "<b>Line-by-line format also works:</b>\n"
                 "<code>🇧🇩 5432198765432198765\n🇺🇸 5976694588658686266</code>\n\n"
-                "আবার পাঠাও:",
+                "Send again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
@@ -9914,7 +9936,7 @@ def _custom_emoji_input(message):
             _custom_emojis.setdefault("flags", {}).update(parsed)
         _save_custom_emojis()
         added_lines = "\n".join(f"  {k} → <code>{v}</code>" for k, v in parsed.items())
-        note = f"✅ {len(parsed)}টি flag JSON থেকে সেট হয়েছে:\n{added_lines}"
+        note = f"✅ {len(parsed)}flag(s) set from JSON:\n{added_lines}"
         if err_msg:
             note += f"\n\n{err_msg}"
         _show_custom_emoji_menu(message, note=note)
@@ -9930,15 +9952,15 @@ def _custom_emoji_input(message):
                 raw_ids.append(token)
         if not raw_ids:
             bot.send_message(message.chat.id,
-                "❌ কোনো valid ID পাওয়া যায়নি!\n\n"
-                "প্রতি লাইনে একটি করে numeric emoji ID দাও:\n"
-                "<code>5432198765432198765\n5976694588658686266</code>\n\nআবার পাঠাও:",
+        "❌ No valid ID found!\n\n"
+        "Enter one numeric emoji ID per line:\n"
+                "<code>5432198765432198765\n5976694588658686266</code>\n\nSend again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
         raw_ids = raw_ids[:200]  # cap at 200
         bot.send_message(message.chat.id,
-            f"⏳ {len(raw_ids)}টি ID Telegram থেকে resolve করা হচ্ছে...",
+            f"⏳ {len(raw_ids)}ID(s) being resolved from Telegram...",
             parse_mode="HTML")
         parsed = {}
         failed = []
@@ -9960,8 +9982,8 @@ def _custom_emoji_input(message):
                 print(f"[FLAG-IDS] API error for chunk: {_api_err}")
         if not parsed:
             bot.send_message(message.chat.id,
-                "❌ Telegram থেকে কোনো emoji resolve করা যায়নি!\n\n"
-                "ID-গুলো valid কিনা চেক করো। আবার পাঠাও:",
+        "❌ No emoji could be resolved from Telegram!\n\n"
+        "Check if the IDs are valid. Send again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
@@ -9969,16 +9991,16 @@ def _custom_emoji_input(message):
             _custom_emojis.setdefault("flags", {}).update(parsed)
         _save_custom_emojis()
         added_lines = "\n".join(f"  {k} → <code>{v}</code>" for k, v in parsed.items())
-        note = f"✅ {len(parsed)}টি flag auto-resolve করে সেট হয়েছে:\n{added_lines}"
+        note = f"✅ {len(parsed)}flag(s) auto-resolved and set:\n{added_lines}"
         if failed:
-            note += f"\n\n⚠️ {len(failed)}টি ID resolve হয়নি।"
+            note += f"\n\n⚠️ {len(failed)}ID(s) could not be resolved."
         _show_custom_emoji_menu(message, note=note)
 
     elif mode == "service":
         # Format: INSTAGRAM 5319160079465857105
         if len(parts) != 2:
             bot.send_message(message.chat.id,
-                "❌ ফরম্যাট ভুল!\n\n<b>সঠিক ফরম্যাট:</b>\n<code>INSTAGRAM 5319160079465857105</code>\n\nআবার পাঠাও:",
+        "❌ Wrong format!\n\n<b>Correct Format:</b>\n<code>INSTAGRAM 5319160079465857105</code>\n\nSend again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
@@ -9986,7 +10008,7 @@ def _custom_emoji_input(message):
         with _custom_emoji_lock:
             _custom_emojis.setdefault("services", {})[svc_name] = emoji_id
         _save_custom_emojis()
-        _show_custom_emoji_menu(message, note=f"✅ {svc_name} → {emoji_id} সেট হয়েছে!")
+        _show_custom_emoji_menu(message, note=f"✅ {svc_name} → {emoji_id} set!")
 
     elif mode == "del_flag":
         emoji_char = parts[0] if parts else ""
@@ -9994,9 +10016,9 @@ def _custom_emoji_input(message):
             removed = _custom_emojis.get("flags", {}).pop(emoji_char, None)
         if removed:
             _save_custom_emojis()
-            _show_custom_emoji_menu(message, note=f"🗑️ {emoji_char} ডিলিট হয়েছে!")
+            _show_custom_emoji_menu(message, note=f"🗑️ {emoji_char} deleted!")
         else:
-            bot.send_message(message.chat.id, f"❌ <code>{emoji_char}</code> পাওয়া যায়নি।", parse_mode="HTML")
+            bot.send_message(message.chat.id, f"❌ <code>{emoji_char}</code> not found.", parse_mode="HTML")
             _custom_emoji_state[uid] = mode
 
     elif mode == "del_service":
@@ -10005,9 +10027,9 @@ def _custom_emoji_input(message):
             removed = _custom_emojis.get("services", {}).pop(svc_name, None)
         if removed:
             _save_custom_emojis()
-            _show_custom_emoji_menu(message, note=f"🗑️ {svc_name} ডিলিট হয়েছে!")
+            _show_custom_emoji_menu(message, note=f"🗑️ {svc_name} deleted!")
         else:
-            bot.send_message(message.chat.id, f"❌ <code>{svc_name}</code> পাওয়া যায়নি।", parse_mode="HTML")
+            bot.send_message(message.chat.id, f"❌ <code>{svc_name}</code> not found.", parse_mode="HTML")
             _custom_emoji_state[uid] = mode
 
     elif mode == "btn":
@@ -10015,8 +10037,8 @@ def _custom_emoji_input(message):
         if len(parts) != 2:
             available = "\n".join(f"  <code>{k}</code> — {v}" for k, v in _BTN_DISPLAY_NAMES.items())
             bot.send_message(message.chat.id,
-                f"❌ ফরম্যাট ভুল!\n\n<b>সঠিক ফরম্যাট:</b>\n<code>button_key emoji_id</code>\n\n"
-                f"<b>Available buttons:</b>\n{available}\n\nআবার পাঠাও:",
+        f"❌ Wrong format!\n\n<b>Correct Format:</b>\n<code>button_key emoji_id</code>\n\n"
+                f"<b>Available buttons:</b>\n{available}\n\nSend again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
@@ -10024,14 +10046,14 @@ def _custom_emoji_input(message):
         if btn_key not in _BTN_DISPLAY_NAMES:
             available = ", ".join(f"<code>{k}</code>" for k in _BTN_DISPLAY_NAMES)
             bot.send_message(message.chat.id,
-                f"❌ <code>{btn_key}</code> পাওয়া যায়নি!\n\nValid keys: {available}\n\nআবার পাঠাও:",
+        f"❌ <code>{btn_key}</code> not found!\n\nValid keys: {available}\n\nSend again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
         with _custom_emoji_lock:
             _custom_emojis.setdefault("buttons", {})[btn_key] = emoji_id
         _save_custom_emojis()
-        _show_custom_emoji_menu(message, note=f"✅ Button <code>{btn_key}</code> → <code>{emoji_id}</code> সেট হয়েছে!")
+        _show_custom_emoji_menu(message, note=f"✅ Button <code>{btn_key}</code> → <code>{emoji_id}</code> set!")
 
     elif mode == "del_btn":
         btn_key = (parts[0] if parts else "").lower()
@@ -10039,18 +10061,18 @@ def _custom_emoji_input(message):
             removed = _custom_emojis.get("buttons", {}).pop(btn_key, None)
         if removed:
             _save_custom_emojis()
-            _show_custom_emoji_menu(message, note=f"🗑️ Button <code>{btn_key}</code> ডিলিট হয়েছে!")
+            _show_custom_emoji_menu(message, note=f"🗑️ Button <code>{btn_key}</code> deleted!")
         else:
-            bot.send_message(message.chat.id, f"❌ <code>{btn_key}</code> পাওয়া যায়নি।", parse_mode="HTML")
+            bot.send_message(message.chat.id, f"❌ <code>{btn_key}</code> not found.", parse_mode="HTML")
             _custom_emoji_state[uid] = mode
 
     elif mode == "msg_slot":
         # Format: slot_name emoji_id fallback_emoji  (e.g. fire 5432198765432198765 🔥)
         if len(parts) < 3:
             bot.send_message(message.chat.id,
-                "❌ ফরম্যাট ভুল!\n\n<b>সঠিক ফরম্যাট:</b>\n<code>slot_name emoji_id fallback_emoji</code>\n\n"
-                "<b>উদাহরণ:</b>\n<code>fire 5432198765432198765 🔥</code>\n\n"
-                "এরপর যেকোনো message template-এ <code>{emoji_fire}</code> লিখলে custom emoji দেখাবে।\n\nআবার পাঠাও:",
+        "❌ Wrong format!\n\n<b>Correct Format:</b>\n<code>slot_name emoji_id fallback_emoji</code>\n\n"
+        "<b>Example:</b>\n<code>fire 5432198765432198765 🔥</code>\n\n"
+                "Then use <code>{emoji_fire}</code> in any message template to show the custom emoji.\n\nSend again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
@@ -10061,8 +10083,8 @@ def _custom_emoji_input(message):
             _custom_emojis.setdefault("msg_slots", {})[slot_name] = {"id": emoji_id, "fb": fallback}
         _save_custom_emojis()
         _show_custom_emoji_menu(message,
-            note=f"✅ Slot <code>emoji_{slot_name}</code> সেট হয়েছে!\n"
-                 f"Template-এ <code>{{emoji_{slot_name}}}</code> ব্যবহার করো।")
+            note=f"✅ Slot <code>emoji_{slot_name}</code> set!\n"
+                 f"Use <code>{{emoji_{slot_name}}}</code> in templates.")
 
     elif mode == "del_msg_slot":
         slot_name = (parts[0] if parts else "").lower()
@@ -10070,17 +10092,17 @@ def _custom_emoji_input(message):
             removed = _custom_emojis.get("msg_slots", {}).pop(slot_name, None)
         if removed:
             _save_custom_emojis()
-            _show_custom_emoji_menu(message, note=f"🗑️ Slot <code>emoji_{slot_name}</code> ডিলিট হয়েছে!")
+            _show_custom_emoji_menu(message, note=f"🗑️ Slot <code>emoji_{slot_name}</code> deleted!")
         else:
-            bot.send_message(message.chat.id, f"❌ <code>emoji_{slot_name}</code> পাওয়া যায়নি।", parse_mode="HTML")
+            bot.send_message(message.chat.id, f"❌ <code>emoji_{slot_name}</code> not found.", parse_mode="HTML")
             _custom_emoji_state[uid] = mode
 
     elif mode == "dm_emoji":
         # Format: slot_key emoji_id fallback_emoji  e.g. "number_pre 5422858869372104873 📞"
         if len(parts) < 3:
             bot.send_message(message.chat.id,
-                "❌ ফরম্যাট ভুল!\n\n<b>সঠিক ফরম্যাট:</b>\n<code>slot_key emoji_id fallback_emoji</code>\n\n"
-                "<b>উদাহরণ:</b>\n<code>number_pre 5422858869372104873 📞</code>\n\nআবার পাঠাও:",
+        "❌ Wrong format!\n\n<b>Correct Format:</b>\n<code>slot_key emoji_id fallback_emoji</code>\n\n"
+        "<b>Example:</b>\n<code>number_pre 5422858869372104873 📞</code>\n\nSend again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
@@ -10088,7 +10110,7 @@ def _custom_emoji_input(message):
         if slot_key not in _DM_EMOJI_DEFAULTS:
             valid = ", ".join(f"<code>{k}</code>" for k in _DM_EMOJI_DEFAULTS)
             bot.send_message(message.chat.id,
-                f"❌ <code>{slot_key}</code> valid না!\n\nValid keys: {valid}\n\nআবার পাঠাও:",
+        f"❌ <code>{slot_key}</code> is invalid!\n\nValid keys: {valid}\n\nSend again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
             return
@@ -10099,7 +10121,7 @@ def _custom_emoji_input(message):
         _save_custom_emojis()
         label = _DM_EMOJI_LABELS.get(slot_key, slot_key)
         _show_custom_emoji_menu(message,
-            note=f"✅ DM emoji <b>{label}</b> → {fallback} <code>{emoji_id}</code> সেট হয়েছে!")
+            note=f"✅ DM emoji <b>{label}</b> → {fallback} <code>{emoji_id}</code> set!")
 
     elif mode == "del_dm_emoji":
         slot_key = (parts[0] if parts else "").lower()
@@ -10108,11 +10130,11 @@ def _custom_emoji_input(message):
         if removed:
             _save_custom_emojis()
             label = _DM_EMOJI_LABELS.get(slot_key, slot_key)
-            _show_custom_emoji_menu(message, note=f"🗑️ DM emoji <b>{label}</b> → default-এ ফিরে গেছে!")
+            _show_custom_emoji_menu(message, note=f"🗑️ DM emoji <b>{label}</b> reset to default!")
         else:
             valid = ", ".join(f"<code>{k}</code>" for k in _DM_EMOJI_DEFAULTS)
             bot.send_message(message.chat.id,
-                f"❌ <code>{slot_key}</code> কাস্টম করা ছিল না।\nValid keys: {valid}\n\nআবার পাঠাও:",
+        f"❌ <code>{slot_key}</code> was not customized.\nValid keys: {valid}\n\nSend again:",
                 parse_mode="HTML")
             _custom_emoji_state[uid] = mode
 
@@ -10131,16 +10153,16 @@ def _show_balance(message):
         pending = [r for r in _withdraw_requests if r["uid"] == uid and r["status"] == "pending"]
         approved = [r for r in _withdraw_requests if r["uid"] == uid and r["status"] == "approved"]
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("💸 উইথড্র করো", callback_data="wd_start"))
+    markup.add(types.InlineKeyboardButton("💸 Withdraw", callback_data="wd_start"))
     bot.send_message(
         message.chat.id,
-        f"💰 <b>আপনার ওয়ালেট</b>\n"
+        f'<tg-emoji emoji-id="5445353829304387411">💰</tg-emoji> <b>Your Wallet</b>\n'
         f"━━━━━━━━━━━━━━━━\n"
-        f"💵 <b>ব্যালেন্স:</b> <code>{cur}{bal:.2f}</code>\n"
-        f"🎁 <b>প্রতি OTP রিওয়ার্ড:</b> <code>{cur}{rpo:.2f}</code>\n"
-        f"📊 <b>মোট OTP:</b> <code>{total_otps}</code>\n"
-        f"⏳ <b>পেন্ডিং উইথড্র:</b> <code>{len(pending)}</code>\n"
-        f"✅ <b>অনুমোদিত উইথড্র:</b> <code>{len(approved)}</code>\n"
+        f'<tg-emoji emoji-id="5197434882321567830">💵</tg-emoji> <b>Balance:</b> <code>{cur}{bal:.2f}</code>\n'
+        f'<tg-emoji emoji-id="5417924076503062111">🎁</tg-emoji> <b>Per OTP Reward:</b> <code>{cur}{rpo:.2f}</code>\n'
+        f'<tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Total OTPs:</b> <code>{total_otps}</code>\n'
+        f'<tg-emoji emoji-id="5386367538735104399">⏳</tg-emoji> <b>Pending Withdraw:</b> <code>{len(pending)}</code>\n'
+        f'<tg-emoji emoji-id="5206607081334906820">✅</tg-emoji> <b>Approved Withdraw:</b> <code>{len(approved)}</code>\n'
         f"━━━━━━━━━━━━━━━━",
         parse_mode="HTML",
         reply_markup=markup,
@@ -10158,22 +10180,22 @@ def _start_withdraw(message):
     if bal < min_wd:
         bot.send_message(
             message.chat.id,
-            f"❌ <b>ব্যালেন্স কম!</b>\n\n"
-            f"আপনার ব্যালেন্স: <code>{cur}{bal:.2f}</code>\n"
-            f"ন্যূনতম উইথড্র: <code>{cur}{min_wd:.2f}</code>\n\n"
-            f"আরও OTP নিন এবং রিওয়ার্ড জমা করুন।",
+            f'❌ <b>Insufficient Balance!</b>\n\n'
+            f'<tg-emoji emoji-id="5197434882321567830">💵</tg-emoji> Your Balance: <code>{cur}{bal:.2f}</code>\n'
+            f'<tg-emoji emoji-id="5368493177634301681">⚠️</tg-emoji> Minimum Withdraw: <code>{cur}{min_wd:.2f}</code>\n\n'
+            f'Get more OTPs and earn rewards to withdraw.',
             parse_mode="HTML",
         )
         return
     msg = bot.send_message(
         message.chat.id,
-        f"💸 <b>উইথড্র রিকোয়েস্ট</b>\n\n"
-        f"আপনার ব্যালেন্স: <code>{cur}{bal:.2f}</code>\n"
-        f"ন্যূনতম: <code>{cur}{min_wd:.2f}</code>\n\n"
-        f"কত টাকা উইথড্র করতে চান? (সংখ্যা লিখুন)\n"
-        f"যেমন: <code>100</code>",
+        f'<tg-emoji emoji-id="5386367538735104399">💸</tg-emoji> <b>Withdraw Request</b>\n\n'
+        f'<tg-emoji emoji-id="5197434882321567830">💵</tg-emoji> Your Balance: <code>{cur}{bal:.2f}</code> <tg-emoji emoji-id="5417924076503062111">🎁</tg-emoji>\n'
+        f'<tg-emoji emoji-id="5368493177634301681">⚠️</tg-emoji> Minimum: <code>{cur}{min_wd:.2f}</code> <tg-emoji emoji-id="5417924076503062111">🎁</tg-emoji>\n\n'
+        f'How much do you want to withdraw? (enter a number)\n'
+        f'Example: <code>100</code>',
         parse_mode="HTML",
-        reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("❌ বাতিল"),
+        reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("❌ Cancel"),
     )
     _withdraw_state[uid] = {"step": "amount"}
     bot.register_next_step_handler(msg, _wd_amount_step)
@@ -10182,9 +10204,9 @@ def _start_withdraw(message):
 def _wd_amount_step(message):
     uid = message.from_user.id
     txt = (message.text or "").strip()
-    if txt in ("❌ বাতিল", "❌ Cancel") or _is_back(txt):
+    if txt in ("❌ Cancel", "❌ Cancel") or _is_back(txt):
         _withdraw_state.pop(uid, None)
-        bot.send_message(message.chat.id, "❌ উইথড্র বাতিল।",
+        bot.send_message(message.chat.id, "❌ Withdraw cancelled.",
                          reply_markup=main_menu(uid), parse_mode="HTML")
         return
     if _intercept_menu_btn(message):
@@ -10193,7 +10215,7 @@ def _wd_amount_step(message):
     try:
         amount = float(txt.replace(",", "").strip())
     except ValueError:
-        msg = bot.send_message(message.chat.id, "❌ সংখ্যা লিখুন! যেমন: <code>100</code>",
+        msg = bot.send_message(message.chat.id, "❌ Please enter a number! Example: <code>100</code>",
                                 parse_mode="HTML")
         bot.register_next_step_handler(msg, _wd_amount_step)
         return
@@ -10202,13 +10224,13 @@ def _wd_amount_step(message):
     min_wd = get_min_withdraw()
     if amount < min_wd:
         msg = bot.send_message(message.chat.id,
-            f"❌ ন্যূনতম <code>{cur}{min_wd:.2f}</code> উইথড্র করতে হবে। আবার লিখুন:",
+            f"❌ Minimum <code>{cur}{min_wd:.2f}</code> required to withdraw. Please enter again:",
             parse_mode="HTML")
         bot.register_next_step_handler(msg, _wd_amount_step)
         return
     if amount > bal:
         msg = bot.send_message(message.chat.id,
-            f"❌ ব্যালেন্স কম! আপনার আছে <code>{cur}{bal:.2f}</code>। আবার লিখুন:",
+            f"❌ Insufficient balance! You have <code>{cur}{bal:.2f}</code>. Please enter again:",
             parse_mode="HTML")
         bot.register_next_step_handler(msg, _wd_amount_step)
         return
@@ -10219,11 +10241,11 @@ def _wd_amount_step(message):
         types.InlineKeyboardButton("Nagad",   callback_data="wd_method:Nagad",   icon_custom_emoji_id="6082388335039351641", style="success"),
         types.InlineKeyboardButton("Rocket",  callback_data="wd_method:Rocket",  icon_custom_emoji_id="6084843995475742197", style="primary"),
         types.InlineKeyboardButton("Binance", callback_data="wd_method:Binance", icon_custom_emoji_id="5359437015752401733", style="success"),
-        types.InlineKeyboardButton("❌ বাতিল", callback_data="wd_cancel", style="danger"),
+        types.InlineKeyboardButton("❌ Cancel", callback_data="wd_cancel", style="danger"),
     )
     bot.send_message(
         message.chat.id,
-        f"✅ পরিমাণ: <code>{cur}{amount:.2f}</code>\n\n📲 পেমেন্ট মেথড বেছে নিন:",
+        f'<tg-emoji emoji-id="5375135722514685501">💰</tg-emoji> Amount: <code>{cur}{amount:.2f}</code>\n\n<tg-emoji emoji-id="5388632425314140043">💳</tg-emoji> Choose payment method:',
         parse_mode="HTML",
         reply_markup=markup,
     )
@@ -10233,16 +10255,16 @@ def _wd_account_step(message):
     uid = message.from_user.id
     state = _withdraw_state.get(uid, {})
     txt = (message.text or "").strip()
-    if txt in ("❌ বাতিল", "❌ Cancel") or _is_back(txt):
+    if txt in ("❌ Cancel", "❌ Cancel") or _is_back(txt):
         _withdraw_state.pop(uid, None)
-        bot.send_message(message.chat.id, "❌ উইথড্র বাতিল।",
+        bot.send_message(message.chat.id, "❌ Withdraw cancelled.",
                          reply_markup=main_menu(uid), parse_mode="HTML")
         return
     if _intercept_menu_btn(message):
         _withdraw_state.pop(uid, None)
         return
     if not txt:
-        msg = bot.send_message(message.chat.id, "❌ অ্যাকাউন্ট নম্বর/ঠিকানা লিখুন:")
+        msg = bot.send_message(message.chat.id, "❌ Enter account number/address:")
         bot.register_next_step_handler(msg, _wd_account_step)
         return
     state["account"] = txt
@@ -10251,16 +10273,16 @@ def _wd_account_step(message):
     cur = get_currency()
     markup = types.InlineKeyboardMarkup()
     markup.add(
-        types.InlineKeyboardButton("✅ কনফার্ম", callback_data="wd_confirm_submit"),
-        types.InlineKeyboardButton("❌ বাতিল",   callback_data="wd_cancel"),
+        types.InlineKeyboardButton("✅ Confirm", callback_data="wd_confirm_submit"),
+        types.InlineKeyboardButton("❌ Cancel",   callback_data="wd_cancel"),
     )
     bot.send_message(
         message.chat.id,
-        f"💸 <b>উইথড্র কনফার্ম করুন</b>\n\n"
-        f"💵 পরিমাণ: <code>{cur}{amount:.2f}</code>\n"
-        f"📲 মেথড: <b>{method}</b>\n"
-        f"📋 অ্যাকাউন্ট: <code>{txt}</code>\n\n"
-        f"নিশ্চিত করুন?",
+        f"💸 <b>Confirm Withdraw</b>\n\n"
+        f"💵 Amount: <code>{cur}{amount:.2f}</code>\n"
+        f"📲 Method: <b>{method}</b>\n"
+        f"📋 Account: <code>{txt}</code>\n\n"
+        f"Are you sure?",
         parse_mode="HTML",
         reply_markup=markup,
     )
@@ -10278,19 +10300,19 @@ def _show_payment_admin(message):
     with _withdraw_lock:
         pending_wds = [r for r in _withdraw_requests if r["status"] == "pending"]
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.add("💵 রিওয়ার্ড সেট করো", "💱 কারেন্সি সেট করো")
-    markup.add("📉 মিনিমাম উইথড্র সেট করো")
-    markup.add("📋 সব ব্যালেন্স দেখো")
-    markup.add("➕ ম্যানুয়াল ব্যালেন্স অ্যাড", "➖ ম্যানুয়াল ব্যালেন্স কাটো")
-    markup.add(f"⏳ পেন্ডিং উইথড্র ({len(pending_wds)})")
+    markup.add("💵 Set Reward", "💱 Set Currency")
+    markup.add("📉 Set Minimum Withdraw")
+    markup.add("📋 View All Balances")
+    markup.add("➕ Add Balance Manually", "➖ Deduct Balance Manually")
+    markup.add(f"⏳ Pending Withdraw ({len(pending_wds)})")
     markup.add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟")
     bot.send_message(
         message.chat.id,
         f"💰 <b>Payment Settings</b>\n\n"
-        f"🎁 প্রতি OTP রিওয়ার্ড: <code>{cur}{rpo:.2f}</code>\n"
-        f"💱 কারেন্সি: <code>{cur}</code>\n"
-        f"📉 মিনিমাম উইথড্র: <code>{cur}{min_wd:.2f}</code>\n"
-        f"⏳ পেন্ডিং উইথড্র: <code>{len(pending_wds)}</code>",
+        f"🎁 Per OTP Reward: <code>{cur}{rpo:.2f}</code>\n"
+        f"💱 Currency: <code>{cur}</code>\n"
+        f"📉 Minimum Withdraw: <code>{cur}{min_wd:.2f}</code>\n"
+        f"⏳ Pending Withdraw: <code>{len(pending_wds)}</code>",
         parse_mode="HTML",
         reply_markup=markup,
     )
@@ -10308,72 +10330,72 @@ def _payment_admin_msg_handler(message):
     if txt == "💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀":
         _show_payment_admin(message)
 
-    elif txt == "💵 রিওয়ার্ড সেট করো":
+    elif txt == "💵 Set Reward":
         cur = get_currency()
         msg = bot.send_message(
             message.chat.id,
-            f"🎁 প্রতি OTP-এর জন্য রিওয়ার্ড কত হবে?\n\n"
-            f"বর্তমান: <code>{cur}{get_reward_per_otp():.2f}</code>\n"
-            f"নতুন পরিমাণ লিখুন (যেমন: <code>0.50</code>):",
+            f"🎁 What is the reward per OTP?\n\n"
+            f"Current: <code>{cur}{get_reward_per_otp():.2f}</code>\n"
+            f"Enter new amount (e.g. <code>0.50</code>):",
             parse_mode="HTML",
             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟"),
         )
         _payment_admin_state[uid] = "set_reward"
         bot.register_next_step_handler(msg, _payment_admin_input)
 
-    elif txt == "💱 কারেন্সি সেট করো":
+    elif txt == "💱 Set Currency":
         msg = bot.send_message(
             message.chat.id,
-            f"💱 কারেন্সি সিম্বল কী হবে?\n\n"
-            f"বর্তমান: <code>{get_currency()}</code>\n"
-            f"নতুন সিম্বল লিখুন (যেমন: <code>৳</code> বা <code>$</code>):",
+            f"💱 What currency symbol to use?\n\n"
+            f"Current: <code>{get_currency()}</code>\n"
+            f"Enter new symbol (e.g. <code>৳</code> or <code>$</code>):",
             parse_mode="HTML",
             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟"),
         )
         _payment_admin_state[uid] = "set_currency"
         bot.register_next_step_handler(msg, _payment_admin_input)
 
-    elif txt == "📉 মিনিমাম উইথড্র সেট করো":
+    elif txt == "📉 Set Minimum Withdraw":
         cur = get_currency()
         msg = bot.send_message(
             message.chat.id,
-            f"📉 ন্যূনতম উইথড্র পরিমাণ কত?\n\n"
-            f"বর্তমান: <code>{cur}{get_min_withdraw():.2f}</code>\n"
-            f"নতুন পরিমাণ লিখুন (যেমন: <code>50</code>):",
+            f"📉 What is the minimum withdraw amount?\n\n"
+            f"Current: <code>{cur}{get_min_withdraw():.2f}</code>\n"
+            f"Enter new amount (e.g. <code>50</code>):",
             parse_mode="HTML",
             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟"),
         )
         _payment_admin_state[uid] = "set_min_withdraw"
         bot.register_next_step_handler(msg, _payment_admin_input)
 
-    elif txt == "📋 সব ব্যালেন্স দেখো":
+    elif txt == "📋 View All Balances":
         with _balances_lock:
             bal_copy = dict(_balances)
         if not bal_copy:
-            bot.send_message(message.chat.id, "❌ কোনো ব্যালেন্স নেই।", parse_mode="HTML")
+            bot.send_message(message.chat.id, "❌ No balances found.", parse_mode="HTML")
             return
         cur = get_currency()
         lines = []
         for k, v in sorted(bal_copy.items(), key=lambda x: -float(x[1])):
             lines.append(f"<code>{k}</code> → <b>{cur}{float(v):.2f}</b>")
-        text = "📋 <b>সব ইউজারের ব্যালেন্স</b>\n━━━━━━━━━━━━━━━━\n" + "\n".join(lines[:50])
+        text = "📋 <b>All User Balances</b>\n━━━━━━━━━━━━━━━━\n" + "\n".join(lines[:50])
         if len(lines) > 50:
-            text += f"\n…এবং আরও {len(lines)-50} জন"
+            text += f"\n…and {len(lines)-50} more"
         bot.send_message(message.chat.id, text, parse_mode="HTML")
 
-    elif txt in ("➕ ম্যানুয়াল ব্যালেন্স অ্যাড", "➖ ম্যানুয়াল ব্যালেন্স কাটো"):
-        action = "add" if "অ্যাড" in txt else "deduct"
+    elif txt in ("➕ Add Balance Manually", "➖ Deduct Balance Manually"):
+        action = "add" if "add" in txt.lower() else "deduct"
         msg = bot.send_message(
             message.chat.id,
-            f"👤 কোন ইউজারের ব্যালেন্স {'<b>যোগ</b>' if action=='add' else '<b>কাটা</b>'} করবে?\n\n"
-            f"ইউজারের <b>Telegram ID</b> লিখুন (যেমন: <code>123456789</code>):",
+            f"👤 Which user's balance do you want to {'<b>add</b>' if action=='add' else '<b>deduct</b>'}?\n\n"
+            f"Enter the user's <b>Telegram ID</b> (Example: <code>123456789</code>):",
             parse_mode="HTML",
             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟"),
         )
         _payment_admin_state[uid] = f"manual_uid:{action}"
         bot.register_next_step_handler(msg, _payment_admin_input)
 
-    elif txt.startswith("⏳ পেন্ডিং উইথড্র"):
+    elif txt.startswith("⏳ Pending Withdraw"):
         _show_pending_withdraws(message)
 
 
@@ -10391,7 +10413,7 @@ def _payment_admin_input(message):
             if val < 0:
                 raise ValueError
         except ValueError:
-            msg = bot.send_message(message.chat.id, "❌ ভুল! একটি ধনাত্মক সংখ্যা দিন:")
+            msg = bot.send_message(message.chat.id, "❌ Invalid! Enter a positive number:")
             _payment_admin_state[uid] = "set_reward"
             bot.register_next_step_handler(msg, _payment_admin_input)
             return
@@ -10400,13 +10422,13 @@ def _payment_admin_input(message):
         _save_reward_settings()
         cur = get_currency()
         bot.send_message(message.chat.id,
-            f"✅ প্রতি OTP রিওয়ার্ড সেট হয়েছে: <code>{cur}{val:.2f}</code>",
+            f"✅ Per OTP reward set: <code>{cur}{val:.2f}</code>",
             parse_mode="HTML", reply_markup=types.ReplyKeyboardRemove())
         _show_payment_admin(message)
 
     elif mode == "set_currency":
         if not txt:
-            msg = bot.send_message(message.chat.id, "❌ কারেন্সি সিম্বল দিন:")
+            msg = bot.send_message(message.chat.id, "❌ Enter a currency symbol:")
             _payment_admin_state[uid] = "set_currency"
             bot.register_next_step_handler(msg, _payment_admin_input)
             return
@@ -10414,7 +10436,7 @@ def _payment_admin_input(message):
             _reward_settings["currency"] = txt
         _save_reward_settings()
         bot.send_message(message.chat.id,
-            f"✅ কারেন্সি সেট হয়েছে: <code>{txt}</code>",
+            f"✅ Currency set: <code>{txt}</code>",
             parse_mode="HTML", reply_markup=types.ReplyKeyboardRemove())
         _show_payment_admin(message)
 
@@ -10424,7 +10446,7 @@ def _payment_admin_input(message):
             if val < 0:
                 raise ValueError
         except ValueError:
-            msg = bot.send_message(message.chat.id, "❌ ভুল! একটি ধনাত্মক সংখ্যা দিন:")
+            msg = bot.send_message(message.chat.id, "❌ Invalid! Enter a positive number:")
             _payment_admin_state[uid] = "set_min_withdraw"
             bot.register_next_step_handler(msg, _payment_admin_input)
             return
@@ -10433,7 +10455,7 @@ def _payment_admin_input(message):
         _save_reward_settings()
         cur = get_currency()
         bot.send_message(message.chat.id,
-            f"✅ মিনিমাম উইথড্র সেট হয়েছে: <code>{cur}{val:.2f}</code>",
+            f"✅ Minimum withdraw set: <code>{cur}{val:.2f}</code>",
             parse_mode="HTML", reply_markup=types.ReplyKeyboardRemove())
         _show_payment_admin(message)
 
@@ -10444,7 +10466,7 @@ def _payment_admin_input(message):
         except ValueError:
             msg = bot.send_message(
                 message.chat.id,
-                "❌ ভুল ID! শুধু সংখ্যা দিন (যেমন: <code>123456789</code>):",
+                "❌ Invalid ID! Numbers only (e.g. <code>123456789</code>):",
                 parse_mode="HTML",
             )
             _payment_admin_state[uid] = f"manual_uid:{action}"
@@ -10452,13 +10474,13 @@ def _payment_admin_input(message):
             return
         cur = get_currency()
         cur_bal = get_balance(target_uid)
-        action_word = "যোগ" if action == "add" else "কাটা"
+        action_word = "add" if action == "add" else "deduct"
         msg = bot.send_message(
             message.chat.id,
             f"👤 UID: <code>{target_uid}</code>\n"
-            f"💰 বর্তমান ব্যালেন্স: <code>{cur}{cur_bal:.2f}</code>\n\n"
-            f"কত টাকা <b>{action_word}</b> করবে? (সংখ্যা লিখুন)\n"
-            f"যেমন: <code>50</code>",
+            f"💰 Current Balance: <code>{cur}{cur_bal:.2f}</code>\n\n"
+            f"How much do you want to <b>{action_word}</b>? (enter a number)\n"
+            f"Example: <code>50</code>",
             parse_mode="HTML",
         )
         _payment_admin_state[uid] = f"manual_amount:{action}:{target_uid}"
@@ -10475,7 +10497,7 @@ def _payment_admin_input(message):
         except ValueError:
             msg = bot.send_message(
                 message.chat.id,
-                "❌ ভুল! একটি ধনাত্মক সংখ্যা দিন:",
+                "❌ Invalid! Enter a positive number:",
                 parse_mode="HTML",
             )
             _payment_admin_state[uid] = f"manual_amount:{action}:{target_uid}"
@@ -10484,37 +10506,37 @@ def _payment_admin_input(message):
         cur = get_currency()
         if action == "add":
             new_bal = add_reward(target_uid, amount)
-            action_label = "যোগ হয়েছে ✅"
+            action_label = "Added ✅"
             sign = "+"
         else:
             ok, new_bal = deduct_balance(target_uid, amount)
             if not ok:
                 bot.send_message(
                     message.chat.id,
-                    f"❌ ব্যালেন্স কম! UID <code>{target_uid}</code>-এর ব্যালেন্স পর্যাপ্ত নয়।",
+                    f"❌ Insufficient balance! UID <code>{target_uid}</code>'s balance is insufficient.",
                     parse_mode="HTML",
                 )
                 _show_payment_admin(message)
                 return
-            action_label = "কাটা হয়েছে ✅"
+            action_label = "Deducted ✅"
             sign = "-"
         bot.send_message(
             message.chat.id,
-            f"✅ <b>ব্যালেন্স আপডেট সফল!</b>\n\n"
+            f"✅ <b>Balance Updated Successfully!</b>\n\n"
             f"👤 UID: <code>{target_uid}</code>\n"
-            f"💸 পরিমাণ: <b>{sign}{cur}{amount:.2f}</b> {action_label}\n"
-            f"💰 নতুন ব্যালেন্স: <code>{cur}{new_bal:.2f}</code>",
+            f"💸 Amount: <b>{sign}{cur}{amount:.2f}</b> {action_label}\n"
+            f"💰 New Balance: <code>{cur}{new_bal:.2f}</code>",
             parse_mode="HTML",
             reply_markup=types.ReplyKeyboardRemove(),
         )
         # Notify the user
         try:
-            action_msg = "যোগ করা হয়েছে" if action == "add" else "কাটা হয়েছে"
+            action_msg = "credited" if action == "add" else "debited"
             bot.send_message(
                 target_uid,
-                f"💰 <b>ব্যালেন্স আপডেট!</b>\n\n"
-                f"আপনার অ্যাকাউন্টে <b>{sign}{cur}{amount:.2f}</b> {action_msg}।\n"
-                f"নতুন ব্যালেন্স: <code>{cur}{new_bal:.2f}</code>",
+                f"💰 <b>Balance Updated!</b>\n\n"
+                f"Your account has been <b>{sign}{cur}{amount:.2f}</b> {action_msg}।\n"
+                f"New Balance: <code>{cur}{new_bal:.2f}</code>",
                 parse_mode="HTML",
             )
         except Exception:
@@ -10530,25 +10552,25 @@ def _show_pending_withdraws(message):
     with _withdraw_lock:
         pending = [r for r in _withdraw_requests if r["status"] == "pending"]
     if not pending:
-        bot.send_message(message.chat.id, "✅ কোনো পেন্ডিং উইথড্র নেই।", parse_mode="HTML")
+        bot.send_message(message.chat.id, "✅ No pending withdrawals.", parse_mode="HTML")
         return
     for req in pending[:10]:
         markup = types.InlineKeyboardMarkup()
         markup.add(
-            types.InlineKeyboardButton("✅ অনুমোদন", callback_data=f"wd_approve:{req['id']}"),
-            types.InlineKeyboardButton("❌ রিজেক্ট",  callback_data=f"wd_reject:{req['id']}"),
+            types.InlineKeyboardButton("✅ Approve", callback_data=f"wd_approve:{req['id']}"),
+            types.InlineKeyboardButton("❌ Reject",  callback_data=f"wd_reject:{req['id']}"),
         )
         import datetime as _dt
         ts = req.get("timestamp", 0)
         dt_str = _dt.datetime.fromtimestamp(ts).strftime("%d/%m/%Y %H:%M") if ts else "?"
         bot.send_message(
             message.chat.id,
-            f"⏳ <b>উইথড্র রিকোয়েস্ট</b>\n\n"
+            f"⏳ <b>Withdraw Request</b>\n\n"
             f"👤 UID: <code>{req['uid']}</code>\n"
-            f"💵 পরিমাণ: <code>{cur}{req['amount']:.2f}</code>\n"
-            f"📲 মেথড: <b>{req['method']}</b>\n"
-            f"📋 অ্যাকাউন্ট: <code>{req['account']}</code>\n"
-            f"🕐 সময়: {dt_str}\n"
+            f"💵 Amount: <code>{cur}{req['amount']:.2f}</code>\n"
+            f"📲 Method: <b>{req['method']}</b>\n"
+            f"📋 Account: <code>{req['account']}</code>\n"
+            f"🕐 Time: {dt_str}\n"
             f"🔑 ID: <code>{req['id']}</code>",
             parse_mode="HTML",
             reply_markup=markup,
@@ -10613,13 +10635,13 @@ def _cc_addrange_step(message):
     if not prefix:
         bot.send_message(
             message.chat.id,
-            "❌ Invalid! শুধু সংখ্যা দাও (যেমন: <code>880</code>, <code>91</code>)। আবার চেষ্টা করো।",
+            "❌ Invalid! Numbers only (e.g. <code>880</code>, <code>91</code>). Try again.",
             parse_mode="HTML"
         )
         _cc_addrange_state[uid] = sid
         msg2 = bot.send_message(
             message.chat.id,
-            f"📲 <b>{sid}</b> এর range prefix লিখো:",
+            f"📲 Enter range prefix for <b>{sid}</b>:",
             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("❌ Cancel"),
             parse_mode="HTML"
         )
@@ -10632,7 +10654,7 @@ def _cc_addrange_step(message):
     c_name, flag = get_country_details(prefix)
     bot.send_message(
         message.chat.id,
-        f"✅ <b>{_v2_svc_emoji(sid)} {sid}</b> এ <b>{_resolve_flag(flag)} {c_name} ({prefix})</b> যোগ হয়েছে!",
+        f"✅ Added <b>{_resolve_flag(flag)} {c_name} ({prefix})</b> to <b>{_v2_svc_emoji(sid)} {sid}</b>!",
         reply_markup=types.ReplyKeyboardRemove(),
         parse_mode="HTML"
     )
@@ -10664,7 +10686,7 @@ def _show_edit_messages_menu(message, note=""):
     lines = [
         "✏️ <b>Message Edit</b>\n"
         "━━━━━━━━━━━━━━━━\n"
-        "<i>মেসেজ টেক্সট এডিট বা custom emoji icon সেট করো:</i>"
+        "<i>Edit message text or set custom emoji icons:</i>"
     ]
 
     seen_slots: set = set()
@@ -10689,7 +10711,7 @@ def _show_edit_messages_menu(message, note=""):
                 types.InlineKeyboardButton("🔄 Reset", callback_data=f"msgicon_reset:{slot_key}"),
             )
 
-    markup.add(types.InlineKeyboardButton("🔄 সব Default এ Reset করো", callback_data="editmsg_reset_all", style="success"))
+    markup.add(types.InlineKeyboardButton("🔄 Reset All to Default", callback_data="editmsg_reset_all", style="success"))
     text = "\n".join(lines)
     if note:
         text += f"\n\n✅ <i>{note}</i>"
@@ -10717,10 +10739,10 @@ def _ask_new_template(call, key):
         msg = bot.send_message(
             call.message.chat.id,
             f"✏️ <b>{label}</b>\n\n"
-            f"📌 <b>ব্যবহারযোগ্য ভেরিয়েবল:</b>\n<code>{vars_hint}</code>\n\n"
-            f"📄 <b>বর্তমান ফরমেট:</b>\n<code>{current_escaped}</code>\n\n"
-            f"⬇️ <b>নতুন ফরমেট লিখো:</b>\n"
-            f"<i>(HTML ট্যাগ সাপোর্টেড: &lt;b&gt;, &lt;i&gt;, &lt;code&gt;, &lt;blockquote&gt; — এবং সরাসরি custom emoji পাঠালেও কাজ করবে!)</i>",
+            f"📌 <b>Available variables:</b>\n<code>{vars_hint}</code>\n\n"
+            f"📄 <b>Current format:</b>\n<code>{current_escaped}</code>\n\n"
+            f"⬇️ <b>Enter new format:</b>\n"
+            f"<i>(HTML tags supported: &lt;b&gt;, &lt;i&gt;, &lt;code&gt;, &lt;blockquote&gt; — sending a custom emoji directly also works to customize!)</i>",
             reply_markup=_back_admin_kb(),
             parse_mode="HTML",
         )
@@ -10729,7 +10751,7 @@ def _ask_new_template(call, key):
         try:
             msg = bot.send_message(
                 call.message.chat.id,
-                f"✏️ {label}\n\n⬇️ নতুন ফরমেট লিখো:",
+                f"✏️ {label}\n\n⬇️ Enter new format:",
                 reply_markup=_back_admin_kb(),
             )
         except Exception:
@@ -10809,7 +10831,7 @@ def _save_new_template(message):
         if not new_text.strip():
             msg = bot.send_message(
                 message.chat.id,
-                "❌ খালি রাখা যাবে না। আবার লিখো:",
+                "❌ Cannot be empty. Enter again:",
                 reply_markup=_back_admin_kb(),
             )
             _edit_template_state[uid] = state
@@ -10833,11 +10855,11 @@ def _save_new_template(message):
         except (ValueError, IndexError) as fmt_err:
             msg = bot.send_message(
                 message.chat.id,
-                f"❌ <b>টেমপ্লেট ভুল আছে!</b>\n\n"
+                f"❌ <b>Template has an error!</b>\n\n"
                 f"🔴 <b>Error:</b> <code>{fmt_err}</code>\n\n"
-                f"⚠️ <b>সমস্যা:</b> ভুল <code>{{</code> <code>}}</code> ব্যবহার।\n\n"
-                f"💡 সাধারণ বন্ধনী দরকার হলে double করো: <code>{{{{</code> এবং <code>}}}}</code>\n\n"
-                f"আবার লিখো:",
+                f"⚠️ <b>Issue:</b> Wrong use of <code>{{</code> <code>}}</code>.\n\n"
+                f"💡 If you need literal braces, double them: <code>{{{{</code> and <code>}}}}</code>\n\n"
+                f"Enter again:",
                 reply_markup=_back_admin_kb(),
                 parse_mode="HTML",
             )
@@ -10852,16 +10874,16 @@ def _save_new_template(message):
         _admin_panel_last.pop(message.chat.id, None)
         _go_admin_panel(
             message,
-            f"✅🔥 <b>মেসেজ আপডেট হয়েছে!</b>\n\n"
+            f"✅🔥 <b>Message updated!</b>\n\n"
             f"✏️ <b>{label}</b>\n\n"
-            f"📄 নতুন ফরমেট সেভ হয়েছে।",
+            f"📄 New format saved.",
         )
     except Exception as e:
         print(f"[TEMPLATE-SAVE] ❌ Error for uid={uid}: {e}")
         try:
             bot.send_message(
                 message.chat.id,
-                f"❌ <b>কিছু একটা সমস্যা হয়েছে!</b>\n<code>{e}</code>\n\nআবার চেষ্টা করো।",
+                f"❌ <b>Something went wrong!</b>\n<code>{e}</code>\n\nPlease try again.",
                 reply_markup=_back_admin_kb(),
                 parse_mode="HTML",
             )
@@ -11003,7 +11025,7 @@ def finalize_auto_add(message, svc, slot_name=None):
         message.chat.id,
         f"✅🔥 <b>DONE!</b>\n\n"
         f"🗂 <b>Slot:</b> {slot_name or 'Auto'}\n"
-        f"📱 <b>Added:</b> {added_count} টি number",
+        f"📱 <b>Added:</b> {added_count} number(s)",
         reply_markup=markup,
         parse_mode="HTML",
     )
