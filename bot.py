@@ -12,7 +12,7 @@ import phonenumbers
 import random
 import csv
 import io
-import tempfilegvbjkkklvcxx
+import tempfile
 import openpyxl
 import xlrd
 from bs4 import BeautifulSoup
@@ -104,7 +104,7 @@ _BUILTIN_PANELS = [
     {'id': 'bp2', 'host': '139.99.9.4', 'base_url': 'http://139.99.9.4/ints', 'url_hint': 'http://139.99.9.4/ints/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi12', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp3', 'host': '54.36.173.235', 'base_url': 'http://54.36.173.235/ints', 'url_hint': 'http://54.36.173.235/ints/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi@', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp4', 'host': '54.39.104.241', 'base_url': 'http://54.39.104.241/ints', 'url_hint': 'http://54.39.104.241/ints/agent/SMSCDRStats', 'username': 'Rabbi5', 'password': 'Rabbi5', 'engine': 'ints_smsranges', 'data_path': '/agent/res/data_smsranges.php', 'admin_id': None},
-    {'id': 'bp5', 'host': '213.32.24.208', 'base_url': 'http://213.32.24.208/ints', 'url_hint': 'http://213.32.24.208/ints/agent/SMSCDRStats', 'username': 'mahofuza', 'password': 'mahofuza@', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
+    {'id': 'bp5', 'host': '213.32.24.208', 'base_url': 'http://213.32.24.208/ints', 'url_hint': 'http://213.32.24.208/ints/agent/SMSCDRStats', 'username': 'mahofuza', 'password': 'mahofuza@', 'engine': 'ints_smsranges', 'data_path': '/agent/res/data_smsranges.php', 'admin_id': None},
     {'id': 'bp6', 'host': '15.235.182.3', 'base_url': 'http://15.235.182.3/konekta', 'url_hint': 'http://15.235.182.3/konekta/agent/SMSCDRReports', 'username': 'Rabbi200', 'password': 'Rabbi200', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp7', 'host': 'nexor-iprn.com', 'base_url': 'https://nexor-iprn.com', 'url_hint': 'https://nexor-iprn.com/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi12@', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp8', 'host': '51.77.52.79', 'base_url': 'http://51.77.52.79/ints', 'url_hint': 'http://51.77.52.79/ints/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi12', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
@@ -311,7 +311,7 @@ _group_settings = load_json(GROUP_SETTINGS_FILE, {
     'group_otp_send': True,
     'group_tag': 'PB',
     'numbers_per_batch': 2,
-    'v2_active_panel': 'fastx',
+    'v2_active_panel': 'stex',
     'v3_enabled': False,
     'extra_groups': [{'id': -1002414484554, 'bot_link': 'https://t.me/pbpremium_otp_bot', 'channel_link': 'https://t.me/gjifch743'}, {'id': -1003738666960, 'bot_link': 'https://t.me/pbpremium_otp_bot', 'channel_link': 'https://t.me/+JsT0epbhAY8zNDY1'}],
     'v2_user_mode': True,
@@ -456,7 +456,7 @@ _DEFAULT_TEMPLATES = {
     'start': '<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <b>WELCOME TO NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji>\n\n╔════════════════════════════╗\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>USER DASHBOARD</b>\n╠════════════════════════════╣\n<tg-emoji emoji-id="5202216593966244027">👤</tg-emoji> <b>User:</b> {uname}\n<tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>User ID:</b> <code>{uid}</code>\n<tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Account Status:</b> <tg-emoji emoji-id="5316919747214854314">💎</tg-emoji> Premium\n╚════════════════════════════╝\n\n╔══════════════════╗\n<tg-emoji emoji-id="5458603043203327669">⚠️</tg-emoji> <b>IMPORTANT NOTICE</b>\n\nPlease JOIN our channel below,\nthen click VERIFY to continue <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>\n╚══════════════════╝\n\n<tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji> <b>Fast • Secure • Premium Service</b> <tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji>\n\n<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <i>Powered by</i>\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>',
     'verify_success': '<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>VERIFICATION COMPLETE!</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>\n\n╔══════════════════════╗\n   <tg-emoji emoji-id="5206607081334906820">✅</tg-emoji> <b>ACCESS GRANTED</b>\n╠══════════════════════╣\n  <tg-emoji emoji-id="5352899869369446268">👋</tg-emoji> <b>Welcome, {vname}!</b>\n  <tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>ID:</b> <code>{uid}</code>\n  <tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Status:</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> Premium\n╚══════════════════════╝\n\n<tg-emoji emoji-id="5420323339723881652">✅</tg-emoji> <b>YOU CAN GET NUMBER NOW!</b> <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>',
     'otp_group': '━━━━━━━━━━━━━━━━\n<blockquote>{svc_emoji} <b>{svc}</b> {flag} {tagged_number} {flag}</blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_key} KEY : <b>{otp}</b></blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_world} Country: {country} {flag}</blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_sms} MESSAGE\n{sms}</blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote><tg-emoji emoji-id="5461117441612462242">💬</tg-emoji> Thanks for using <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji></blockquote>\n━━━━━━━━━━━━━━━━',
-    'otp_dm': '{flag} {emoji_number_pre}{number} {svc_emoji}{svc}\n{emoji_country_pre}{country}{emoji_country_post}',
+    'otp_dm': '{flag} {number} {svc_emoji} {svc}\n{emoji_country_pre} COUNTRY:{country}{flag}',
     'otp_dm_v2': '{emoji_number_pre}{number} {svc_emoji}{svc}\n{emoji_country_pre}{country}{emoji_country_post}',
     'number_assigned': '✅ <b>Number Assigned Successfully !</b>\n\n🔧 <b>Platform :</b> {svc}\n🌍 <b>Country :</b> {flag} {country}\n\n📞 <b>Number :</b> <code>{number}</code>\n\n⏱ <b>Auto code fetch :</b> 10:00s',
     'broadcast': '🔥 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧!</b> 🔥\n━━━━━━━━━━━━━━━━\n\n📢 {text} 📢\n\n━━━━━━━━━━━━━━━━\n🤖🔥 <i>𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>  🔥🤖',
@@ -7834,18 +7834,26 @@ def _parse_spreadsheet(data: bytes, filename: str):
     elif ext == "xlsx":
         wb = openpyxl.load_workbook(io.BytesIO(data), read_only=True, data_only=True)
         ws = wb.active
+        def _xlsx_cell_str(c):
+            if isinstance(c, float) and c.is_integer():
+                return str(int(c))
+            return str(c)
         for row in ws.iter_rows(values_only=True):
-            cleaned = [str(c).strip() for c in row if c is not None and str(c).strip()]
+            cleaned = [_xlsx_cell_str(c).strip() for c in row if c is not None and _xlsx_cell_str(c).strip()]
             if cleaned:
                 raw_rows.append(cleaned)
     elif ext == "xls":
         wb = xlrd.open_workbook(file_contents=data)
         ws = wb.sheet_by_index(0)
+        def _xls_cell_str(cv):
+            if isinstance(cv, float) and cv.is_integer():
+                return str(int(cv))
+            return str(cv)
         for ri in range(ws.nrows):
             cleaned = [
-                str(ws.cell_value(ri, ci)).strip()
+                _xls_cell_str(ws.cell_value(ri, ci)).strip()
                 for ci in range(ws.ncols)
-                if str(ws.cell_value(ri, ci)).strip()
+                if _xls_cell_str(ws.cell_value(ri, ci)).strip()
             ]
             if cleaned:
                 raw_rows.append(cleaned)
@@ -8448,13 +8456,17 @@ def text_handler(message):
             else:
                 _sup_url = f"https://t.me/{_sup_id}"
             markup.add(types.InlineKeyboardButton(
-                "⚠️ SUPPORT TEAM ⚠️",
-                url=_sup_url
+                "SUPPORT TEAM",
+                url=_sup_url,
+                style="danger",
+                icon_custom_emoji_id="5202216593966244027"
             ))
         else:
             markup.add(types.InlineKeyboardButton(
-                "⚠️ SUPPORT TEAM ⚠️",
-                url="https://t.me/Tom_9805"
+                "SUPPORT TEAM",
+                url="https://t.me/Tom_9805",
+                style="danger",
+                icon_custom_emoji_id="5202216593966244027"
             ))
         bot.send_message(
             message.chat.id,
@@ -11213,29 +11225,64 @@ def _go_admin_panel(message, text="🔥 <b>ADMIN PANEL</b>"):
         if now - _admin_panel_last.get(chat_id, 0) < 2.0:
             return
         _admin_panel_last[chat_id] = now
-    m_admin = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    m_admin.add("➕ 𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱", "📥 𝗖𝗦𝗩 𝗔𝗱𝗱")
-    m_admin.add("🗑️ 𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿")
-    m_admin.add("🔥📢 𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁", "⚡👥 𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁")
-    m_admin.add("📋👥 𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁", "📈 𝗢𝗧𝗣 𝗦𝘁𝗮𝘁𝘀")
-    m_admin.add("🎭 𝗗𝗘𝗠𝗢 𝗢𝗧𝗣")
-    m_admin.add("➕ 𝗔𝗱𝗱 𝗣𝗮𝗻𝗲𝗹", "🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗣𝗮𝗻𝗲𝗹")
-    m_admin.add("➕ 𝗔𝗱𝗱 𝗦𝗲𝗿𝘃𝗶𝗰𝗲", "🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗦𝗲𝗿𝘃𝗶𝗰𝗲")
-    m_admin.add("📊 𝗣𝗮𝗻𝗲𝗹𝘀", "🔍 𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲𝗹")
-    m_admin.add("📤 𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗚𝗿𝘂𝗽𝗲 𝗦𝗲𝗻𝗱", "🛑 𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗕𝗼𝗻𝗱𝗵𝗼")
+    m_admin = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    KB = types.KeyboardButton
+    m_admin.add(
+        KB("➕ 𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱",          style="success"),
+        KB("🗑️ 𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿",             style="danger"),
+    )
+    m_admin.add(
+        KB("🔥📢 𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁",           style="primary"),
+        KB("⚡👥 𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁",          style="primary"),
+    )
+    m_admin.add(
+        KB("📋👥 𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁",            style="primary"),
+        KB("📈 𝗢𝗧𝗣 𝗦𝘁𝗮𝘁𝘀",             style="primary"),
+    )
+    m_admin.add(
+        KB("🎭 𝗗𝗘𝗠𝗢 𝗢𝗧𝗣",              style="primary"),
+        KB("➕ 𝗔𝗱𝗱 𝗣𝗮𝗻𝗲𝗹",             style="success"),
+    )
+    m_admin.add(
+        KB("🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗣𝗮𝗻𝗲𝗹",         style="danger"),
+        KB("➕ 𝗔𝗱𝗱 𝗦𝗲𝗿𝘃𝗶𝗰𝗲",           style="success"),
+    )
+    m_admin.add(
+        KB("🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗦𝗲𝗿𝘃𝗶𝗰𝗲",       style="danger"),
+        KB("📊 𝗣𝗮𝗻𝗲𝗹𝘀",                style="primary"),
+    )
+    m_admin.add(
+        KB("🔍 𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲𝗹",            style="primary"),
+        KB("📤 𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗚𝗿𝘂𝗽𝗲 𝗦𝗲𝗻𝗱", style="success"),
+    )
+    m_admin.add(
+        KB("🛑 𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗕𝗼𝗻𝗱𝗵𝗼",    style="danger"),
+        KB("⚙️ 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀",             style="primary"),
+    )
     if is_super_admin(uid):
-        m_admin.add("👑 𝗔𝗱𝗱 𝗔𝗱𝗺𝗶𝗻", "🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗔𝗱𝗺𝗶𝗻")
-        m_admin.add("📞 𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗜𝗗")
-    m_admin.add("⚙️ 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀")
-    m_admin.add("✏️ 𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀")
-    m_admin.add("📡 𝗩𝟮 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗙𝗼𝗿𝗺𝗮𝘁")
-    m_admin.add("🔀 𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁")
-    m_admin.add("🎛️ 𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴")
-    m_admin.add("📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀")
-    m_admin.add("🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶")
-    m_admin.add("🔑 𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲")
-    m_admin.add("💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀")
-    m_admin.add("⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂")
+        m_admin.add(
+            KB("👑 𝗔𝗱𝗱 𝗔𝗱𝗺𝗶𝗻",         style="success"),
+            KB("🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗔𝗱𝗺𝗶𝗻",     style="danger"),
+        )
+        m_admin.add(
+            KB("📞 𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗜𝗗",        style="primary"),
+        )
+    m_admin.add(
+        KB("✏️ 𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀",        style="primary"),
+        KB("🔀 𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁",       style="primary"),
+    )
+    m_admin.add(
+        KB("🎛️ 𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴", style="primary"),
+        KB("📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀",         style="primary"),
+    )
+    m_admin.add(
+        KB("🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶",         style="primary"),
+        KB("🔑 𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲",       style="primary"),
+    )
+    m_admin.add(
+        KB("💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀",    style="primary"),
+        KB("⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂",          style="danger"),
+    )
     bot.send_message(
         message.chat.id,
         text,
@@ -11929,4 +11976,3 @@ while True:
         else:
             print(f"[POLLING] Error: {e} — restarting in 5s...")
             time.sleep(5)
-ggbbb
