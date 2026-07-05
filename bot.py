@@ -26,7 +26,7 @@ if os.path.exists(_PID_FILE):
             try:
                 os.kill(_old_pid, 9)
                 time.sleep(5)
-                print(f"[START] Killed old instance PID {_old_pid}")
+                print(f"[START] Killed old instance PID {_old_pid}")vvbbnnnn
             except ProcessLookupError:
                 pass
     except Exception:
