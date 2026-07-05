@@ -3,6 +3,7 @@ from telebot import types
 import json
 import os
 import re
+import emoji as _emoji_lib
 import time
 import threading
 import datetime
@@ -26,7 +27,7 @@ if os.path.exists(_PID_FILE):
             try:
                 os.kill(_old_pid, 9)
                 time.sleep(5)
-                print(f"[START] Killed old instance PID {_old_pid}")vvbbnnnn
+                print(f"[START] Killed old instance PID {_old_pid}")
             except ProcessLookupError:
                 pass
     except Exception:
@@ -313,7 +314,8 @@ _group_settings = load_json(GROUP_SETTINGS_FILE, {
     'v2_active_panel': 'fastx',
     'v3_enabled': False,
     'extra_groups': [{'id': -1002414484554, 'bot_link': 'https://t.me/pbpremium_otp_bot', 'channel_link': 'https://t.me/gjifch743'}, {'id': -1003738666960, 'bot_link': 'https://t.me/pbpremium_otp_bot', 'channel_link': 'https://t.me/+JsT0epbhAY8zNDY1'}],
-    'v2_user_mode': False,
+    'v2_user_mode': True,
+    'fastx_api_key': 'MURAD_88F18AB46B13F781BD52C4E1',
 })
 # <<SYNC:_group_settings_defaults:END>>
 
@@ -324,6 +326,23 @@ OTP_GROUP_ID = _group_settings["otp_group_id"]
 def save_group_settings():
     save_json(GROUP_SETTINGS_FILE, _group_settings)
     _sync_settings_to_botpy()
+
+
+def _apply_saved_api_keys():
+    """Override global API keys from saved group_settings (if admin changed them)."""
+    global FASTX_API_KEY, STEX_API_KEY, V3_API_KEY
+    if _group_settings.get("fastx_api_key"):
+        FASTX_API_KEY = _group_settings["fastx_api_key"]
+    if _group_settings.get("stex_api_key"):
+        STEX_API_KEY = _group_settings["stex_api_key"]
+        for p in _V2_PANELS_REGISTRY:
+            if p["id"] == "stex":
+                p["api_key"] = STEX_API_KEY
+    if _group_settings.get("voltex_api_key"):
+        V3_API_KEY = _group_settings["voltex_api_key"]
+        for p in _V2_PANELS_REGISTRY:
+            if p["id"] == "voltex":
+                p["api_key"] = V3_API_KEY
 
 
 def get_otp_group_id():
@@ -1365,6 +1384,7 @@ _addpanel_state = {}
 _testpanel_state = {}
 _pending_force_add = {}   # panel_id → panel dict (login failed, user wants force-add)
 _pending_excel = {}  # uid → {'numbers': [...], 'filename': str}
+_awaiting_slot_excel = set()  # UIDs currently in finalize_auto_add Excel-wait state
 
 # Migrate old panels that use panel_type → new engine/data_path format
 def _migrate_dynamic_panels():
@@ -2172,6 +2192,8 @@ _V2_PANELS_REGISTRY = [
     {"id": "voltex", "name": "Voltex SMS", "base_url": V3_BASE_URL,   "api_key": V3_API_KEY},
 ]
 
+# Apply any admin-overridden API keys saved in group_settings
+_apply_saved_api_keys()
 
 # Keywords to detect synthetic services from OTP message content
 _FASTX_MSG_SERVICE_KEYWORDS = {
@@ -2783,16 +2805,61 @@ threading.Thread(target=_v2_panel_monitor, daemon=True).start()
 
 
 def _v2_svc_emoji(sid):
-    m = {
-        "INSTAGRAM": '<tg-emoji emoji-id="5319160079465857105">📸</tg-emoji>',
-        "FACEBOOK":  '<tg-emoji emoji-id="5323261730283863478">🔵</tg-emoji>',
-        "TELEGRAM":  '<tg-emoji emoji-id="5330237710655306682">✈️</tg-emoji>',
-        "WHATSAPP":  '<tg-emoji emoji-id="5334998226636390258">💚</tg-emoji>',
-        "TIKTOK":    '<tg-emoji emoji-id="5327982530702359565">🎵</tg-emoji>',
-        "TWITTER": "🐦", "BINANCE": "🟡", "SNAPCHAT": "👻",
-        "GOOGLE": "🔴", "YOUTUBE": "📺", "LINKEDIN": "💼", "AMAZON": "🛒",
+    _defaults = {
+        "INSTAGRAM": ("5319160079465857105", "📸"),
+        "FACEBOOK":  ("5323261730283863478", "🔵"),
+        "TELEGRAM":  ("5330237710655306682", "✈️"),
+        "WHATSAPP":  ("5334998226636390258", "💚"),
+        "TIKTOK":    ("5327982530702359565", "🎵"),
+        "TWITTER":   (None, "🐦"),
+        "BINANCE":   (None, "🟡"),
+        "SNAPCHAT":  (None, "👻"),
+        "GOOGLE":    (None, "🔴"),
+        "YOUTUBE":   (None, "📺"),
+        "LINKEDIN":  (None, "💼"),
+        "AMAZON":    (None, "🛒"),
     }
-    return m.get((sid or "").upper(), "📱")
+    key = (sid or "").upper()
+    # Check custom override first
+    with _custom_emoji_lock:
+        custom_id = _custom_emojis.get("services", {}).get(key)
+    if custom_id:
+        fb = _defaults.get(key, (None, "📱"))[1]
+        return f'<tg-emoji emoji-id="{custom_id}">{fb}</tg-emoji>'
+    # Fall back to hardcoded defaults
+    default_id, fb = _defaults.get(key, (None, "📱"))
+    if default_id:
+        return f'<tg-emoji emoji-id="{default_id}">{fb}</tg-emoji>'
+    return fb
+
+
+_EMOJI_RE = re.compile(
+    "["
+    "\U0001F600-\U0001F64F"
+    "\U0001F300-\U0001F5FF"
+    "\U0001F680-\U0001F6FF"
+    "\U0001F700-\U0001F77F"
+    "\U0001F780-\U0001F7FF"
+    "\U0001F800-\U0001F8FF"
+    "\U0001F900-\U0001F9FF"
+    "\U0001FA00-\U0001FA6F"
+    "\U0001FA70-\U0001FAFF"
+    "\U00002702-\U000027B0"
+    "\U000024C2-\U0001F251"
+    "\u2600-\u26FF"
+    "\u2700-\u27BF"
+    "\u200d"
+    "\ufe0f"
+    "]+",
+    flags=re.UNICODE,
+)
+
+
+def _strip_emoji(text: str) -> str:
+    """Remove all Unicode emojis from a string using the emoji library + regex fallback."""
+    cleaned = _emoji_lib.replace_emoji(text, replace="")
+    cleaned = _EMOJI_RE.sub("", cleaned)
+    return " ".join(cleaned.split())
 
 
 def _svc_icon_emoji_id(sid):
@@ -3042,10 +3109,13 @@ def _v2_build_console_markup():
 
 
 def _v2_build_country_markup(sid):
-    """Build country buttons for a specific service — Step 2."""
+    """Build country buttons for a specific service — Step 2.
+    Shows both V2 live ranges AND V1 stock countries for the same service."""
     cfg = _console_config.get(sid, {})
     markup = types.InlineKeyboardMarkup(row_width=2)
     btns = []
+
+    # V2 live range buttons
     for prefix in cfg.get("ranges", []):
         c_name, flag = get_country_details(prefix)
         if c_name and c_name not in ("Unknown", ""):
@@ -3056,6 +3126,21 @@ def _v2_build_country_markup(sid):
             label, callback_data=f"v2csvc:{sid}:{prefix}", style="primary",
             **_flag_btn_kwargs(flag)
         ))
+
+    # V1 stock country buttons for the same service (manual/stock numbers)
+    svc_key = sid.lower()
+    svc_stock = dict(stock.get(svc_key, {}))
+    for cnt, nums in svc_stock.items():
+        if not nums:
+            continue
+        _, flag = get_country_details(nums[0])
+        btns.append(types.InlineKeyboardButton(
+            f"{cnt}",
+            callback_data=f"n:{svc_key}:{cnt}",
+            style="success",
+            **_flag_btn_kwargs(flag)
+        ))
+
     if btns:
         markup.add(*btns)
     markup.add(types.InlineKeyboardButton("⬅️ Back", callback_data="v2back", style="danger"))
@@ -4754,10 +4839,8 @@ def main_menu(user_id):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     _gn_text, _gn_icon = _btn_text_and_icon("get_number", "📲 𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥")
     markup.add(types.KeyboardButton(_gn_text, style="success", **_gn_icon))
-    if _group_settings.get("v3_enabled", True):
-        markup.add(types.KeyboardButton("🆕 𝗩𝟯 𝗣𝗔𝗡𝗘𝗟"))
     _sp_text, _sp_icon = _btn_text_and_icon("saport", "📞 𝗦𝗔𝗣𝗢𝗥𝗧")
-    _bl_text, _bl_icon = _btn_text_and_icon("balance", "💰 𝗕𝗮𝗹𝗮𝗻𝗰𝗲")
+    _bl_text, _bl_icon = _btn_text_and_icon("balance", "💰 ??𝗮𝗹𝗮𝗻𝗰𝗲")
     markup.add(types.KeyboardButton(_sp_text, style="danger", **_sp_icon),
                types.KeyboardButton(_bl_text, style="primary", **_bl_icon))
     _dv_text, _dv_icon = _btn_text_and_icon("developer", "👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼")
@@ -4801,7 +4884,7 @@ def _v1_build_service_markup():
 
     # First: services defined in _services (preserves ordering/labels)
     for svc_info in _services:
-        label = svc_info.get("label", "")
+        label = _strip_emoji(svc_info.get("label", ""))
         key   = svc_info.get("key", "")
         total = sum(len(v) for v in stock.get(key, {}).values())
         if not total:
@@ -4842,8 +4925,83 @@ def _v1_build_service_markup():
     return markup, bool(btns)
 
 
+def _build_combined_service_markup():
+    """Build combined V1 (stock) + V2 (live console) service buttons in one markup."""
+    _STYLES = ["success", "primary", "danger"]
+    btns = []
+    idx = 0
+    seen_keys = set()
+
+    # Collect enabled V2 service keys (lowercase) to suppress duplicate V1 buttons
+    _v2_enabled_keys = {
+        sid.lower() for sid in _CONSOLE_SVC_NAMES
+        if _console_config.get(sid, {}).get("enabled") and _console_config.get(sid, {}).get("ranges")
+    }
+
+    # V1 stock services (skip any that already have a V2 counterpart)
+    for svc_info in _services:
+        label = _strip_emoji(svc_info.get("label", ""))
+        key   = svc_info.get("key", "")
+        total = sum(len(v) for v in stock.get(key, {}).values())
+        seen_keys.add(key)
+        if not total:
+            continue
+        if key.lower() in _v2_enabled_keys:
+            continue  # V2 already covers this service (manual numbers merged there)
+        _icon_id = _svc_icon_emoji_id(key)
+        _btn_kwargs = {"icon_custom_emoji_id": _icon_id} if _icon_id else {}
+        btns.append(types.InlineKeyboardButton(
+            label,
+            callback_data=f"v1svc:{key}",
+            style=_STYLES[idx % len(_STYLES)],
+            **_btn_kwargs
+        ))
+        idx += 1
+
+    for key, country_map in stock.items():
+        if key in seen_keys:
+            continue
+        total = sum(len(v) for v in country_map.values())
+        if not total:
+            continue
+        if key.lower() in _v2_enabled_keys:
+            continue  # V2 already covers this service
+        label = key.title()
+        _icon_id = _svc_icon_emoji_id(key)
+        _btn_kwargs = {"icon_custom_emoji_id": _icon_id} if _icon_id else {}
+        btns.append(types.InlineKeyboardButton(
+            label,
+            callback_data=f"v1svc:{key}",
+            style=_STYLES[idx % len(_STYLES)],
+            **_btn_kwargs
+        ))
+        idx += 1
+
+    # V2 live console services
+    for sid in _CONSOLE_SVC_NAMES:
+        cfg = _console_config.get(sid, {})
+        if not cfg.get("enabled"):
+            continue
+        if not cfg.get("ranges"):
+            continue
+        _icon_id = _svc_icon_emoji_id(sid)
+        _btn_kwargs = {"icon_custom_emoji_id": _icon_id} if _icon_id else {}
+        btns.append(types.InlineKeyboardButton(
+            f"{sid}",
+            callback_data=f"v2svc_cc:{sid}",
+            style=_STYLES[idx % len(_STYLES)],
+            **_btn_kwargs
+        ))
+        idx += 1
+
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    for btn in btns:
+        markup.add(btn)
+    return markup, bool(btns)
+
+
 def show_services(message):
-    markup, has_btns = _v1_build_service_markup()
+    markup, has_btns = _build_combined_service_markup()
     if not has_btns:
         bot.send_message(
             message.chat.id,
@@ -5923,7 +6081,7 @@ def _svc_get_label(message):
         return
     if _intercept_menu_btn(message):
         return
-    label = (message.text or "").strip()
+    label = _strip_emoji((message.text or "").strip())
     if not label:
         msg = bot.send_message(message.chat.id, "❌ Label dao:", reply_markup=_back_admin_kb())
         bot.register_next_step_handler(msg, _svc_get_label)
@@ -6088,6 +6246,30 @@ def callback_handler(call):
                 )
             except Exception:
                 pass
+            return
+
+        # ── V2 Panel API Key change ───────────────────────────────────────────
+        if data.startswith("chgkey:"):
+            uid = call.from_user.id
+            if uid not in ADMIN_IDS:
+                bot.answer_callback_query(call.id, "❌ No permission!")
+                return
+            pid = data.split(":", 1)[1]   # fastx | stex | voltex
+            _PANEL_LABELS = {"fastx": "⚡ FastX SMS", "stex": "🌐 STEX SMS", "voltex": "🔮 Voltex SMS"}
+            label = _PANEL_LABELS.get(pid, pid.upper())
+            bot.answer_callback_query(call.id)
+            try:
+                bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
+            except Exception:
+                pass
+            msg = bot.send_message(
+                call.message.chat.id,
+                f"🔑 <b>{label} — Notun API Key dao:</b>\n\n"
+                f"<i>Shudhu API key text-e pathao (kono extra character ছাড়া)</i>",
+                reply_markup=_back_admin_kb(),
+                parse_mode="HTML",
+            )
+            bot.register_next_step_handler(msg, lambda m, p=pid: _chgkey_receive(m, p))
             return
 
         # ── API Key Panel type selection ──────────────────────────────────────
@@ -6269,7 +6451,7 @@ def callback_handler(call):
             cid = call.message.chat.id
             if cid in _countdowns:
                 _countdowns[cid].set()
-            markup, has_btns = _v1_build_service_markup()
+            markup, has_btns = _build_combined_service_markup()
             if has_btns:
                 try:
                     bot.edit_message_text(
@@ -7196,15 +7378,23 @@ def callback_handler(call):
                 bot.answer_callback_query(call.id, "❌ Number not found! Try again later.", show_alert=True)
 
         elif data == "v2back":
-            markup, has_btns = _v2_build_console_markup()
+            markup, has_btns = _build_combined_service_markup()
             if has_btns:
-                bot.edit_message_text(
-                    "<tg-emoji emoji-id=\"5202216593966244027\">👤</tg-emoji> <b>SELECT PLATFORM</b>",
-                    call.message.chat.id, call.message.message_id,
-                    reply_markup=markup, parse_mode="HTML"
-                )
+                try:
+                    bot.edit_message_text(
+                        "<tg-emoji emoji-id=\"5202216593966244027\">👤</tg-emoji> <b>𝗦𝗘𝗟𝗘𝗖𝗧 𝗦𝗘𝗥𝗩𝗜𝗖𝗘</b>",
+                        call.message.chat.id, call.message.message_id,
+                        reply_markup=markup, parse_mode="HTML"
+                    )
+                except Exception:
+                    bot.send_message(
+                        call.message.chat.id,
+                        "<tg-emoji emoji-id=\"5202216593966244027\">👤</tg-emoji> <b>𝗦𝗘𝗟𝗘𝗖𝗧 𝗦𝗘𝗥𝗩𝗜𝗖𝗘</b>",
+                        reply_markup=markup, parse_mode="HTML"
+                    )
+                bot.answer_callback_query(call.id)
             else:
-                bot.answer_callback_query(call.id, "❌ Admin has not configured any service yet.", show_alert=True)
+                bot.answer_callback_query(call.id, "❌ No service available.", show_alert=True)
 
         elif data.startswith("v2svc_cc:"):
             sid = data.split(":", 1)[1]
@@ -7753,14 +7943,17 @@ def document_handler(message):
     uid = message.from_user.id
     if uid not in ADMIN_IDS:
         return
+    # If user is in finalize_auto_add Excel-wait flow, let the next_step_handler handle it
+    if uid in _awaiting_slot_excel:
+        return
     register_user(message.chat.id)
 
     doc = message.document
     name = doc.file_name or ""
     ext = name.rsplit(".", 1)[-1].lower() if "." in name else ""
 
-    # ── .txt flag file handler ──────────────────────────────────────────────────
-    if ext == "txt":
+    # ── .txt / .json handler — auto-detect service emoji or flag file ───────────
+    if ext in ("txt", "json"):
         wait = bot.send_message(message.chat.id,
             f"⏳ <b>{name}</b> parse korchi...", parse_mode="HTML")
         try:
@@ -7772,17 +7965,105 @@ def document_handler(message):
                 message.chat.id, wait.message_id, parse_mode="HTML")
             return
         import re as _re
+
+        _KNOWN_SVCS = {
+            "INSTAGRAM","FACEBOOK","WHATSAPP","TELEGRAM","TIKTOK","TWITTER",
+            "BINANCE","SNAPCHAT","GOOGLE","YOUTUBE","LINKEDIN","AMAZON",
+            "TINDER","UBER","NETFLIX","SPOTIFY","VIBER","LINE","WECHAT",
+            "DISCORD","REDDIT","PINTEREST","TUMBLR","SIGNAL","SKYPE",
+        }
+
+        def _parse_service_emoji_txt(content):
+            """Extract {SERVICE_NAME: emoji_id} from any common format."""
+            result = {}
+            # Try whole-file JSON first
+            try:
+                data = json.loads(content)
+                if isinstance(data, dict):
+                    for k, v in data.items():
+                        svc = str(k).upper().strip()
+                        eid_m = _re.search(r'\d{10,}', str(v))
+                        if svc and eid_m:
+                            result[svc] = eid_m.group(0)
+                    return result
+            except Exception:
+                pass
+            # Line-by-line: find first word-like token + any 10-digit number on same line
+            for line in content.splitlines():
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                eid_m = _re.search(r'(\d{10,})', line)
+                if not eid_m:
+                    continue
+                eid = eid_m.group(1)
+                prefix = line[:line.index(eid)]
+                svc_m = _re.search(r'([A-Za-z][A-Za-z0-9 _\-]{1,20})', prefix)
+                if svc_m:
+                    svc = _re.sub(r'[\s\-_]+', '_', svc_m.group(1).strip()).upper().rstrip('_:→- ')
+                    if svc:
+                        result[svc] = eid
+            return result
+
+        def _is_service_file(content):
+            """Return True if any line has a known service keyword + 10-digit number."""
+            for line in content.splitlines():
+                ul = line.upper()
+                if _re.search(r'\d{10,}', ul):
+                    for svc in _KNOWN_SVCS:
+                        if svc in ul:
+                            return True
+            # Also detect JSON with service-like keys
+            try:
+                data = json.loads(content)
+                if isinstance(data, dict):
+                    for k in data:
+                        if str(k).upper() in _KNOWN_SVCS:
+                            return True
+            except Exception:
+                pass
+            return False
+
+        # Auto-detect: service emoji file or flag file?
+        if ext == "json" or _is_service_file(txt_content):
+            # ── Service emoji file ──────────────────────────────────────────
+            svc_loaded = _parse_service_emoji_txt(txt_content)
+            try:
+                bot.delete_message(message.chat.id, wait.message_id)
+            except Exception:
+                pass
+            if not svc_loaded:
+                bot.send_message(message.chat.id,
+                    "❌ <b>Service emoji data parse hoyni!</b>\n\n"
+                    "<b>TXT format:</b>\n"
+                    "<code>WHATSAPP 5334998226636390258\nINSTAGRAM 5319160079465857105</code>\n\n"
+                    "<b>JSON format:</b>\n"
+                    "<code>{\"WHATSAPP\": \"5334998226636390258\"}</code>",
+                    parse_mode="HTML")
+                return
+            with _custom_emoji_lock:
+                _custom_emojis.setdefault("services", {}).update(svc_loaded)
+            _save_custom_emojis()
+            lines_preview = "\n".join(
+                f"  🎯 <b>{k}</b> → <code>{v}</code>"
+                for k, v in list(svc_loaded.items())[:20])
+            extra = f"\n  <i>...and {len(svc_loaded)-20} more</i>" if len(svc_loaded) > 20 else ""
+            bot.send_message(message.chat.id,
+                f"✅ <b>{len(svc_loaded)} service emoji set hoyeche!</b>\n\n"
+                f"{lines_preview}{extra}\n\n"
+                f"🎉 Ekhon OTP message-e custom emoji dekhabe.",
+                parse_mode="HTML")
+            return
+        # ── Flag emoji file (original .txt handler) ─────────────────────────
         parsed = {}
         for line in txt_content.splitlines():
             line = line.strip()
             if not line:
                 continue
-            # Format: (1)(US)🇺🇸 United States {"emoji": "🇺🇸", "id": "5913463998522592692"}
             m = _re.search(r'([🇠-🇿]{2}).*?"id"\s*:\s*"(\d+)"', line)
             if m:
                 parsed[m.group(1)] = m.group(2)
                 continue
-            # Fallback: flag_emoji  numeric_id
             tokens = line.split()
             if len(tokens) >= 2 and tokens[-1].isdigit() and len(tokens[-1]) >= 10:
                 flag_tok = next((t for t in tokens if len(t) == 2 and
@@ -7796,8 +8077,10 @@ def document_handler(message):
         if not parsed:
             bot.send_message(message.chat.id,
                 "❌ <b>Flag data parse hoyni!</b>\n\n"
-                "File format check koro. Expected:\n"
-                "<code>(1)(US)🇺🇸 United States {\"emoji\": \"🇺🇸\", \"id\": \"123...\"}</code>",
+                "Flag file format:\n"
+                "<code>(1)(US)🇺🇸 United States {\"emoji\": \"🇺🇸\", \"id\": \"123...\"}</code>\n\n"
+                "Service emoji file format:\n"
+                "<code>WHATSAPP 5334998226636390258\nINSTAGRAM 5319160079465857105</code>",
                 parse_mode="HTML")
             return
         with _custom_emoji_lock:
@@ -7815,12 +8098,81 @@ def document_handler(message):
         return
     # ────────────────────────────────────────────────────────────────────────────
 
+    # ── .json service emoji file handler ────────────────────────────────────────
+    if ext == "json":
+        wait = bot.send_message(message.chat.id,
+            f"⏳ <b>{name}</b> parse korchi...", parse_mode="HTML")
+        try:
+            file_info = bot.get_file(doc.file_id)
+            raw = bot.download_file(file_info.file_path)
+            data = json.loads(raw.decode("utf-8", errors="ignore"))
+        except Exception as e:
+            bot.edit_message_text(f"❌ File load/parse hoyni: <code>{e}</code>",
+                message.chat.id, wait.message_id, parse_mode="HTML")
+            return
+
+        if not isinstance(data, dict):
+            bot.edit_message_text(
+                "❌ <b>Invalid format!</b>\n\n"
+                "JSON file ta hobe:\n"
+                "<code>{\n"
+                '  "WHATSAPP": "5334998226636390258",\n'
+                '  "INSTAGRAM": "5319160079465857105",\n'
+                '  "FACEBOOK": "5323261730283863478"\n'
+                "}</code>",
+                message.chat.id, wait.message_id, parse_mode="HTML")
+            return
+
+        loaded = {}
+        skipped = []
+        for svc_raw, eid in data.items():
+            svc = str(svc_raw).upper().strip()
+            eid = str(eid).strip()
+            if not svc or not eid.isdigit():
+                skipped.append(f"{svc_raw}: {eid}")
+                continue
+            loaded[svc] = eid
+
+        try:
+            bot.delete_message(message.chat.id, wait.message_id)
+        except Exception:
+            pass
+
+        if not loaded:
+            bot.send_message(message.chat.id,
+                "❌ <b>Kono valid service emoji ID pawa jayni!</b>\n\n"
+                "Format check koro:\n"
+                "<code>{\"WHATSAPP\": \"5334998226636390258\"}</code>",
+                parse_mode="HTML")
+            return
+
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("services", {}).update(loaded)
+        _save_custom_emojis()
+
+        lines_preview = "\n".join(
+            f"  🎯 <b>{k}</b> → <code>{v}</code>" for k, v in list(loaded.items())[:20]
+        )
+        extra = f"\n  <i>...and {len(loaded)-20} more</i>" if len(loaded) > 20 else ""
+        skip_txt = ""
+        if skipped:
+            skip_txt = f"\n\n⚠️ <b>Skip hoyeche ({len(skipped)}):</b> {', '.join(skipped[:5])}"
+
+        bot.send_message(message.chat.id,
+            f"✅ <b>{len(loaded)} service emoji ID set hoyeche!</b>\n\n"
+            f"{lines_preview}{extra}{skip_txt}\n\n"
+            f"🎉 Ekhon theke OTP message-e custom service emoji dekhabe.",
+            parse_mode="HTML")
+        return
+    # ────────────────────────────────────────────────────────────────────────────
+
     if ext not in ("xlsx", "xls", "csv"):
         bot.send_message(
             message.chat.id,
             "❌ <b>Unsupported file!</b>\n\n"
             "📎 Supported formats:\n"
             "  • <b>.txt</b>  — Premium Flag file\n"
+            "  • <b>.json</b> — Service Emoji ID file\n"
             "  • <b>.xlsx</b> — Excel (new)\n"
             "  • <b>.xls</b>  — Excel (old)\n"
             "  • <b>.csv</b>  — CSV\n\n"
@@ -8011,10 +8363,7 @@ def text_handler(message):
         show_services(message)
 
     elif txt in ("📲 𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥", "𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥"):
-        if _group_settings.get("v2_user_mode", False):
-            _v2_show_console(message.chat.id)
-        else:
-            show_services(message)
+        show_services(message)
 
     elif txt == "🔄 𝗩𝟮 𝗦𝗪𝗜𝗧𝗖𝗛":
         _v2_users.add(uid)
@@ -8099,20 +8448,20 @@ def text_handler(message):
             else:
                 _sup_url = f"https://t.me/{_sup_id}"
             markup.add(types.InlineKeyboardButton(
-                "👤 Support Team ✅",
+                "⚠️ SUPPORT TEAM ⚠️",
                 url=_sup_url
             ))
         else:
             markup.add(types.InlineKeyboardButton(
-                "👤 Support Team ✅",
+                "⚠️ SUPPORT TEAM ⚠️",
                 url="https://t.me/Tom_9805"
             ))
         bot.send_message(
             message.chat.id,
-            "<tg-emoji emoji-id=\"5420323339723881652\">⭐</tg-emoji> <b>PREMIUM SUPPORT</b> <tg-emoji emoji-id=\"5420323339723881652\">⭐</tg-emoji>\n\n"
+            "<tg-emoji emoji-id=\"5202216593966244027\">⚠️</tg-emoji> <b>SUPPORT TEAM</b> <tg-emoji emoji-id=\"5271604874419647061\">⚠️</tg-emoji>\n\n"
             "━━━━━━━━━━━━━━━━\n"
-            "<tg-emoji emoji-id=\"5391112412445288650\">❓</tg-emoji> Need help\n"
-            "<tg-emoji emoji-id=\"5443038326535759644\">👇</tg-emoji> Click the button below for support\n"
+            "<tg-emoji emoji-id=\"5391112412445288650\">❓</tg-emoji> Need help? Amader support team contact koro\n"
+            "<tg-emoji emoji-id=\"5443038326535759644\">👇</tg-emoji> Nicher button-e click koro\n"
             "━━━━━━━━━━━━━━━━",
             reply_markup=markup,
             parse_mode="HTML",
@@ -8562,6 +8911,35 @@ def text_handler(message):
 
     elif txt == "📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀" and uid in ADMIN_IDS:
         _show_extra_groups(message)
+
+    elif txt == "🔑 𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲" and uid in ADMIN_IDS:
+        current_fastx  = _group_settings.get("fastx_api_key", FASTX_API_KEY)
+        current_stex   = _group_settings.get("stex_api_key",  STEX_API_KEY)
+        current_voltex = _group_settings.get("voltex_api_key", V3_API_KEY)
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        markup.add(
+            types.InlineKeyboardButton(
+                f"⚡ FastX SMS  |  🔑 {current_fastx[:12]}...",
+                callback_data="chgkey:fastx",
+            ),
+            types.InlineKeyboardButton(
+                f"🌐 STEX SMS  |  🔑 {current_stex[:12]}...",
+                callback_data="chgkey:stex",
+            ),
+            types.InlineKeyboardButton(
+                f"🔮 Voltex SMS  |  🔑 {current_voltex[:12]}...",
+                callback_data="chgkey:voltex",
+            ),
+        )
+        bot.send_message(
+            message.chat.id,
+            "🔑🔥 <b>V2 PANEL API KEY CHANGE</b> 🔥🔑\n"
+            "━━━━━━━━━━━━━━━━\n\n"
+            "Kon panel er API key change korte chao?\n"
+            "Niche theke panel select koro:",
+            reply_markup=markup,
+            parse_mode="HTML",
+        )
 
     elif txt == "🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶" and uid in ADMIN_IDS:
         _show_custom_emoji_menu(message)
@@ -9243,11 +9621,7 @@ def _settings_text(uid=None):
         "📢 <b>LINKS</b>\n"
         f"📢 Join Channel: {ch2_str}\n"
         f"🤖 Bot Link: {bot_str}\n\n"
-        "🆕 <b>V3 PANEL</b>\n"
-        f"🔘 V3 Status: {v3_str}\n"
         f"📡 Extra Groups: {eg_str}\n\n"
-        "📲 <b>GET NUMBER MODE</b>\n"
-        f"🔘 Status: {v2_mode_str}\n\n"
         "━━━━━━━━━━━━━━━━\n"
         "⬇️ Ki change korte chao?"
     )
@@ -9282,12 +9656,6 @@ def _settings_markup():
         types.InlineKeyboardButton("📢 Join Channel", callback_data="set_channel2", style="danger"),
         types.InlineKeyboardButton("🤖 Bot Link", callback_data="set_botlink", style="success"),
     )
-    v3_on = _group_settings.get("v3_enabled", True)
-    v3_label = "🆕 V3 Panel: 🟢 ON" if v3_on else "🆕 V3 Panel: 🔴 OFF"
-    markup.add(types.InlineKeyboardButton(v3_label, callback_data="toggle_v3", style="primary"))
-    v2_mode = _group_settings.get("v2_user_mode", False)
-    v2_mode_label = "📲 Get Number Mode: 🟢 ON" if v2_mode else "📲 Get Number Mode: 🔴 OFF"
-    markup.add(types.InlineKeyboardButton(v2_mode_label, callback_data="toggle_v2_mode", style="danger"))
     return markup
 
 
@@ -9471,6 +9839,54 @@ def _sett_get_support_id(message):
         message,
         f"✅ <b>SUPPORT ID UPDATED!</b>\n\n"
         f"📞 <b>Notun Support ID:</b> <code>{val}</code>",
+    )
+
+
+def _chgkey_receive(message, panel_id):
+    """Receive new API key from admin and apply it to the selected V2 panel."""
+    global FASTX_API_KEY, STEX_API_KEY, V3_API_KEY
+    uid = message.from_user.id
+    if uid not in ADMIN_IDS:
+        return
+    if _is_back(message.text) or _intercept_menu_btn(message):
+        return
+    new_key = (message.text or "").strip()
+    if not new_key:
+        msg = bot.send_message(
+            message.chat.id,
+            "❌ API key khali — abar pathao:",
+            reply_markup=_back_admin_kb(),
+            parse_mode="HTML",
+        )
+        bot.register_next_step_handler(msg, lambda m: _chgkey_receive(m, panel_id))
+        return
+
+    _PANEL_LABELS = {"fastx": "⚡ FastX SMS", "stex": "🌐 STEX SMS", "voltex": "🔮 Voltex SMS"}
+    label = _PANEL_LABELS.get(panel_id, panel_id.upper())
+
+    if panel_id == "fastx":
+        FASTX_API_KEY = new_key
+        _group_settings["fastx_api_key"] = new_key
+    elif panel_id == "stex":
+        STEX_API_KEY = new_key
+        _group_settings["stex_api_key"] = new_key
+        for p in _V2_PANELS_REGISTRY:
+            if p["id"] == "stex":
+                p["api_key"] = new_key
+    elif panel_id == "voltex":
+        V3_API_KEY = new_key
+        _group_settings["voltex_api_key"] = new_key
+        for p in _V2_PANELS_REGISTRY:
+            if p["id"] == "voltex":
+                p["api_key"] = new_key
+
+    save_group_settings()
+    _go_admin_panel(
+        message,
+        f"✅🔑 <b>API KEY UPDATED!</b>\n\n"
+        f"📡 <b>Panel:</b> {label}\n"
+        f"🔑 <b>New Key:</b> <code>{new_key}</code>\n\n"
+        f"✅ Ekhon theke notun key diye API call hobe.",
     )
 
 
@@ -9736,7 +10152,7 @@ def _resend_old_otps(message):
             cid,
             f"{status_icon}\n\n"
             f"📊 <b>Total real OTPs:</b> {total}\n"
-            f"📤 <b>Sent:</b> {sent}\n"
+            f"?? <b>Sent:</b> {sent}\n"
             f"❌ <b>Failed:</b> {failed}",
             parse_mode="HTML",
         )
@@ -9893,6 +10309,109 @@ def _custom_emoji_input(message):
     mode = _custom_emoji_state.pop(uid, None)
     if not mode:
         return
+
+    # ── document sent while in "service" mode → parse as Service Emoji ID file ──
+    if message.document and mode == "service":
+        doc = message.document
+        fname = doc.file_name or ""
+        fext = fname.rsplit(".", 1)[-1].lower() if "." in fname else ""
+        wait = bot.send_message(message.chat.id,
+            f"⏳ <b>{fname}</b> parse korchi...", parse_mode="HTML")
+        try:
+            file_info = bot.get_file(doc.file_id)
+            raw = bot.download_file(file_info.file_path)
+            content = raw.decode("utf-8", errors="ignore")
+        except Exception as e:
+            bot.edit_message_text(f"❌ File download hoyni: <code>{e}</code>",
+                message.chat.id, wait.message_id, parse_mode="HTML")
+            return
+        loaded = {}
+        skipped = []
+        if fext == "json":
+            try:
+                data = json.loads(content)
+            except Exception as je:
+                bot.edit_message_text(
+                    f"❌ JSON parse error: <code>{je}</code>",
+                    message.chat.id, wait.message_id, parse_mode="HTML")
+                return
+            if not isinstance(data, dict):
+                bot.edit_message_text(
+                    "❌ <b>Invalid format!</b>\n\n"
+                    "JSON file ta hobe:\n"
+                    "<code>{\n"
+                    '  "WHATSAPP": "5334998226636390258",\n'
+                    '  "INSTAGRAM": "5319160079465857105"\n'
+                    "}</code>",
+                    message.chat.id, wait.message_id, parse_mode="HTML")
+                return
+            for svc_raw, eid in data.items():
+                svc = str(svc_raw).upper().strip()
+                eid = str(eid).strip()
+                if svc and eid.isdigit():
+                    loaded[svc] = eid
+                else:
+                    skipped.append(f"{svc_raw}")
+        else:
+            # .txt or any other: robust line-by-line parse
+            import re as _re_svc
+            # Try whole-file JSON first
+            try:
+                _jdata = json.loads(content)
+                if isinstance(_jdata, dict):
+                    for k, v in _jdata.items():
+                        svc = str(k).upper().strip()
+                        _eid_m = _re_svc.search(r'\d{10,}', str(v))
+                        if svc and _eid_m:
+                            loaded[svc] = _eid_m.group(0)
+                        else:
+                            skipped.append(str(k))
+            except Exception:
+                # Line-by-line: any 10+ digit number + preceding word = service
+                for line in content.splitlines():
+                    line = line.strip()
+                    if not line or line.startswith("#"):
+                        continue
+                    _eid_m = _re_svc.search(r'(\d{10,})', line)
+                    if not _eid_m:
+                        skipped.append(line)
+                        continue
+                    eid = _eid_m.group(1)
+                    prefix = line[:line.index(eid)]
+                    _svc_m = _re_svc.search(r'([A-Za-z][A-Za-z0-9 _\-]{1,20})', prefix)
+                    if _svc_m:
+                        svc = _re_svc.sub(r'[\s\-_]+', '_', _svc_m.group(1).strip()).upper().rstrip('_:→ ')
+                        if svc:
+                            loaded[svc] = eid
+                        else:
+                            skipped.append(line)
+                    else:
+                        skipped.append(line)
+        try:
+            bot.delete_message(message.chat.id, wait.message_id)
+        except Exception:
+            pass
+        if not loaded:
+            bot.send_message(message.chat.id,
+                "❌ <b>Kono valid service emoji ID pawa jayni!</b>\n\n"
+                "JSON format:\n"
+                "<code>{\"WHATSAPP\": \"5334998226636390258\"}</code>\n\n"
+                "TXT format (line by line):\n"
+                "<code>WHATSAPP 5334998226636390258\nINSTAGRAM 5319160079465857105</code>",
+                parse_mode="HTML")
+            _custom_emoji_state[uid] = mode
+            return
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("services", {}).update(loaded)
+        _save_custom_emojis()
+        lines_preview = "\n".join(
+            f"  🎯 <b>{k}</b> → <code>{v}</code>" for k, v in list(loaded.items())[:20])
+        extra = f"\n  <i>...and {len(loaded)-20} more</i>" if len(loaded) > 20 else ""
+        skip_txt = f"\n\n⚠️ Skip: {', '.join(skipped[:5])}" if skipped else ""
+        _show_custom_emoji_menu(message,
+            note=f"✅ {len(loaded)} service emoji set!\n{lines_preview}{extra}{skip_txt}")
+        return
+    # ─────────────────────────────────────────────────────────────────────────────
 
     # ── .txt document sent while in a flag mode → parse as Premium Flag file ──
     if message.document and mode in ("flag", "flag_bulk_json", "flag_ids_only"):
@@ -10714,6 +11233,7 @@ def _go_admin_panel(message, text="🔥 <b>ADMIN PANEL</b>"):
     m_admin.add("🎛️ 𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴")
     m_admin.add("📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀")
     m_admin.add("🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶")
+    m_admin.add("🔑 𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲")
     m_admin.add("💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀")
     m_admin.add("⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂")
     bot.send_message(
@@ -11038,6 +11558,7 @@ _ALL_MENU_BTNS = {
     "🌍 All Flags JSON Set", "📋 Flag JSON Export",
     "🔢 IDs Only Set", "🗑️ Flag Emoji Del",
     "🗑️ Service Emoji Del",
+    "🔑 𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲",
 }
 
 
@@ -11097,27 +11618,91 @@ def ask_numbers_for_slot(message, svc):
     msg = bot.send_message(
         message.chat.id,
         f"✅ Slot: <b>{slot_name}</b>\n\n"
-        f"📱 Ekhon <b>{svc.upper()}</b> er number gulo pathao:\n"
-        f"<i>(Newline ba comma diye alag koro)</i>",
+        f"📊 Ekhon <b>{svc.upper()}</b> er number er Excel file pathao:\n"
+        f"<i>(.xlsx / .xls / .csv — ekta column-e number thakle hobe)</i>",
         reply_markup=_cancel_kb(),
         parse_mode="HTML",
     )
+    _awaiting_slot_excel.add(message.from_user.id)
     bot.register_next_step_handler(msg, lambda m: finalize_auto_add(m, svc, slot_name))
 
 
 def finalize_auto_add(message, svc, slot_name=None):
     global stock
     uid = message.from_user.id
+    _awaiting_slot_excel.discard(uid)  # clear guard — document_handler will now ignore this UID
     if (message.text or "").strip() == "❌ Cancel":
         _go_admin_panel(message)
         return
-    nums = [n.strip() for n in re.split(r"[,\n\r]", message.text) if n.strip()]
+
+    # ── Excel / CSV file upload ───────────────────────────────────────────────
+    if message.document:
+        doc = message.document
+        fname = doc.file_name or "file"
+        ext = fname.rsplit(".", 1)[-1].lower() if "." in fname else ""
+        if ext not in ("xlsx", "xls", "csv"):
+            msg = bot.send_message(
+                message.chat.id,
+                "❌ Shudhu <b>.xlsx / .xls / .csv</b> file pathao!\n\n"
+                "📊 Abar try koro — Excel file pathao:",
+                reply_markup=_cancel_kb(),
+                parse_mode="HTML",
+            )
+            bot.register_next_step_handler(msg, lambda m: finalize_auto_add(m, svc, slot_name))
+            return
+        wait = bot.send_message(message.chat.id, "⏳ File parse korchi...", parse_mode="HTML")
+        try:
+            file_info = bot.get_file(doc.file_id)
+            raw = bot.download_file(file_info.file_path)
+        except Exception as e:
+            bot.edit_message_text(f"❌ File download hoyni: <code>{e}</code>",
+                message.chat.id, wait.message_id, parse_mode="HTML")
+            return
+        rows, mode = _parse_spreadsheet(raw, fname)
+        try:
+            bot.delete_message(message.chat.id, wait.message_id)
+        except Exception:
+            pass
+        if not rows:
+            msg = bot.send_message(
+                message.chat.id,
+                "⚠️ File-e kono number paini!\n"
+                "Excel-e number gulo ekta column-e thakle hobe.\n\n"
+                "📊 Abar try koro — Excel file pathao:",
+                reply_markup=_cancel_kb(),
+                parse_mode="HTML",
+            )
+            bot.register_next_step_handler(msg, lambda m: finalize_auto_add(m, svc, slot_name))
+            return
+        # Extract number list from parsed rows
+        if mode == "two_col":
+            nums = [num for _, num in rows]
+        else:
+            nums = list(rows)
+    else:
+        # ── Text fallback (newline / comma) ───────────────────────────────────
+        if not message.text:
+            msg = bot.send_message(
+                message.chat.id,
+                "❌ Excel file pathao (.xlsx / .xls / .csv):",
+                reply_markup=_cancel_kb(),
+                parse_mode="HTML",
+            )
+            bot.register_next_step_handler(msg, lambda m: finalize_auto_add(m, svc, slot_name))
+            return
+        nums = [n.strip() for n in re.split(r"[,\n\r]", message.text) if n.strip()]
+
+    # ── Add numbers to stock ──────────────────────────────────────────────────
     if slot_name:
+        if svc not in stock:
+            stock[svc] = {}
         if slot_name not in stock[svc]:
             stock[svc][slot_name] = []
         for num in nums:
-            stock[svc][slot_name].append(num)
-        added_count = len(nums)
+            clean = re.sub(r"\D", "", str(num))
+            if clean:
+                stock[svc][slot_name].append(clean)
+        added_count = len([re.sub(r"\D", "", str(n)) for n in nums if re.sub(r"\D", "", str(n))])
     else:
         added_count = 0
         for num in nums:
