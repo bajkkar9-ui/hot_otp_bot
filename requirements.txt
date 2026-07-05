@@ -1,6 +1,7 @@
-pytelegrambotapi
+pyTelegramBotAPI
 requests
 phonenumbers
-beautifulsoup4
+emoji
 openpyxl
 xlrd
+beautifulsoup4
