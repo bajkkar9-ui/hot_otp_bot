@@ -1,4 +1,4 @@
-fgghbhimport telebot
+import telebot
 from telebot import types
 import json
 import os
@@ -6,6 +6,7 @@ import re
 import emoji as _emoji_lib
 import time
 import threading
+_LINE_SEP = '<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>'
 import datetime
 import requests
 import phonenumbers
@@ -104,7 +105,7 @@ _BUILTIN_PANELS = [
     {'id': 'bp2', 'host': '139.99.9.4', 'base_url': 'http://139.99.9.4/ints', 'url_hint': 'http://139.99.9.4/ints/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi12', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp3', 'host': '54.36.173.235', 'base_url': 'http://54.36.173.235/ints', 'url_hint': 'http://54.36.173.235/ints/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi@', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp4', 'host': '54.39.104.241', 'base_url': 'http://54.39.104.241/ints', 'url_hint': 'http://54.39.104.241/ints/agent/SMSCDRStats', 'username': 'Rabbi5', 'password': 'Rabbi5', 'engine': 'ints_smsranges', 'data_path': '/agent/res/data_smsranges.php', 'admin_id': None},
-    {'id': 'bp5', 'host': '213.32.24.208', 'base_url': 'http://213.32.24.208/ints', 'url_hint': 'http://213.32.24.208/ints/agent/SMSCDRStats', 'username': 'mahofuza', 'password': 'mahofuza@', 'engine': 'ints_smsranges', 'data_path': '/agent/res/data_smsranges.php', 'admin_id': None},
+    {'id': 'bp5', 'host': '213.32.24.208', 'base_url': 'http://213.32.24.208/ints', 'url_hint': 'http://213.32.24.208/ints/agent/SMSCDRStats', 'username': 'mahofuza', 'password': 'mahofuza@', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp6', 'host': '15.235.182.3', 'base_url': 'http://15.235.182.3/konekta', 'url_hint': 'http://15.235.182.3/konekta/agent/SMSCDRReports', 'username': 'Rabbi200', 'password': 'Rabbi200', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp7', 'host': 'nexor-iprn.com', 'base_url': 'https://nexor-iprn.com', 'url_hint': 'https://nexor-iprn.com/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi12@', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
     {'id': 'bp8', 'host': '51.77.52.79', 'base_url': 'http://51.77.52.79/ints', 'url_hint': 'http://51.77.52.79/ints/agent/SMSCDRStats', 'username': 'Rabbi12', 'password': 'Rabbi12', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': None},
@@ -453,13 +454,13 @@ def _schedule_delete(chat_id, msg_id):
 TEMPLATES_FILE = "message_templates.json"
 # <<SYNC:_DEFAULT_TEMPLATES:START>>
 _DEFAULT_TEMPLATES = {
-    'start': '<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <b>WELCOME TO NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji>\n\n╔════════════════════════════╗\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>USER DASHBOARD</b>\n╠════════════════════════════╣\n<tg-emoji emoji-id="5202216593966244027">👤</tg-emoji> <b>User:</b> {uname}\n<tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>User ID:</b> <code>{uid}</code>\n<tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Account Status:</b> <tg-emoji emoji-id="5316919747214854314">💎</tg-emoji> Premium\n╚════════════════════════════╝\n\n╔══════════════════╗\n<tg-emoji emoji-id="5458603043203327669">⚠️</tg-emoji> <b>IMPORTANT NOTICE</b>\n\nPlease JOIN our channel below,\nthen click VERIFY to continue <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>\n╚══════════════════╝\n\n<tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji> <b>Fast • Secure • Premium Service</b> <tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji>\n\n<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <i>Powered by</i>\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>',
-    'verify_success': '<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>VERIFICATION COMPLETE!</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>\n\n╔══════════════════════╗\n   <tg-emoji emoji-id="5206607081334906820">✅</tg-emoji> <b>ACCESS GRANTED</b>\n╠══════════════════════╣\n  <tg-emoji emoji-id="5352899869369446268">👋</tg-emoji> <b>Welcome, {vname}!</b>\n  <tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>ID:</b> <code>{uid}</code>\n  <tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Status:</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> Premium\n╚══════════════════════╝\n\n<tg-emoji emoji-id="5420323339723881652">✅</tg-emoji> <b>YOU CAN GET NUMBER NOW!</b> <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>',
-    'otp_group': '━━━━━━━━━━━━━━━━\n<blockquote>{svc_emoji} <b>{svc}</b> {flag} {tagged_number} {flag}</blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_key} KEY : <b>{otp}</b></blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_world} Country: {country} {flag}</blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote>{emoji_otp_sms} MESSAGE\n{sms}</blockquote>\n━━━━━━━━━━━━━━━━\n<blockquote><tg-emoji emoji-id="5461117441612462242">💬</tg-emoji> Thanks for using <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji></blockquote>\n━━━━━━━━━━━━━━━━',
+    'start': '<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <b>WELCOME TO NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji>\n\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>USER DASHBOARD</b>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<tg-emoji emoji-id="5202216593966244027">👤</tg-emoji> <b>User:</b> {uname}\n<tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>User ID:</b> <code>{uid}</code>\n<tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Account Status:</b> <tg-emoji emoji-id="5316919747214854314">💎</tg-emoji> Premium\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<tg-emoji emoji-id="5458603043203327669">⚠️</tg-emoji> <b>IMPORTANT NOTICE</b>\n\nPlease JOIN our channel below,\nthen click VERIFY to continue <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n\n<tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji> <b>Fast • Secure • Premium Service</b> <tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji>\n\n<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <i>Powered by</i>\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>',
+    'verify_success': '<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>VERIFICATION COMPLETE!</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>\n\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n   <tg-emoji emoji-id="5206607081334906820">✅</tg-emoji> <b>ACCESS GRANTED</b>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n  <tg-emoji emoji-id="5352899869369446268">👋</tg-emoji> <b>Welcome, {vname}!</b>\n  <tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>ID:</b> <code>{uid}</code>\n  <tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Status:</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> Premium\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n\n<tg-emoji emoji-id="5420323339723881652">✅</tg-emoji> <b>YOU CAN GET NUMBER NOW!</b> <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>',
+    'otp_group': '<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<blockquote>{svc_emoji} <b>{svc}</b> {flag} {tagged_number} {flag}</blockquote>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<blockquote>{emoji_otp_key} KEY : <b>{otp}</b></blockquote>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<blockquote>{emoji_otp_world} Country: {country} {flag}</blockquote>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<blockquote>{emoji_otp_sms} MESSAGE\n{sms}</blockquote>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<blockquote><tg-emoji emoji-id="5461117441612462242">💬</tg-emoji> Thanks for using <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji></blockquote>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>',
     'otp_dm': '{flag} {number} {svc_emoji} {svc}\n{emoji_country_pre} COUNTRY:{country}{flag}',
     'otp_dm_v2': '{emoji_number_pre}{number} {svc_emoji}{svc}\n{emoji_country_pre}{country}{emoji_country_post}',
     'number_assigned': '✅ <b>Number Assigned Successfully !</b>\n\n🔧 <b>Platform :</b> {svc}\n🌍 <b>Country :</b> {flag} {country}\n\n📞 <b>Number :</b> <code>{number}</code>\n\n⏱ <b>Auto code fetch :</b> 10:00s',
-    'broadcast': '🔥 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧!</b> 🔥\n━━━━━━━━━━━━━━━━\n\n📢 {text} 📢\n\n━━━━━━━━━━━━━━━━\n🤖🔥 <i>𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>  🔥🤖',
+    'broadcast': '🔥 <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧!</b> 🔥\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n\n📢 {text} 📢\n\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n🤖🔥 <i>𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢</i>  <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧</b>  🔥🤖',
 }
 # <<SYNC:_DEFAULT_TEMPLATES:END>>
 _templates = load_json(TEMPLATES_FILE, dict(_DEFAULT_TEMPLATES))
@@ -1169,9 +1170,9 @@ def _dispatch_otp(otp, number, seconds, service="", sms_body=""):
 def send_status_message(chat_id, status_text):
     message = (
         "⚙️ <b>𝗦𝗧𝗔𝗧𝗨𝗦 𝗔𝗟𝗘𝗥𝗧</b> ⚙️\n"
-        "━━━━━━━━━━━━━━━━\n\n"
+        "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         f"📛 {status_text} 📛\n\n"
-        "━━━━━━━━━━━━━━━━\n"
+        "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
         "🤖⚡ <b>𝗔𝗥 𝗢𝗧𝗣 𝗕𝗢𝗧 — 𝗔𝗖𝗧𝗜𝗩𝗘</b> ⚡🤖"
     )
     try:
@@ -3635,13 +3636,13 @@ def _show_extra_groups(message):
     bot.send_message(
         message.chat.id,
         "📡 <b>EXTRA GROUPS</b>\n"
-        "━━━━━━━━━━━━━━━━\n\n"
+        "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         f"🔢 Total extra groups: <b>{len(groups)}</b>\n\n"
         "Add groups here to send OTP to all groups.\n"
         "Each group can have its own bot link and channel link.\n\n"
         "💡 <i>The bot must be added as <b>Admin</b> in that group.</i>\n"
         "🧪 <i>Use the Test Send button to check if the bot can send messages to that group.</i>\n\n"
-        "━━━━━━━━━━━━━━━━",
+        "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>",
         reply_markup=markup,
         parse_mode="HTML",
     )
@@ -4875,7 +4876,7 @@ def demo_status_text():
     status = f"🟢 <b>{len(running)} running</b>" if running else "🔴 <b>All stopped</b>"
     lines = (
         f"🎭🔥 <b>DEMO OTP PANEL</b> 🔥🎭\n"
-        f"━━━━━━━━━━━━━━━━\n\n"
+        f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         f"📡 <b>Status ▸▸</b>  {status}\n"
         f"📋 <b>Configs:</b>  {len(configs)}\n\n"
     )
@@ -4887,7 +4888,7 @@ def demo_status_text():
             f"{icon} <b>{cfg['name']}</b>\n"
             f"  💬 {svcs}  |  🔢 {cfg['digits']} digits  |  ⏱️ {cfg['interval']}s  |  📱 {len(nums)} num\n\n"
         )
-    lines += "━━━━━━━━━━━━━━━━"
+    lines += "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>"
     return lines
 
 
@@ -4926,7 +4927,7 @@ def main_menu(user_id):
     _gn_text, _gn_icon = _btn_text_and_icon("get_number", "📲 𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥")
     markup.add(types.KeyboardButton(_gn_text, style="success", **_gn_icon))
     _sp_text, _sp_icon = _btn_text_and_icon("saport", "📞 𝗦𝗔𝗣𝗢𝗥𝗧")
-    _bl_text, _bl_icon = _btn_text_and_icon("balance", "💰 ??𝗮𝗹𝗮𝗻𝗰𝗲")
+    _bl_text, _bl_icon = _btn_text_and_icon("balance", "💰 𝗕𝗮𝗹𝗮𝗻𝗰𝗲")
     markup.add(types.KeyboardButton(_sp_text, style="danger", **_sp_icon),
                types.KeyboardButton(_bl_text, style="primary", **_bl_icon))
     _dv_text, _dv_icon = _btn_text_and_icon("developer", "👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼")
@@ -5212,10 +5213,10 @@ def panels_cmd(message):
     bot.send_message(
         message.chat.id,
         f"📡 <b>PANEL STATUS</b>\n"
-        f"━━━━━━━━━━━━━━━━\n\n"
+        f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         f"{lines}"
         f"🎭 <b>Demo OTP:</b>  {demo_str}\n\n"
-        f"━━━━━━━━━━━━━━━━\n"
+        f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
         f"🔄 <i>Updates every {POLL_INTERVAL}s</i>",
         parse_mode="HTML",
     )
@@ -5245,7 +5246,7 @@ def panels_cmd(message):
         bot.send_message(
             message.chat.id,
             f"📡 <b>DYNAMIC PANELS</b>\n"
-            f"━━━━━━━━━━━━━━━━\n\n"
+            f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             f"{dp_lines}"
             f"💡 <i>/addpanel diye naya panel add koro</i>",
             parse_mode="HTML",
@@ -5502,7 +5503,7 @@ def _ap_get_pass(message):
         bot.send_message(
             chat_id,
             f"✅🔥 <b>PANEL ADDED & STARTED!</b> 🔥✅\n"
-            f"━━━━━━━━━━━━━━━━\n\n"
+            f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             f"🆔 <b>ID      ▸▸</b> <code>{panel_id}</code>\n"
             f"🌐 <b>Host    ▸▸</b> <code>{data.get('host','')}</code>\n"
             f"👤 <b>User    ▸▸</b> <code>{data.get('username','')}</code>\n"
@@ -5605,7 +5606,7 @@ def _iva_do_connect(message, cookie_str):
 
         bot.send_message(chat_id,
             f"✅🔥 <b>IVA SMS PANEL ADDED!</b> 🔥✅\n"
-            f"━━━━━━━━━━━━━━━━\n\n"
+            f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             f"🆔 <b>ID     ▸▸</b> <code>{panel_id}</code>\n"
             f"🌐 <b>Host   ▸▸</b> <code>ivasms.com</code>\n"
             f"🔑 <b>Login  ▸▸</b> <code>Cookie ✅</code>\n\n"
@@ -5766,7 +5767,7 @@ def _apk_get_key(message):
         bot.send_message(
             chat_id,
             f"✅🔥 <b>API KEY PANEL ADDED!</b> 🔥✅\n"
-            f"━━━━━━━━━━━━━━━━\n\n"
+            f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             f"🆔 <b>ID       ▸▸</b> <code>{panel_id}</code>\n"
             f"🌐 <b>Host     ▸▸</b> <code>{host}</code>\n"
             f"🗝️ <b>API Key  ▸▸</b> <code>{api_key[:12]}...</code>\n"
@@ -6062,7 +6063,7 @@ def _tp_get_pass_test(message):
             bot.send_message(
                 message.chat.id,
                 "❌🔥 <b>TEST FAILED!</b> 🔥❌\n\n"
-                "━━━━━━━━━━━━━━━━\n\n"
+                "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
                 f"🌐 <b>URL      ▸▸</b> <code>{data.get('base_url','')}</code>\n"
                 f"👤 <b>User     ▸▸</b> <code>{data.get('username','')}</code>\n"
                 f"📡 <b>Status   ▸▸</b> ❌ Login başarısız\n\n"
@@ -6141,13 +6142,13 @@ def _tp_get_pass_test(message):
         bot.send_message(
             message.chat.id,
             "✅🔍 <b>TEST SUCCESS!</b> 🔍✅\n\n"
-            "━━━━━━━━━━━━━━━━\n\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             f"🌐 <b>URL      ▸▸</b> <code>{data.get('base_url','')}</code>\n"
             f"👤 <b>User     ▸▸</b> <code>{data.get('username','')}</code>\n"
             f"🔍 <b>Engine   ▸▸</b> {engine_label}\n"
             f"📂 <b>Endpoint ▸▸</b> <code>{det_path or '/agent/res/data_smscdr.php'}</code>\n"
             f"🔑 <b>Token    ▸▸</b> {tok_display}\n\n"
-            "━━━━━━━━━━━━━━━━\n\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             f"{otp_summary}\n\n"
             "✅ <i>Panel thik ache! Add Panel diye save korte paro.</i>",
             parse_mode="HTML",
@@ -6237,7 +6238,7 @@ def listpanels_cmd(message):
             parse_mode="HTML",
         )
         return
-    lines = "📋🔥 <b>DYNAMIC PANELS LIST</b> 🔥📋\n━━━━━━━━━━━━━━━━\n\n"
+    lines = "📋🔥 <b>DYNAMIC PANELS LIST</b> 🔥📋\n<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
     for p in my_panels:
         pid = p["id"]
         with _stats_lock:
@@ -7540,7 +7541,7 @@ def callback_handler(call):
             try:
                 bot.edit_message_text(
                     "📡 <b>Live Console Config</b>\n"
-                    "━━━━━━━━━━━━━━━━\n\n"
+                    "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
                     "Select service — toggle or add/delete range:\n"
                     "✅ = enabled  ⭕ = disabled",
                     call.message.chat.id, call.message.message_id,
@@ -7566,7 +7567,7 @@ def callback_handler(call):
             try:
                 bot.edit_message_text(
                     f"📡 <b>{_v2_svc_emoji(sid)} {sid}</b>\n"
-                    f"━━━━━━━━━━━━━━━━\n\n"
+                    f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
                     f"📌 Status: <b>{status}</b>\n"
                     f"🔢 Ranges:\n{range_txt}\n\n"
                     f"Use the buttons below to configure:",
@@ -7595,7 +7596,7 @@ def callback_handler(call):
             try:
                 bot.edit_message_text(
                     f"📡 <b>{_v2_svc_emoji(sid)} {sid}</b>\n"
-                    f"━━━━━━━━━━━━━━━━\n\n"
+                    f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
                     f"📌 Status: <b>{status}</b>\n"
                     f"🔢 Ranges:\n{range_txt}\n\n"
                     f"Use the buttons below to configure:",
@@ -7646,7 +7647,7 @@ def callback_handler(call):
             try:
                 bot.edit_message_text(
                     f"📡 <b>{_v2_svc_emoji(sid)} {sid}</b>\n"
-                    f"━━━━━━━━━━━━━━━━\n\n"
+                    f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
                     f"📌 Status: <b>{status}</b>\n"
                     f"🔢 Ranges:\n{range_txt}\n\n"
                     f"Use the buttons below to configure:",
@@ -7720,10 +7721,10 @@ def callback_handler(call):
             markup, has = _v3_build_console_markup(services)
             text = (
                 "🆕 <b>V3 PANEL</b>\n"
-                "━━━━━━━━━━━━━━━━\n\n"
+                "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
                 "🔴 <b>Service select koro:</b>\n"
                 "<i>Click a service to get a number</i>\n\n"
-                "━━━━━━━━━━━━━━━━"
+                "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>"
                 if has else
                 "🆕 <b>V3 PANEL</b>\n\n⚠️ No service available."
             )
@@ -8334,13 +8335,13 @@ def document_handler(message):
         bot.send_message(
             message.chat.id,
             f"📊🔥 <b>EXCEL IMPORT DONE!</b> 🔥📊\n"
-            f"━━━━━━━━━━━━━━━━\n\n"
+            f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             f"📎 <b>File:</b> <code>{name}</code>\n"
             f"📋 <b>Rows parsed:</b> {len(rows)}\n\n"
             f"{report_lines}\n"
             f"✅ <b>Total added:</b> {total_added}\n"
             f"⚠️ <b>Skipped:</b> {total_skipped}\n\n"
-            f"━━━━━━━━━━━━━━━━\n"
+            f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
             f"💡 /panels diye stock check koro.",
             reply_markup=main_menu(uid),
             parse_mode="HTML",
@@ -8352,7 +8353,7 @@ def document_handler(message):
         bot.send_message(
             message.chat.id,
             f"📂🔥 <b>FILE LOADED!</b> 🔥📂\n"
-            f"━━━━━━━━━━━━━━━━\n\n"
+            f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             f"📎 <b>File:</b> <code>{name}</code>\n"
             f"📱 <b>Numbers found:</b> {len(rows)}\n\n"
             f" <b>Kon service-e add korbo?</b>\n"
@@ -8433,13 +8434,13 @@ def _excel_pick_service(message):
     bot.send_message(
         message.chat.id,
         f"📊🔥 <b>EXCEL IMPORT DONE!</b> 🔥📊\n"
-        f"━━━━━━━━━━━━━━━━\n\n"
+        f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         f"📎 <b>File:</b>     <code>{filename}</code>\n"
         f"💬 <b>Service:</b>  <b>{svc.upper()}</b>\n"
         f"📱 <b>Parsed:</b>   {len(numbers)}\n\n"
         f"✅ <b>Added:</b>    {added}\n"
         f"⚠️ <b>Skipped:</b>  {skipped}\n\n"
-        f"━━━━━━━━━━━━━━━━\n"
+        f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
         f"💡 /panels diye stock check koro.",
         reply_markup=main_menu(uid),
         parse_mode="HTML",
@@ -8465,11 +8466,11 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "🔄 <b>V2 SWITCH</b>\n"
-            "━━━━━━━━━━━━━━━━\n\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         "Select mode:\n\n"
         "🔴 <b>LIVE RANGE</b> — Shows live OTP range from panel\n"
         "⌨️ <b>CUSTOM RANGE</b> — Enter range manually, get matching number\n\n"
-            "━━━━━━━━━━━━━━━━",
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>",
             reply_markup=v2_switch_menu(),
             parse_mode="HTML",
         )
@@ -8486,10 +8487,10 @@ def text_handler(message):
         msg = bot.send_message(
             message.chat.id,
             "⌨️ <b>CUSTOM RANGE</b>\n"
-            "━━━━━━━━━━━━━━━━\n\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             "📲 the range/prefix you want:\n"
             "<i>Example: <code>8801</code>, <code>44</code>, <code>33</code></i>\n\n"
-            "━━━━━━━━━━━━━━━━",
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>",
             reply_markup=cancel_markup,
             parse_mode="HTML",
         )
@@ -8557,20 +8558,20 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "<tg-emoji emoji-id=\"5202216593966244027\">⚠️</tg-emoji> <b>SUPPORT TEAM</b> <tg-emoji emoji-id=\"5271604874419647061\">⚠️</tg-emoji>\n\n"
-            "━━━━━━━━━━━━━━━━\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
             "<tg-emoji emoji-id=\"5391112412445288650\">❓</tg-emoji> Need help? Amader support team contact koro\n"
             "<tg-emoji emoji-id=\"5443038326535759644\">👇</tg-emoji> Nicher button-e click koro\n"
-            "━━━━━━━━━━━━━━━━",
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>",
             reply_markup=markup,
             parse_mode="HTML",
         )
 
     elif txt == "📊 𝗦𝗧𝗢𝗖𝗞":
-        report = "🔥 <b>LIVE STOCK REPORT</b> 🔥\n━━━━━━━━━━━━━━━━\n\n"
+        report = "🔥 <b>LIVE STOCK REPORT</b> 🔥\n<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         for s, d in stock.items():
             total = sum(len(v) for v in d.values())
             report += f" <b>{s.upper()}</b>: {total}  \n"
-        report += "\n━━━━━━━━━━━━━━━━\n🤖 <b>AR OTP BOT</b> 🔥"
+        report += "\n<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n🤖 <b>AR OTP BOT</b> 🔥"
         bot.send_message(message.chat.id, report, parse_mode="HTML")
 
     elif txt in ("⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️", "𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟") and uid in ADMIN_IDS:
@@ -8650,10 +8651,10 @@ def text_handler(message):
             for idx, chunk in enumerate(chunks):
                 lines = (
                     f"📋👥 <b>USER LIST</b> 👥📋\n"
-                    f"━━━━━━━━━━━━━━━━\n"
+                    f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
                     f"📊 Total: <b>{total}</b> users"
                     + (f"  |  Page {idx + 1}/{len(chunks)}" if len(chunks) > 1 else "")
-                    + "\n━━━━━━━━━━━━━━━━\n\n"
+                    + "\n<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
                 )
                 for i, user_id in enumerate(chunk, start=idx * PAGE + 1):
                     name = user_names.get(str(user_id), "—")
@@ -8678,11 +8679,11 @@ def text_handler(message):
             for idx, chunk in enumerate(chunks):
                 lines = (
                     f"📈 <b>OTP STATS</b>\n"
-                    f"━━━━━━━━━━━━━━━━\n"
+                    f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
                     f"📊 Total OTPs Delivered: <b>{total_otps}</b>"
                     + (f"  |  Page {idx+1}/{len(chunks)}" if len(chunks) > 1 else "")
                     + f"\n👥 Total Users: <b>{len(sorted_stats)}</b> more\n"
-                    f"━━━━━━━━━━━━━━━━\n\n"
+                    f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
                 )
                 for rank, (user_id, count) in enumerate(chunk, start=idx*PAGE+1):
                     name = user_names.get(str(user_id), "")
@@ -8717,12 +8718,12 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "📥🔥 <b>CSV / EXCEL দিয়ে NUMBER ADD</b> 🔥📥\n"
-            "━━━━━━━━━━━━━━━━\n\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             "📎 <b>Supported formats:</b>\n"
             "  • <b>.csv</b>  — CSV file\n"
             "  • <b>.xlsx</b> — Excel (new)\n"
             "  • <b>.xls</b>  — Excel (old)\n\n"
-            "━━━━━━━━━━━━━━━━\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
             "📋 <b>Format 1 — 2 Column (Service + Number):</b>\n"
             "<code>facebook,8801700123456\n"
             "instagram,8801800234567\n"
@@ -8732,10 +8733,10 @@ def text_handler(message):
             "8801800234567\n"
             "251912345678</code>\n"
             "<i>(Service pore choose korte hobe)</i>\n\n"
-            "━━━━━━━━━━━━━━━━\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
             "✅ <b>Available services:</b>\n"
             f"{svc_list}\n\n"
-            "━━━━━━━━━━━━━━━━\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
             "⬆️ <b>Ekhon CSV/Excel file pathao!</b>",
             reply_markup=_back_admin_kb(),
             parse_mode="HTML",
@@ -8949,7 +8950,7 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "🎛️ <b>Live Console Config</b>\n"
-            "━━━━━━━━━━━━━━━━\n\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             "Select service — toggle or add/delete range:\n"
             "✅ = enabled  ⭕ = disabled",
             reply_markup=_cc_services_markup(),
@@ -8962,11 +8963,11 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             f"🔀 <b>V2 Panel Select</b>\n"
-            f"━━━━━━━━━━━━━━━━\n\n"
+            f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         f"✅ <b>Currently Active:</b> {pname}\n\n"
         f"Use the buttons below to enable/disable panel.\n"
         f"The panel with ✅ is active — V2 numbers and OTP will come from there.\n\n"
-            f"━━━━━━━━━━━━━━━━",
+            f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>",
             reply_markup=_v2_panel_toggle_markup(),
             parse_mode="HTML",
         )
@@ -8982,12 +8983,12 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "📡 <b>V2 Message Format</b>\n"
-            "━━━━━━━━━━━━━━━━\n\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             "📌 <b>Available variables:</b>\n"
             f"<code>{vars_hint}</code>\n\n"
         "📄 <b>Current V2 DM Format:</b>\n"
             f"<code>{current_esc}</code>\n\n"
-            "━━━━━━━━━━━━━━━━\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
             "<i>ℹ️ In V2 mode, Get New Number and Change Country buttons are not shown.</i>",
             reply_markup=markup,
             parse_mode="HTML",
@@ -9001,9 +9002,9 @@ def text_handler(message):
             "<b><tg-emoji emoji-id=\"5447644880824181073\">⚡</tg-emoji> Role: Bot Developer</b>\n"
             "<b><tg-emoji emoji-id=\"5341363621572128687\">🤖</tg-emoji> Project: Custom Otp Bot</b>\n"
             "<b><tg-emoji emoji-id=\"5391112412445288650\">📲</tg-emoji> Contact: @Tom_9805</b>\n"
-            "<b>━━━━━━━━━━━━━━━━</b>\n"
+            "<b><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji></b>\n"
             "<b><tg-emoji emoji-id=\"5447644880824181073\">⚡</tg-emoji> Developed &amp; Managed by Atik</b>\n"
-            "<b>━━━━━━━━━━━━━━━━</b>",
+            "<b><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji></b>",
             parse_mode="HTML",
         )
 
@@ -9032,7 +9033,7 @@ def text_handler(message):
         bot.send_message(
             message.chat.id,
             "🔑🔥 <b>V2 PANEL API KEY CHANGE</b> 🔥🔑\n"
-            "━━━━━━━━━━━━━━━━\n\n"
+            "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
             "Kon panel er API key change korte chao?\n"
             "Niche theke panel select koro:",
             reply_markup=markup,
@@ -9753,7 +9754,7 @@ def _settings_text(uid=None):
     eg_str = f"{len(extra_grps)}extra group(s) added" if extra_grps else "❌ No extra group added"
     return (
         "⚙️ <b>BOT SETTINGS</b> ⚙️\n"
-        "━━━━━━━━━━━━━━━━\n\n"
+        "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         "📡 <b>OTP GROUP</b>\n"
         f"🔗 Link: {link_str}\n"
         f"🆔 Chat ID: {id_str}\n"
@@ -9765,7 +9766,7 @@ def _settings_text(uid=None):
         f"📢 Join Channel: {ch2_str}\n"
         f"🤖 Bot Link: {bot_str}\n\n"
         f"📡 Extra Groups: {eg_str}\n\n"
-        "━━━━━━━━━━━━━━━━\n"
+        "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
         "⬇️ Ki change korte chao?"
     )
 
@@ -10170,7 +10171,7 @@ def _show_remove_admin(message):
     bot.send_message(
         message.chat.id,
         "🗑️ <b>Remove Admin</b>\n\n"
-        "━━━━━━━━━━━━━━━━\n"
+        "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
         "Niche theke admin select koro:\n\n"
         "<i>⚠️ Super Admin remove kora jabe na.</i>",
         reply_markup=markup,
@@ -10343,12 +10344,12 @@ def _show_msg_icons_menu(message, note=""):
     markup.add(types.InlineKeyboardButton("❌ Close", callback_data="msgicon_close"))
     text = (
         f"✨ <b>Message Icons</b>\n"
-        f"━━━━━━━━━━━━━━━━\n\n"
+        f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         f"<i>✏️ Click to send a custom emoji sticker or type the ID.</i>\n"
         f"<i>🔄 Reset to restore the default emoji.</i>"
         + "\n".join(lines)
         + ("\n\n<i>✅ " + note + "</i>" if note else "")
-        + "\n\n━━━━━━━━━━━━━━━━\n"
+        + "\n\n<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
     )
     try:
         bot.send_message(message.chat.id, text, reply_markup=markup, parse_mode="HTML")
@@ -10426,14 +10427,14 @@ def _show_custom_emoji_menu(message, note=""):
     )
     text = (
         f"🎨 <b>Custom Emoji Settings</b>\n"
-        f"━━━━━━━━━━━━━━━━\n\n"
+        f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n\n"
         f"📲 <b>DM Message Emoji (number/country):</b>\n{dm_emoji_lines}\n"
         f"🏳️ <b>Flag Emojis:</b>\n{flag_lines}\n\n"
         f"🎯 <b>Service Emojis:</b>\n{svc_lines}\n\n"
         f"🔘 <b>Button Emojis (set):</b>\n{btn_lines}\n\n"
         f"📋 <b>All Button Keys:</b>\n{all_btn_keys}\n\n"
         f"💬 <b>Message Slot Emojis:</b>\n{slot_lines}\n\n"
-        f"━━━━━━━━━━━━━━━━\n"
+        f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
         + (f"<i>{note}</i>\n" if note else "")
     )
     mk = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -10989,13 +10990,13 @@ def _show_balance(message):
     bot.send_message(
         message.chat.id,
         f'<tg-emoji emoji-id="5445353829304387411">💰</tg-emoji> <b>Your Wallet</b>\n'
-        f"━━━━━━━━━━━━━━━━\n"
+        f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
         f'<tg-emoji emoji-id="5197434882321567830">💵</tg-emoji> <b>Balance:</b> <code>{cur}{bal:.2f}</code>\n'
         f'<tg-emoji emoji-id="5417924076503062111">🎁</tg-emoji> <b>Per OTP Reward:</b> <code>{cur}{rpo:.2f}</code>\n'
         f'<tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Total OTPs:</b> <code>{total_otps}</code>\n'
         f'<tg-emoji emoji-id="5386367538735104399">⏳</tg-emoji> <b>Pending Withdraw:</b> <code>{len(pending)}</code>\n'
         f'<tg-emoji emoji-id="5206607081334906820">✅</tg-emoji> <b>Approved Withdraw:</b> <code>{len(approved)}</code>\n'
-        f"━━━━━━━━━━━━━━━━",
+        f"<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>",
         parse_mode="HTML",
         reply_markup=markup,
     )
@@ -11210,7 +11211,7 @@ def _payment_admin_msg_handler(message):
         lines = []
         for k, v in sorted(bal_copy.items(), key=lambda x: -float(x[1])):
             lines.append(f"<code>{k}</code> → <b>{cur}{float(v):.2f}</b>")
-        text = "📋 <b>All User Balances</b>\n━━━━━━━━━━━━━━━━\n" + "\n".join(lines[:50])
+        text = "📋 <b>All User Balances</b>\n<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n" + "\n".join(lines[:50])
         if len(lines) > 50:
             text += f"\n…and {len(lines)-50} more"
         bot.send_message(message.chat.id, text, parse_mode="HTML")
@@ -11554,7 +11555,7 @@ def _show_edit_messages_menu(message, note=""):
     markup = types.InlineKeyboardMarkup(row_width=2)
     lines = [
         "✏️ <b>Message Edit</b>\n"
-        "━━━━━━━━━━━━━━━━\n"
+        "<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>\n"
         "<i>Edit message text or set custom emoji icons:</i>"
     ]
 
@@ -11584,7 +11585,7 @@ def _show_edit_messages_menu(message, note=""):
     text = "\n".join(lines)
     if note:
         text += f"\n\n✅ <i>{note}</i>"
-    text += "\n\n━━━━━━━━━━━━━━━━"
+    text += "\n\n<tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji><tg-emoji emoji-id=\"5870818207383686839\">〰️</tg-emoji>"
     try:
         bot.send_message(message.chat.id, text, reply_markup=markup, parse_mode="HTML")
     except Exception as e:
