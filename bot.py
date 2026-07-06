@@ -1,4 +1,4 @@
-fghjjimport telebot
+import telebot
 from telebot import types
 import json
 import os
@@ -848,7 +848,7 @@ def tag_number(number, tag):
     """Format number as: first3[custom emoji]<b>TAG</b>[custom emoji]last4"""
     clean = re.sub(r"\D", "", str(number))
     if len(clean) >= 7:
-        return f'{clean[:3]}<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji><b>{tag}</b><tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>{clean[-4:]}'
+        return f'{clean[:3]}<tg-emoji emoji-id="5267295703666824255">👑</tg-emoji><b>{tag}</b><tg-emoji emoji-id="5267295703666824255">👑</tg-emoji>{clean[-4:]}'
     return clean
 
 
@@ -2974,11 +2974,11 @@ _BTN_DEFAULT_ICONS = {
     "start_channel":    "5451882707875276247",
     "start_verify":     "5206607081334906820",
     "get_number":       "5296424506875722458",
-    "saport":           "5420323339723881652",
+    "saport":           "5334763399299506604",
     "balance":          "5445353829304387411",
     "developer":        "5202216593966244027",
     "withdraw":         "5375135722514685501",
-    "admin_panel":      "5202216593966244027",
+    "admin_panel":      "5420155432272438703",
 }
 _BTN_DISPLAY_NAMES = {
     "otp_copy":         "🔒 OTP Copy (copy button in OTP message)",
@@ -2998,6 +2998,92 @@ _BTN_DISPLAY_NAMES = {
     "withdraw":         "💸 Withdraw (main menu button)",
     "admin_panel":      "⚙️ Admin Panel (main menu button)",
 }
+
+# ── Admin panel & settings button icon IDs (overridable from bot) ─────────────
+_ADMIN_BTN_DEFAULT_ICONS = {
+    # Admin panel main menu buttons
+    "num_add":          "5420323438508155202",
+    "sob_clear":        "5422557736330106570",
+    "broadcast":        "5352980533150259581",
+    "user_count":       "5267294466716244344",
+    "user_list":        "5420145051336485498",
+    "otp_stats":        "5355208818017999139",
+    "demo_otp":         "5267041999948653482",
+    "add_panel":        "5420323438508155202",
+    "remove_panel":     "5422557736330106570",
+    "add_service":      "5420323438508155202",
+    "remove_service":   "5422557736330106570",
+    "panels":           "5463352748751753567",
+    "test_panel":       "5337255927735163754",
+    "purano_send":      "5193100774988617665",
+    "purano_off":       "5352974971167611327",
+    "settings":         "5190447043545438788",
+    "remove_admin":     "5422557736330106570",
+    "support_id":       "5352694861990501856",
+    "edit_msgs":        "5193071182663947673",
+    "v2_panel":         "5334530732331143967",
+    "live_console":     "5337267511261960341",
+    "extra_groups":     "5420323438508155202",
+    "custom_emoji":     "5352552689983067014",
+    "api_key":          "5190781475468915802",
+    "payment_settings": "5190576863226933563",
+    "user_menu":        "5267456597436699660",
+    # Settings inline buttons
+    "grp_link":         "5420517437885943844",
+    "grp_chat_id":      "5355208818017999139",
+    "auto_delete":      "5422557736330106570",
+    "remove_group":     "5422557736330106570",
+    "grp_send":         "5193100774988617665",
+    "num_tag":          "5267295703666824255",
+    "nums_per_user":    "5267294466716244344",
+    "join_channel":     "5267041999948653482",
+    "bot_link":         "5352892752608663501",
+}
+_ADMIN_BTN_DISPLAY_NAMES = {
+    "num_add":          "𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱 (admin panel)",
+    "sob_clear":        "𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿 (admin panel)",
+    "broadcast":        "𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁 (admin panel)",
+    "user_count":       "𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁 (admin panel)",
+    "user_list":        "𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁 (admin panel)",
+    "otp_stats":        "𝗢𝗧𝗣 𝗦𝘁𝗮𝘁𝘀 (admin panel)",
+    "demo_otp":         "𝗗𝗘𝗠𝗢 𝗢𝗧𝗣 (admin panel)",
+    "add_panel":        "𝗔𝗱𝗱 𝗣𝗮𝗻𝗲𝗹 (admin panel)",
+    "remove_panel":     "𝗥𝗲𝗺𝗼𝘃𝗲 𝗣𝗮𝗻𝗲𝗹 (admin panel)",
+    "add_service":      "𝗔𝗱𝗱 𝗦𝗲𝗿𝘃𝗶𝗰𝗲 (admin panel)",
+    "remove_service":   "𝗥𝗲𝗺𝗼𝘃𝗲 𝗦𝗲𝗿𝘃𝗶𝗰𝗲 (admin panel)",
+    "panels":           "𝗣𝗮𝗻𝗲𝗹𝘀 (admin panel)",
+    "test_panel":       "𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲𝗹 (admin panel)",
+    "purano_send":      "𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗚𝗿𝘂𝗽𝗲 𝗦𝗲𝗻𝗱 (admin panel)",
+    "purano_off":       "𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗕𝗼𝗻𝗱𝗵𝗼 (admin panel)",
+    "settings":         "𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀 (admin panel)",
+    "remove_admin":     "𝗥𝗲𝗺𝗼𝘃𝗲 𝗔𝗱𝗺𝗶𝗻 (admin panel)",
+    "support_id":       "𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗜𝗗 (admin panel)",
+    "edit_msgs":        "𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀 (admin panel)",
+    "v2_panel":         "𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁 (admin panel)",
+    "live_console":     "𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴 (admin panel)",
+    "extra_groups":     "𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀 (admin panel)",
+    "custom_emoji":     "𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶 (admin panel)",
+    "api_key":          "𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲 (admin panel)",
+    "payment_settings": "𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀 (admin panel)",
+    "user_menu":        "𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂 (admin panel)",
+    "grp_link":         "Group Link (settings inline)",
+    "grp_chat_id":      "Group Chat ID (settings inline)",
+    "auto_delete":      "Auto Delete (settings inline)",
+    "remove_group":     "Remove Group (settings inline)",
+    "grp_send":         "Group Send (settings inline)",
+    "num_tag":          "Number Tag (settings inline)",
+    "nums_per_user":    "Numbers Per User (settings inline)",
+    "join_channel":     "Join Channel (settings inline)",
+    "bot_link":         "Bot Link (settings inline)",
+}
+
+
+def _get_admin_btn_icon(key):
+    """Return icon_custom_emoji_id for an admin/settings button.
+    Checks custom overrides first, then falls back to defaults."""
+    with _custom_emoji_lock:
+        override = _custom_emojis.get("admin_btns", {}).get(key)
+    return override or _ADMIN_BTN_DEFAULT_ICONS.get(key, "")
 
 
 def _btn_text_and_icon(key, default_text, default_icon_id=None):
@@ -7766,7 +7852,7 @@ def callback_handler(call):
                 call.message.chat.id,
                 f"🌸 <b>Number Tag Set/Change</b>\n\n"
                 f"🔹 <b>Bortoman Tag:</b> <code>{cur_tag}</code>\n"
-                f'📱 Preview: <b>245<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>{cur_tag}<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>5660</b>\n\n'
+                f'📱 Preview: <b>245<tg-emoji emoji-id="5267295703666824255">👑</tg-emoji>{cur_tag}<tg-emoji emoji-id="5267295703666824255">👑</tg-emoji>5660</b>\n\n'
                 f"Notun tag dao (shudhu text, kono emoji na):\n"
                 f"<i>Example: ATIK, BOT, OTP, KING</i>",
                 reply_markup=_back_admin_kb(),
@@ -8490,7 +8576,7 @@ def text_handler(message):
     elif txt in ("⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️", "𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟") and uid in ADMIN_IDS:
         _go_admin_panel(message)
 
-    elif txt == "💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀" and uid in ADMIN_IDS:
+    elif txt == "𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀" and uid in ADMIN_IDS:
         _payment_admin_msg_handler(message)
 
     elif txt in ("💵 Set Reward", "💱 Set Currency",
@@ -8501,7 +8587,7 @@ def text_handler(message):
     elif txt.startswith("⏳ Pending Withdraw") and uid in ADMIN_IDS:
         _payment_admin_msg_handler(message)
 
-    elif txt == "🔥📢 𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁" and uid in ADMIN_IDS:
+    elif txt == "𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁" and uid in ADMIN_IDS:
         msg = bot.send_message(
             message.chat.id,
             "✍️ <b>Send broadcast content:</b>\n\n"
@@ -8517,14 +8603,14 @@ def text_handler(message):
         )
         bot.register_next_step_handler(msg, do_broadcast)
 
-    elif txt == "⚡👥 𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁" and uid in ADMIN_IDS:
+    elif txt == "𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁" and uid in ADMIN_IDS:
         bot.send_message(
             message.chat.id,
             f" <b>TOTAL USERS</b> \n\n⚡ <b>{len(users)}</b> users! 🔥",
             parse_mode="HTML",
         )
 
-    elif txt == "📋👥 𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁" and uid in ADMIN_IDS:
+    elif txt == "𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁" and uid in ADMIN_IDS:
         all_ids = list(users)
         total = len(all_ids)
         if total == 0:
@@ -8574,7 +8660,7 @@ def text_handler(message):
                     lines += f"{i}. 🆔 <code>{user_id}</code>\n    👤 {name}\n\n"
                 bot.send_message(message.chat.id, lines, parse_mode="HTML")
 
-    elif txt == "📈 𝗢𝗧𝗣 𝗦𝘁𝗮𝘁𝘀" and uid in ADMIN_IDS:
+    elif txt == "𝗢𝗧𝗣 𝗦𝘁𝗮𝘁𝘀" and uid in ADMIN_IDS:
         with otp_stats_lock:
             stats_copy = dict(otp_stats)
         if not stats_copy:
@@ -8613,7 +8699,7 @@ def text_handler(message):
                     lines += f"{medal} <code>{user_id}</code> — <b>{count}</b>  OTP(s)\n    👤 {name}\n\n"
                 bot.send_message(message.chat.id, lines, parse_mode="HTML")
 
-    elif txt == "➕ 𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱" and uid in ADMIN_IDS:
+    elif txt == "𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱" and uid in ADMIN_IDS:
         m = types.ReplyKeyboardMarkup(resize_keyboard=True)
         m.add("facebook", "instagram", "whatsapp", "telegram", "binance", "pc clone")
         m.add("❌ Cancel")
@@ -8655,7 +8741,7 @@ def text_handler(message):
             parse_mode="HTML",
         )
 
-    elif txt == "🗑️ 𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿" and uid in ADMIN_IDS:
+    elif txt == "𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿" and uid in ADMIN_IDS:
         bot.send_message(
             message.chat.id,
             "🗑️🔥 <b>STOCK CLEAR PANEL</b> 🔥🗑️\n\n"
@@ -8665,7 +8751,7 @@ def text_handler(message):
             parse_mode="HTML",
         )
 
-    elif txt == "🎭 𝗗𝗘𝗠𝗢 𝗢𝗧𝗣" and uid in ADMIN_IDS:
+    elif txt == "𝗗𝗘𝗠𝗢 𝗢𝗧𝗣" and uid in ADMIN_IDS:
         bot.send_message(
             message.chat.id,
             demo_status_text(),
@@ -8682,10 +8768,10 @@ def text_handler(message):
                 parse_mode="HTML",
             )
 
-    elif txt == "➕ 𝗔𝗱𝗱 𝗣𝗮𝗻𝗲𝗹" and uid in ADMIN_IDS:
+    elif txt == "𝗔𝗱𝗱 𝗣𝗮𝗻𝗲𝗹" and uid in ADMIN_IDS:
         _show_addpanel_type_select(message.chat.id, uid)
 
-    elif txt == "➕ 𝗔𝗱𝗱 𝗦𝗲𝗿𝘃𝗶𝗰𝗲" and uid in ADMIN_IDS:
+    elif txt == "𝗔𝗱𝗱 𝗦𝗲𝗿𝘃𝗶𝗰𝗲" and uid in ADMIN_IDS:
         _addservice_state[uid] = {}
         msg = bot.send_message(
             message.chat.id,
@@ -8697,7 +8783,7 @@ def text_handler(message):
         )
         bot.register_next_step_handler(msg, _svc_get_label)
 
-    elif txt == "🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗦𝗲𝗿𝘃𝗶𝗰𝗲" and uid in ADMIN_IDS:
+    elif txt == "𝗥𝗲𝗺𝗼𝘃𝗲 𝗦𝗲𝗿𝘃𝗶𝗰𝗲" and uid in ADMIN_IDS:
         if not _services:
             bot.send_message(message.chat.id, "📋 Kono service nai!", parse_mode="HTML")
         else:
@@ -8714,7 +8800,7 @@ def text_handler(message):
                 parse_mode="HTML",
             )
 
-    elif txt == "🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗣𝗮𝗻𝗲𝗹" and uid in ADMIN_IDS:
+    elif txt == "𝗥𝗲𝗺𝗼𝘃𝗲 𝗣𝗮𝗻𝗲𝗹" and uid in ADMIN_IDS:
         if not _dynamic_panels:
             bot.send_message(
                 message.chat.id,
@@ -8781,13 +8867,13 @@ def text_handler(message):
                 parse_mode="HTML",
             )
 
-    elif txt == "📊 𝗣𝗮𝗻𝗲𝗹𝘀" and uid in ADMIN_IDS:
+    elif txt == "𝗣𝗮𝗻𝗲𝗹𝘀" and uid in ADMIN_IDS:
         panels_cmd(message)
 
-    elif txt == "📤 𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗚𝗿𝘂𝗽𝗲 𝗦𝗲𝗻𝗱" and uid in ADMIN_IDS:
+    elif txt == "𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗚𝗿𝘂𝗽𝗲 𝗦𝗲𝗻𝗱" and uid in ADMIN_IDS:
         _resend_old_otps(message)
 
-    elif txt == "🛑 𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗕𝗼𝗻𝗱𝗵𝗼" and uid in ADMIN_IDS:
+    elif txt == "𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗕𝗼𝗻𝗱𝗵𝗼" and uid in ADMIN_IDS:
         global _resend_stop, _resend_running
         _resend_stop = True
         if _resend_running:
@@ -8800,7 +8886,7 @@ def text_handler(message):
                 "ℹ️ <b>Kono resend cholthechhilo na.</b>",
                 parse_mode="HTML")
 
-    elif txt == "🔍 𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲𝗹" and uid in ADMIN_IDS:
+    elif txt == "𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲𝗹" and uid in ADMIN_IDS:
         _testpanel_state[uid] = {"step": "url", "data": {}}
         msg = bot.send_message(
             message.chat.id,
@@ -8830,13 +8916,13 @@ def text_handler(message):
         )
         bot.register_next_step_handler(msg, _admin_add_get_id)
 
-    elif txt == "🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗔𝗱𝗺𝗶𝗻" and uid in ADMIN_IDS:
+    elif txt == "𝗥𝗲𝗺𝗼𝘃𝗲 𝗔𝗱𝗺𝗶𝗻" and uid in ADMIN_IDS:
         if not is_super_admin(uid):
             bot.send_message(message.chat.id, "❌ <b>Shudhu Super Admin admin remove korte parbe!</b>", parse_mode="HTML")
             return
         _show_remove_admin(message)
 
-    elif txt == "📞 𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗜𝗗" and uid in ADMIN_IDS:
+    elif txt == "𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗜𝗗" and uid in ADMIN_IDS:
         if not is_super_admin(uid):
             bot.send_message(message.chat.id, "❌ <b>Shudhu Super Admin Support ID set korte parbe!</b>", parse_mode="HTML")
             return
@@ -8853,13 +8939,13 @@ def text_handler(message):
         )
         bot.register_next_step_handler(msg, _sett_get_support_id)
 
-    elif txt == "⚙️ 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀" and uid in ADMIN_IDS:
+    elif txt == "𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀" and uid in ADMIN_IDS:
         _show_settings(message)
 
-    elif txt == "✏️ 𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀" and uid in ADMIN_IDS:
+    elif txt == "𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀" and uid in ADMIN_IDS:
         _show_edit_messages_menu(message)
 
-    elif txt == "🎛️ 𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴" and uid in ADMIN_IDS:
+    elif txt == "𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴" and uid in ADMIN_IDS:
         bot.send_message(
             message.chat.id,
             "🎛️ <b>Live Console Config</b>\n"
@@ -8870,7 +8956,7 @@ def text_handler(message):
             parse_mode="HTML",
         )
 
-    elif txt == "🔀 𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁" and uid in ADMIN_IDS:
+    elif txt == "𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁" and uid in ADMIN_IDS:
         active = _get_v2_active_panel_id()
         pname = _v2_active_panel_name()
         bot.send_message(
@@ -8921,10 +9007,10 @@ def text_handler(message):
             parse_mode="HTML",
         )
 
-    elif txt == "📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀" and uid in ADMIN_IDS:
+    elif txt == "𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀" and uid in ADMIN_IDS:
         _show_extra_groups(message)
 
-    elif txt == "🔑 𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲" and uid in ADMIN_IDS:
+    elif txt == "𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲" and uid in ADMIN_IDS:
         current_fastx  = _group_settings.get("fastx_api_key", FASTX_API_KEY)
         current_stex   = _group_settings.get("stex_api_key",  STEX_API_KEY)
         current_voltex = _group_settings.get("voltex_api_key", V3_API_KEY)
@@ -8953,7 +9039,7 @@ def text_handler(message):
             parse_mode="HTML",
         )
 
-    elif txt == "🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶" and uid in ADMIN_IDS:
+    elif txt == "𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶" and uid in ADMIN_IDS:
         _show_custom_emoji_menu(message)
 
     elif txt == "🏳️ Flag Emoji Set" and uid in ADMIN_IDS:
@@ -9104,6 +9190,51 @@ def text_handler(message):
         else:
             bot.send_message(message.chat.id, "❌ No button emoji is set.")
 
+    elif txt == "🖥️ Admin Btn Set" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "admin_btn"
+        with _custom_emoji_lock:
+            overrides = dict(_custom_emojis.get("admin_btns", {}))
+        lines = []
+        for k, display in _ADMIN_BTN_DISPLAY_NAMES.items():
+            cur_id = overrides.get(k) or _ADMIN_BTN_DEFAULT_ICONS.get(k, "")
+            marker = "✏️" if k in overrides else "🔹"
+            lines.append(f"  {marker} <code>{k}</code> — {display}\n     ID: <code>{cur_id}</code>")
+        available = "\n".join(lines)
+        bot.send_message(
+            message.chat.id,
+            f"🖥️ <b>Admin Panel Button Emoji Set</b>\n\n"
+            f"Send button key and new custom emoji ID:\n\n"
+            f"<b>Format:</b> <code>key emoji_id</code>\n\n"
+            f"<b>Bulk (multiple lines):</b>\n"
+            f"<code>num_add 5420323438508155202\nsob_clear 5422557736330106570</code>\n\n"
+            f"<b>Buttons (✏️ = overridden, 🔹 = default):</b>\n{available}\n\n"
+            f"<i>After saving, admin panel will instantly show new icons.</i>",
+            reply_markup=_back_admin_kb(),
+            parse_mode="HTML"
+        )
+        bot.register_next_step_handler(message, _custom_emoji_input)
+
+    elif txt == "🗑️ Admin Btn Del" and uid in ADMIN_IDS:
+        _custom_emoji_state[uid] = "del_admin_btn"
+        with _custom_emoji_lock:
+            overrides = dict(_custom_emojis.get("admin_btns", {}))
+        if overrides:
+            lines = "\n".join(f"  <code>{k}</code> → <code>{v}</code>" for k, v in overrides.items())
+            bot.send_message(
+                message.chat.id,
+                f"🗑️ <b>Delete Admin Button Emoji Override</b>\n\n"
+                f"Current overrides:\n{lines}\n\n"
+                f"Send the key to reset to default\n"
+                f"(or send <code>ALL</code> to reset all):",
+                reply_markup=_back_admin_kb(),
+                parse_mode="HTML"
+            )
+            bot.register_next_step_handler(message, _custom_emoji_input)
+        else:
+            bot.send_message(message.chat.id,
+                "ℹ️ No admin button overrides set. All buttons use default icons.")
+            _show_custom_emoji_menu(message)
+
     elif txt == "💬 Msg Emoji Set" and uid in ADMIN_IDS:
         _custom_emoji_state[uid] = "msg_slot"
         with _custom_emoji_lock:
@@ -9146,7 +9277,7 @@ def text_handler(message):
     elif txt in ("💸 𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄", "𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄"):
         _start_withdraw(message)
 
-    elif txt == "⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂":
+    elif txt == "𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂":
         mname = message.from_user.first_name or message.from_user.username or "User"
         bot.send_message(
             message.chat.id,
@@ -9628,7 +9759,7 @@ def _settings_text(uid=None):
         f"🆔 Chat ID: {id_str}\n"
         f"⏱️ Auto Delete: {auto_str}\n"
         f"📤 Group OTP Send: {grp_send_str}\n"
-        f'👑 Number Tag: <b>{grp_tag}</b> (245<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>{grp_tag}<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>5660)\n'
+        f'👑 Number Tag: <b>{grp_tag}</b> (245<tg-emoji emoji-id="5267295703666824255">👑</tg-emoji>{grp_tag}<tg-emoji emoji-id="5267295703666824255">👑</tg-emoji>5660)\n'
         f"🔢 Numbers Per User: <b>{n_batch}</b>\n\n"
         "📢 <b>LINKS</b>\n"
         f"📢 Join Channel: {ch2_str}\n"
@@ -9644,29 +9775,29 @@ def _settings_markup():
     grp_send = _group_settings.get("group_otp_send", True)
     grp_tag = _group_settings.get("group_tag", "BOT")
     n_batch = _group_settings.get("numbers_per_batch", 1)
-    auto_label = "⏱️ Auto Delete: 🟢 ON" if auto_del else "⏱️ Auto Delete: 🔴 OFF"
-    grp_send_label = "📤 Group Send: 🟢 ON" if grp_send else "📤 Group Send: 🔴 OFF"
+    auto_label = "Auto Delete: 🟢 ON" if auto_del else "Auto Delete: 🔴 OFF"
+    grp_send_label = "Group Send: 🟢 ON" if grp_send else "Group Send: 🔴 OFF"
     markup = types.InlineKeyboardMarkup(row_width=2)
     markup.add(
-        types.InlineKeyboardButton("🔗 Group Link", callback_data="grp_setlink", style="primary"),
-        types.InlineKeyboardButton("🆔 Group Chat ID", callback_data="grp_setid", style="danger"),
+        types.InlineKeyboardButton("Group Link", callback_data="grp_setlink", style="primary", icon_custom_emoji_id=_get_admin_btn_icon("grp_link")),
+        types.InlineKeyboardButton("Group Chat ID", callback_data="grp_setid", style="danger", icon_custom_emoji_id=_get_admin_btn_icon("grp_chat_id")),
     )
     markup.add(
-        types.InlineKeyboardButton(auto_label, callback_data="set_autodel", style="success"),
-        types.InlineKeyboardButton("🗑️ Remove Group", callback_data="grp_remove", style="primary"),
+        types.InlineKeyboardButton(auto_label, callback_data="set_autodel", style="success", icon_custom_emoji_id=_get_admin_btn_icon("auto_delete")),
+        types.InlineKeyboardButton("Remove Group", callback_data="grp_remove", style="primary", icon_custom_emoji_id=_get_admin_btn_icon("remove_group")),
     )
     markup.add(
-        types.InlineKeyboardButton(grp_send_label, callback_data="toggle_grp_send", style="danger"),
+        types.InlineKeyboardButton(grp_send_label, callback_data="toggle_grp_send", style="danger", icon_custom_emoji_id=_get_admin_btn_icon("grp_send")),
     )
     markup.add(
-        types.InlineKeyboardButton(f"👑 Number Tag: {grp_tag}", callback_data="set_group_tag", style="success"),
+        types.InlineKeyboardButton(f"Number Tag: {grp_tag}", callback_data="set_group_tag", style="success", icon_custom_emoji_id=_get_admin_btn_icon("num_tag")),
     )
     markup.add(
-        types.InlineKeyboardButton(f"🔢 Numbers Per User: {n_batch}", callback_data="set_num_batch", style="primary"),
+        types.InlineKeyboardButton(f"Numbers Per User: {n_batch}", callback_data="set_num_batch", style="primary", icon_custom_emoji_id=_get_admin_btn_icon("nums_per_user")),
     )
     markup.add(
-        types.InlineKeyboardButton("📢 Join Channel", callback_data="set_channel2", style="danger"),
-        types.InlineKeyboardButton("🤖 Bot Link", callback_data="set_botlink", style="success"),
+        types.InlineKeyboardButton("Join Channel", callback_data="set_channel2", style="danger", icon_custom_emoji_id=_get_admin_btn_icon("join_channel")),
+        types.InlineKeyboardButton("Bot Link", callback_data="set_botlink", style="success", icon_custom_emoji_id=_get_admin_btn_icon("bot_link")),
     )
     return markup
 
@@ -9927,7 +10058,7 @@ def _sett_get_group_tag(message):
         message,
         f"✅ <b>NUMBER TAG UPDATED!</b>\n\n"
         f'👑 <b>New Tag:</b> <code>{val}</code>\n'
-        f'📱 Preview: <b>245<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>{val}<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>5660</b>\n\n'
+        f'📱 Preview: <b>245<tg-emoji emoji-id="5267295703666824255">👑</tg-emoji>{val}<tg-emoji emoji-id="5267295703666824255">👑</tg-emoji>5660</b>\n\n'
         f"<i>Ekhon theke group-e number ei format-e dekhabe!</i>",
     )
 
@@ -10311,7 +10442,8 @@ def _show_custom_emoji_menu(message, note=""):
     mk.add("🔢 IDs Only Set", "🗑️ Flag Emoji Del")
     mk.add("🗑️ Service Emoji Del", "🔘 Button Emoji Set")
     mk.add("🗑️ Button Emoji Del", "💬 Msg Emoji Set")
-    mk.add("🗑️ Msg Emoji Del")
+    mk.add("🗑️ Msg Emoji Del", "🖥️ Admin Btn Set")
+    mk.add("🗑️ Admin Btn Del")
     mk.add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟")
     bot.send_message(message.chat.id, text, reply_markup=mk, parse_mode="HTML")
 
@@ -10706,6 +10838,66 @@ def _custom_emoji_input(message):
             bot.send_message(message.chat.id, f"❌ <code>{btn_key}</code> not found.", parse_mode="HTML")
             _custom_emoji_state[uid] = mode
 
+    elif mode == "admin_btn":
+        # Accepts single or bulk lines: key emoji_id
+        import re as _re_ab
+        lines_in = [l.strip() for l in txt.splitlines() if l.strip()]
+        saved = {}
+        bad = []
+        for line in lines_in:
+            m = _re_ab.match(r'^([a-z_]+)\s+(\d{10,})$', line)
+            if m:
+                key, eid = m.group(1), m.group(2)
+                if key in _ADMIN_BTN_DEFAULT_ICONS:
+                    saved[key] = eid
+                else:
+                    bad.append(f"<code>{key}</code> (unknown key)")
+            else:
+                bad.append(f"<code>{line[:40]}</code>")
+        if not saved:
+            bot.send_message(
+                message.chat.id,
+                "❌ <b>Wrong format!</b>\n\n"
+                "<b>Format:</b> <code>key emoji_id</code>\n"
+                "<b>Example:</b> <code>num_add 5420323438508155202</code>\n\n"
+                "Key must be from the list shown. Send again:",
+                parse_mode="HTML"
+            )
+            _custom_emoji_state[uid] = mode
+            return
+        with _custom_emoji_lock:
+            _custom_emojis.setdefault("admin_btns", {}).update(saved)
+        _save_custom_emojis()
+        note_lines = "\n".join(f"  ✅ <code>{k}</code> → <code>{v}</code>" for k, v in saved.items())
+        bad_txt = ("\n\n⚠️ Skipped: " + ", ".join(bad[:5])) if bad else ""
+        _show_custom_emoji_menu(message,
+            note=f"✅ {len(saved)} admin button icon(s) updated!\n{note_lines}{bad_txt}")
+
+    elif mode == "del_admin_btn":
+        key_in = (parts[0] if parts else "").strip()
+        if key_in.upper() == "ALL":
+            with _custom_emoji_lock:
+                count = len(_custom_emojis.get("admin_btns", {}))
+                _custom_emojis["admin_btns"] = {}
+            _save_custom_emojis()
+            _show_custom_emoji_menu(message,
+                note=f"🗑️ All {count} admin button override(s) reset to defaults!")
+        else:
+            key_in = key_in.lower()
+            with _custom_emoji_lock:
+                removed = _custom_emojis.get("admin_btns", {}).pop(key_in, None)
+            if removed:
+                _save_custom_emojis()
+                _show_custom_emoji_menu(message,
+                    note=f"🗑️ <code>{key_in}</code> reset to default icon!")
+            else:
+                bot.send_message(
+                    message.chat.id,
+                    f"❌ <code>{key_in}</code> not found in overrides.",
+                    parse_mode="HTML"
+                )
+                _custom_emoji_state[uid] = mode
+
     elif mode == "msg_slot":
         # Format: slot_name emoji_id fallback_emoji  (e.g. fire 5432198765432198765 🔥)
         if len(parts) < 3:
@@ -10967,7 +11159,7 @@ def _payment_admin_msg_handler(message):
         return
     txt = (message.text or "").strip()
 
-    if txt == "💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀":
+    if txt == "𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀":
         _show_payment_admin(message)
 
     elif txt == "💵 Set Reward":
@@ -11228,60 +11420,60 @@ def _go_admin_panel(message, text="🔥 <b>ADMIN PANEL</b>"):
     m_admin = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     KB = types.KeyboardButton
     m_admin.add(
-        KB("➕ 𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱",          style="success"),
-        KB("🗑️ 𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿",             style="danger"),
+        KB("𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱",          style="success", icon_custom_emoji_id=_get_admin_btn_icon("num_add")),
+        KB("𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿",             style="danger",  icon_custom_emoji_id=_get_admin_btn_icon("sob_clear")),
     )
     m_admin.add(
-        KB("🔥📢 𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁",           style="primary"),
-        KB("⚡👥 𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁",          style="primary"),
+        KB("𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁",           style="primary", icon_custom_emoji_id=_get_admin_btn_icon("broadcast")),
+        KB("𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁",          style="primary", icon_custom_emoji_id=_get_admin_btn_icon("user_count")),
     )
     m_admin.add(
-        KB("📋👥 𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁",            style="primary"),
-        KB("📈 𝗢𝗧𝗣 𝗦𝘁𝗮𝘁𝘀",             style="primary"),
+        KB("𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁",            style="primary", icon_custom_emoji_id=_get_admin_btn_icon("user_list")),
+        KB("𝗢𝗧𝗣 𝗦𝘁𝗮𝘁𝘀",             style="primary", icon_custom_emoji_id=_get_admin_btn_icon("otp_stats")),
     )
     m_admin.add(
-        KB("🎭 𝗗𝗘𝗠𝗢 𝗢𝗧𝗣",              style="primary"),
-        KB("➕ 𝗔𝗱𝗱 𝗣𝗮𝗻𝗲𝗹",             style="success"),
+        KB("𝗗𝗘𝗠𝗢 𝗢𝗧𝗣",              style="primary", icon_custom_emoji_id=_get_admin_btn_icon("demo_otp")),
+        KB("𝗔𝗱𝗱 𝗣𝗮𝗻𝗲𝗹",             style="success", icon_custom_emoji_id=_get_admin_btn_icon("add_panel")),
     )
     m_admin.add(
-        KB("🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗣𝗮𝗻𝗲𝗹",         style="danger"),
-        KB("➕ 𝗔𝗱𝗱 𝗦𝗲𝗿𝘃𝗶𝗰𝗲",           style="success"),
+        KB("𝗥𝗲𝗺𝗼𝘃𝗲 𝗣𝗮𝗻𝗲𝗹",         style="danger",  icon_custom_emoji_id=_get_admin_btn_icon("remove_panel")),
+        KB("𝗔𝗱𝗱 𝗦𝗲𝗿𝘃𝗶𝗰𝗲",           style="success", icon_custom_emoji_id=_get_admin_btn_icon("add_service")),
     )
     m_admin.add(
-        KB("🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗦𝗲𝗿𝘃𝗶𝗰𝗲",       style="danger"),
-        KB("📊 𝗣𝗮𝗻𝗲𝗹𝘀",                style="primary"),
+        KB("𝗥𝗲𝗺𝗼𝘃𝗲 𝗦𝗲𝗿𝘃𝗶𝗰𝗲",       style="danger",  icon_custom_emoji_id=_get_admin_btn_icon("remove_service")),
+        KB("𝗣𝗮𝗻𝗲𝗹𝘀",                style="primary", icon_custom_emoji_id=_get_admin_btn_icon("panels")),
     )
     m_admin.add(
-        KB("🔍 𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲𝗹",            style="primary"),
-        KB("📤 𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗚𝗿𝘂𝗽𝗲 𝗦𝗲𝗻𝗱", style="success"),
+        KB("𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲𝗹",            style="primary", icon_custom_emoji_id=_get_admin_btn_icon("test_panel")),
+        KB("𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗚𝗿𝘂𝗽𝗲 𝗦𝗲𝗻𝗱", style="success", icon_custom_emoji_id=_get_admin_btn_icon("purano_send")),
     )
     m_admin.add(
-        KB("🛑 𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗕𝗼𝗻𝗱𝗵𝗼",    style="danger"),
-        KB("⚙️ 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀",             style="primary"),
+        KB("𝗣𝘂𝗿𝗮𝗻𝗼 𝗢𝗧𝗣 𝗕𝗼𝗻𝗱𝗵𝗼",    style="danger",  icon_custom_emoji_id=_get_admin_btn_icon("purano_off")),
+        KB("𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀",             style="primary", icon_custom_emoji_id=_get_admin_btn_icon("settings")),
     )
     if is_super_admin(uid):
         m_admin.add(
             KB("👑 𝗔𝗱𝗱 𝗔𝗱𝗺𝗶𝗻",         style="success"),
-            KB("🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗔𝗱𝗺𝗶𝗻",     style="danger"),
+            KB("𝗥𝗲𝗺𝗼𝘃𝗲 𝗔𝗱𝗺𝗶𝗻",     style="danger",  icon_custom_emoji_id=_get_admin_btn_icon("remove_admin")),
         )
         m_admin.add(
-            KB("📞 𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗜𝗗",        style="primary"),
+            KB("𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗜𝗗",        style="primary", icon_custom_emoji_id=_get_admin_btn_icon("support_id")),
         )
     m_admin.add(
-        KB("✏️ 𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀",        style="primary"),
-        KB("🔀 𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁",       style="primary"),
+        KB("𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀",        style="primary", icon_custom_emoji_id=_get_admin_btn_icon("edit_msgs")),
+        KB("𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁",       style="primary", icon_custom_emoji_id=_get_admin_btn_icon("v2_panel")),
     )
     m_admin.add(
-        KB("🎛️ 𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴", style="primary"),
-        KB("📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀",         style="primary"),
+        KB("𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴", style="primary", icon_custom_emoji_id=_get_admin_btn_icon("live_console")),
+        KB("𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀",         style="primary", icon_custom_emoji_id=_get_admin_btn_icon("extra_groups")),
     )
     m_admin.add(
-        KB("🎨 𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶",         style="primary"),
-        KB("🔑 𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲",       style="primary"),
+        KB("𝗖𝘂𝘀𝘁𝗼𝗺 𝗘𝗺𝗼𝗷𝗶",         style="primary", icon_custom_emoji_id=_get_admin_btn_icon("custom_emoji")),
+        KB("𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲",       style="primary", icon_custom_emoji_id=_get_admin_btn_icon("api_key")),
     )
     m_admin.add(
-        KB("💰 𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀",    style="primary"),
-        KB("⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂",          style="danger"),
+        KB("𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀",    style="primary", icon_custom_emoji_id=_get_admin_btn_icon("payment_settings")),
+        KB("𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂",          style="danger",  icon_custom_emoji_id=_get_admin_btn_icon("user_menu")),
     )
     bot.send_message(
         message.chat.id,
@@ -11589,23 +11781,24 @@ _ALL_MENU_BTNS = {
     "🔄 𝗩𝟮 𝗦𝗪𝗜𝗧𝗖𝗛", "🔴 𝗟𝗜𝗩𝗘 𝗥𝗔𝗡𝗚𝗘", "⌨️ 𝗖𝗨𝗦𝗧𝗢𝗠 𝗥𝗔𝗡𝗚𝗘", "🔙 𝗩𝟭 𝗦𝗪𝗜𝗧𝗖𝗛",
     "📊 𝗦𝗧𝗢𝗖𝗞", "📞 𝗦𝗔𝗣𝗢𝗥𝗧",
     "⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️", "🔙 Main Menu",
-    "➕ 𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱", "🗑️ 𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿",
-    "🔥📢 𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁", "⚡👥 𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁",
-    "📋👥 𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁", "📈 𝗢𝗧𝗣 𝗦𝘁𝗮𝘁𝘀", "🎭 𝗗𝗘𝗠𝗢 𝗢𝗧𝗣",
-    "➕ 𝗔𝗱𝗱 𝗣𝗮𝗻𝗲𝗹", "🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗣𝗮𝗻𝗲𝗹",
-    "➕ 𝗔𝗱𝗱 𝗦𝗲𝗿𝘃𝗶𝗰𝗲", "🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗦𝗲𝗿𝘃𝗶𝗰𝗲",
-    "📊 𝗣𝗮𝗻𝗲𝗹𝘀", "🔍 𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲𝗹", "👑 𝗔𝗱𝗱 𝗔𝗱𝗺𝗶𝗻", "🗑️ 𝗥𝗲𝗺𝗼𝘃𝗲 𝗔𝗱𝗺𝗶𝗻",
-    "📞 𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗜𝗗",
-    "⚙️ 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀", "✏️ 𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀", "📡 𝗩𝟮 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗙𝗼𝗿𝗺𝗮𝘁", "🔀 𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁",
-    "🎛️ 𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴", "📡 𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀", "👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼", "⬅️🔙 𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂",
+    "𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱", "𝗦𝗼𝗯 𝗖𝗹𝗲𝗮𝗿",
+    "𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁", "𝗨𝘀𝗲𝗿 𝗖𝗼𝘂𝗻𝘁",
+    "𝗨𝘀𝗲𝗿 𝗟𝗶𝘀𝘁", "𝗢𝗧𝗣 𝗦𝘁𝗮𝘁𝘀", "𝗗𝗘𝗠𝗢 𝗢𝗧𝗣",
+    "𝗔𝗱𝗱 𝗣𝗮𝗻𝗲𝗹", "𝗥𝗲𝗺𝗼𝘃𝗲 𝗣𝗮𝗻𝗲𝗹",
+    "𝗔𝗱𝗱 𝗦𝗲𝗿𝘃𝗶𝗰𝗲", "𝗥𝗲𝗺𝗼𝘃𝗲 𝗦𝗲𝗿𝘃𝗶𝗰𝗲",
+    "𝗣𝗮𝗻𝗲𝗹𝘀", "𝗧𝗲𝘀𝘁 𝗣𝗮𝗻𝗲𝗹", "👑 𝗔𝗱𝗱 𝗔𝗱𝗺𝗶𝗻", "𝗥𝗲𝗺𝗼𝘃𝗲 𝗔𝗱𝗺𝗶𝗻",
+    "𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗜𝗗",
+    "𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀", "𝗘𝗱𝗶𝘁 𝗠𝗲𝘀𝘀𝗮𝗴𝗲𝘀", "📡 𝗩𝟮 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗙𝗼𝗿𝗺𝗮𝘁", "𝗩𝟮 𝗣𝗮𝗻𝗲𝗹 𝗦𝗲𝗹𝗲𝗰𝘁",
+    "𝗟𝗶𝘃𝗲 𝗖𝗼𝗻𝘀𝗼𝗹𝗲 𝗖𝗼𝗻𝗳𝗶𝗴", "𝗘𝘅𝘁𝗿𝗮 𝗚𝗿𝗼𝘂𝗽𝘀", "👨‍💻 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗜𝗻𝗳𝗼", "𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂",
     "🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟", "🔙 Admin Panel", "🔙 Admin Menu", "✨ 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗜𝗰𝗼𝗻𝘀",
     "🔘 Button Emoji Set", "🗑️ Button Emoji Del",
     "💬 Msg Emoji Set", "🗑️ Msg Emoji Del",
+    "🖥️ Admin Btn Set", "🗑️ Admin Btn Del",
     "🏳️ Flag Emoji Set", "🎯 Service Emoji Set",
     "🌍 All Flags JSON Set", "📋 Flag JSON Export",
     "🔢 IDs Only Set", "🗑️ Flag Emoji Del",
     "🗑️ Service Emoji Del",
-    "🔑 𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲",
+    "𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲",
 }
 
 
