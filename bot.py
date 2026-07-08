@@ -1,4 +1,4 @@
-fggiufufuufimport telebot
+import telebot
 from telebot import types
 import json
 import os
@@ -604,7 +604,9 @@ _DEFAULT_SERVICES = [
     {'label': 'Instagram →', 'key': 'instagram'},
     {'label': 'Facebook 💎', 'key': 'facebook'},
     {'label': 'WhatsApp', 'key': 'whatsapp'},
-    {'label': 'PC Clone 💎', 'key': 'pc clone'},
+    {'label': 'Telegram', 'key': 'telegram'},
+    {'label': 'Binance', 'key': 'binance'},
+    {'label': 'Pc Clone', 'key': 'pcclone'},
 ]
 # <<SYNC:_DEFAULT_SERVICES:END>>
 _services = load_json(SERVICES_FILE, list(_DEFAULT_SERVICES))
@@ -635,10 +637,12 @@ _custom_emoji_lock = threading.Lock()
 BALANCES_FILE        = "balances.json"
 WITHDRAW_FILE        = "withdraw_requests.json"
 REWARD_SETTINGS_FILE = "reward_settings.json"
+REFERRALS_FILE       = "referrals.json"
 
 _balances_lock         = threading.Lock()
 _withdraw_lock         = threading.Lock()
 _reward_settings_lock  = threading.Lock()
+_referrals_lock        = threading.Lock()
 
 _balances:          dict = load_json(BALANCES_FILE, {})
 _withdraw_requests: list = load_json(WITHDRAW_FILE, [])
@@ -659,6 +663,29 @@ def _save_withdraws():
 def _save_reward_settings():
     with _reward_settings_lock:
         save_json(REWARD_SETTINGS_FILE, _reward_settings)
+
+# ── Referral system ────────────────────────────────────────────────────────────
+_referrals: dict = load_json(REFERRALS_FILE, {})  # str(new_uid) → referrer_uid (int)
+
+def _save_referrals():
+    with _referrals_lock:
+        save_json(REFERRALS_FILE, _referrals)
+
+def get_refer_commission() -> float:
+    with _reward_settings_lock:
+        return float(_reward_settings.get("refer_commission", 10.0))
+
+def _get_refer_link(uid: int) -> str:
+    try:
+        me = bot.get_me()
+        return f"https://t.me/{me.username}?start=ref{uid}"
+    except Exception:
+        bl = get_bot_link()
+        return f"{bl}?start=ref{uid}" if bl else ""
+
+def _get_refer_count(uid: int) -> int:
+    with _referrals_lock:
+        return sum(1 for v in _referrals.values() if v == uid)
 
 def get_balance(uid: int) -> float:
     with _balances_lock:
@@ -2955,6 +2982,7 @@ _BTN_EMOJI_PREFIX = {
     "balance":          "💰 ",
     "developer":        "👨‍💻 ",
     "withdraw":         "💸 ",
+    "refer":            "🔗 ",
     "admin_panel":      "⚙️ ",
 }
 _BTN_EMOJI_SUFFIX = {
@@ -2979,6 +3007,7 @@ _BTN_DEFAULT_ICONS = {
     "balance":          "5445353829304387411",
     "developer":        "5202216593966244027",
     "withdraw":         "5375135722514685501",
+    "refer":            "5267041999948653482",
     "admin_panel":      "5420155432272438703",
 }
 _BTN_DISPLAY_NAMES = {
@@ -2997,6 +3026,7 @@ _BTN_DISPLAY_NAMES = {
     "balance":          "💰 Balance (main menu button)",
     "developer":        "👨‍💻 Developer Info (main menu button)",
     "withdraw":         "💸 Withdraw (main menu button)",
+    "refer":            "🔗 Reffer (main menu button)",
     "admin_panel":      "⚙️ Admin Panel (main menu button)",
 }
 
@@ -4934,6 +4964,8 @@ def main_menu(user_id):
     _wd_text, _wd_icon = _btn_text_and_icon("withdraw", "💸 𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄")
     markup.add(types.KeyboardButton(_dv_text, style="success", **_dv_icon),
                types.KeyboardButton(_wd_text, style="danger", **_wd_icon))
+    _rf_text, _rf_icon = _btn_text_and_icon("refer", "🔗 𝗥𝗲𝗳𝗳𝗲𝗿")
+    markup.add(types.KeyboardButton(_rf_text, style="primary", **_rf_icon))
     if user_id in ADMIN_IDS:
         _ap_text, _ap_icon = _btn_text_and_icon("admin_panel", "⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️")
         markup.add(types.KeyboardButton(_ap_text, style="primary", **_ap_icon))
@@ -5136,6 +5168,33 @@ def show_countries(chat_id, svc):
 @bot.message_handler(commands=["start"])
 def start_cmd(message):
     u = message.from_user
+    # ── Referral handling — check BEFORE register_user so we know if new ──────
+    _is_new_user = message.chat.id not in users
+    _payload = (message.text or "").split(None, 1)[1].strip() if len((message.text or "").split(None, 1)) > 1 else ""
+    if _is_new_user and _payload.startswith("ref") and _payload[3:].isdigit():
+        _referrer_uid = int(_payload[3:])
+        if _referrer_uid != message.from_user.id:
+            _claimed = False
+            with _referrals_lock:
+                if str(message.from_user.id) not in _referrals:
+                    _referrals[str(message.from_user.id)] = _referrer_uid
+                    _claimed = True
+            if _claimed:
+                _save_referrals()
+                _commission = get_refer_commission()
+                _cur = get_currency()
+                _new_bal = add_reward(_referrer_uid, _commission)
+                try:
+                    bot.send_message(
+                        _referrer_uid,
+                        f'<tg-emoji emoji-id="5267041999948653482">🔗</tg-emoji> <b>Referral Commission!</b>\n\n'
+                        f'👤 Ekjon new user tomar link diye join korecho!\n'
+                        f'💰 Commission: <b>+{_cur}{_commission:.2f}</b>\n'
+                        f'💳 New Balance: <code>{_cur}{_new_bal:.2f}</code>',
+                        parse_mode="HTML",
+                    )
+                except Exception:
+                    pass
     register_user(
         message.chat.id,
         first_name=u.first_name or "",
@@ -6289,6 +6348,40 @@ def callback_handler(call):
     global stock
     try:
         data = call.data
+
+        # ── Admin Number Add — service selection ─────────────────────────────
+        if data.startswith("admin_add_svc:"):
+            if call.from_user.id not in ADMIN_IDS:
+                bot.answer_callback_query(call.id, "❌ No permission!")
+                return
+            svc = data.split(":", 1)[1]
+            if svc == "cancel":
+                bot.answer_callback_query(call.id, "❌ Cancelled")
+                try:
+                    bot.edit_message_reply_markup(
+                        call.message.chat.id, call.message.message_id, reply_markup=None
+                    )
+                except Exception:
+                    pass
+                _go_admin_panel(call.message)
+                return
+            bot.answer_callback_query(call.id, f"✅ {svc.upper()}")
+            try:
+                bot.edit_message_reply_markup(
+                    call.message.chat.id, call.message.message_id, reply_markup=None
+                )
+            except Exception:
+                pass
+            msg = bot.send_message(
+                call.message.chat.id,
+                f"🔥 <b>{svc.upper()}</b>\n\n"
+                f"📝 <b>Slot name dao:</b>\n"
+                f"<i>Udharan: Mali 1, Germany 2, India 3</i>",
+                reply_markup=_cancel_kb(),
+                parse_mode="HTML",
+            )
+            bot.register_next_step_handler(msg, lambda m, s=svc: ask_numbers_for_slot(m, s))
+            return
 
         # ── Force Add Panel (Railway IP blocked) ─────────────────────────────
         if data.startswith("forceadd:"):
@@ -7994,9 +8087,35 @@ def _parse_spreadsheet(data: bytes, filename: str):
         return result, "one_col"
 
 
-def _add_numbers_bulk(svc: str, numbers: list):
+def _notify_new_numbers(svc, c_name, flag, total_added):
+    """Broadcast NEW NUMBERS notification to all registered users in background."""
+    _NEW_SEP = ''.join(['<tg-emoji emoji-id="5870818207383686839">➖</tg-emoji>'] * 8)
+    _added_icon = '<tg-emoji emoji-id="5267041999948653482">📤</tg-emoji>'
+    _svc_e = _v2_svc_emoji(svc)
+    text = (
+        f"{_NEW_SEP}\n"
+        f"《 NEW NUMBERS 》\n"
+        f"{_NEW_SEP}\n"
+        f"{_resolve_flag(flag)} {c_name.upper()} {_svc_e} {svc.upper()}\n"
+        f"{_NEW_SEP}\n"
+        f"{_added_icon} Total Added: {total_added}\n"
+        f"{_NEW_SEP}\n"
+        f"Use /start to get your numbers!"
+    )
+    def _send():
+        for uid in list(users):
+            try:
+                bot.send_message(uid, text, parse_mode="HTML")
+                time.sleep(0.05)
+            except Exception:
+                pass
+    threading.Thread(target=_send, daemon=True).start()
+
+
+def _add_numbers_bulk(svc: str, numbers: list, notify=True):
     """Add a list of number strings to stock[svc]. Returns (added, skipped)."""
     added, skipped = 0, 0
+    first_num = None
     svc = svc.lower().strip()
     # Auto-create service in stock if it exists in _services list but not in stock
     if svc not in stock:
@@ -8013,12 +8132,17 @@ def _add_numbers_bulk(svc: str, numbers: list):
         if c_name == "Unknown":
             skipped += 1
             continue
+        if first_num is None:
+            first_num = num
         if c_name not in stock[svc]:
             stock[svc][c_name] = []
         stock[svc][c_name].append(num)
         added += 1
     if added:
         save_stock()
+        if notify and first_num:
+            c_name, flag = get_country_details(first_num)
+            _notify_new_numbers(svc, c_name, flag, added)
     return added, skipped
 
 
@@ -8030,6 +8154,36 @@ def _service_select_markup():
         m.add(*labels)
     else:
         m.add("Facebook", "Instagram", "WhatsApp", "Telegram", "Binance", "PC Clone")
+    return m
+
+
+_SVC_PLAIN_EMOJI = {
+    "instagram": "📸", "facebook": "🔵", "telegram": "✈️",
+    "whatsapp": "💚", "tiktok": "🎵", "twitter": "🐦",
+    "binance": "🟡", "snapchat": "👻", "google": "🔴",
+    "youtube": "📺", "linkedin": "💼", "amazon": "🛒",
+    "pc clone": "📱",
+}
+
+
+def _admin_add_svc_keyboard():
+    """Reply keyboard for admin Number Add — styled KeyboardButtons with custom emoji icons."""
+    _colors = ["primary", "success", "danger"]
+    KB = types.KeyboardButton
+    m = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    svcs = _services if _services else [
+        {"key": k, "label": k.title()}
+        for k in ["facebook", "instagram", "whatsapp", "telegram", "binance", "pc clone"]
+    ]
+    btns = []
+    for i, svc in enumerate(svcs):
+        key = svc["key"].lower()
+        label = svc["label"].split("→")[0].split("💎")[0].strip()
+        icon_id = _svc_icon_emoji_id(key)
+        icon_kwargs = {"icon_custom_emoji_id": icon_id} if icon_id else {}
+        btns.append(KB(label, style=_colors[i % 3], **icon_kwargs))
+    m.add(*btns)
+    m.add(KB("❌ Cancel", style="danger"))
     return m
 
 
@@ -8582,6 +8736,7 @@ def text_handler(message):
 
     elif txt in ("💵 Set Reward", "💱 Set Currency",
                  "📉 Set Minimum Withdraw", "📋 View All Balances",
+                 "🔗 Set Refer Commission",
                  "➕ Add Balance Manually", "➖ Deduct Balance Manually") and uid in ADMIN_IDS:
         _payment_admin_msg_handler(message)
 
@@ -8701,13 +8856,10 @@ def text_handler(message):
                 bot.send_message(message.chat.id, lines, parse_mode="HTML")
 
     elif txt == "𝗡𝘂𝗺𝗯𝗮𝗿 𝗔𝗱𝗱" and uid in ADMIN_IDS:
-        m = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        m.add("facebook", "instagram", "whatsapp", "telegram", "binance", "pc clone")
-        m.add("❌ Cancel")
         msg = bot.send_message(
             message.chat.id,
             "🔥 <b>Service choose koro:</b> 🔥",
-            reply_markup=m,
+            reply_markup=_admin_add_svc_keyboard(),
             parse_mode="HTML",
         )
         bot.register_next_step_handler(msg, process_auto_add)
@@ -9278,6 +9430,9 @@ def text_handler(message):
     elif txt in ("💸 𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄", "𝗪𝗶𝘁𝗵𝗱𝗿𝗮𝘄"):
         _start_withdraw(message)
 
+    elif txt in ("🔗 𝗥𝗲𝗳𝗳𝗲𝗿", "𝗥𝗲𝗳𝗳𝗲𝗿"):
+        _show_refer(message)
+
     elif txt == "𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂":
         mname = message.from_user.first_name or message.from_user.username or "User"
         bot.send_message(
@@ -9529,7 +9684,8 @@ def _inject_custom_emojis(text):
 
 
 def make_broadcast_msg(text):
-    return get_template("broadcast").format(text=_inject_custom_emojis(text or ""))
+    # Send exactly what admin typed — just inject custom emoji IDs, no header/footer wrapper
+    return _inject_custom_emojis(text or "")
 
 
 def do_broadcast(message):
@@ -11002,6 +11158,28 @@ def _show_balance(message):
     )
 
 
+def _show_refer(message):
+    uid = message.from_user.id
+    link = _get_refer_link(uid)
+    count = _get_refer_count(uid)
+    cur = get_currency()
+    commission = get_refer_commission()
+    _SEP = '<tg-emoji emoji-id="5870818207383686839">🔗</tg-emoji>' * 8
+    bot.send_message(
+        message.chat.id,
+        f'<tg-emoji emoji-id="5420145051336485498">🔗</tg-emoji> <b>Referral Program</b>\n'
+        f'{_SEP}\n'
+        f'<tg-emoji emoji-id="5352694861990501856">👥</tg-emoji> <b>Your Referrals:</b> <code>{count}</code> people\n'
+        f'<tg-emoji emoji-id="5796420706572966288">💰</tg-emoji> <b>Commission per Refer:</b> <code>{cur}{commission:.2f}</code>\n'
+        f'{_SEP}\n'
+        f'<tg-emoji emoji-id="5420517437885943844">📎</tg-emoji> <b>Your Referral Link:</b>\n'
+        f'<code>{link}</code>\n'
+        f'{_SEP}\n'
+        f'<tg-emoji emoji-id="5267041999948653482">🔗</tg-emoji> <i>Share this link — when someone joins, you\'ll get {cur}{commission:.2f}!</i>',
+        parse_mode="HTML",
+    )
+
+
 _withdraw_state: dict = {}
 
 
@@ -11133,8 +11311,9 @@ def _show_payment_admin(message):
     with _withdraw_lock:
         pending_wds = [r for r in _withdraw_requests if r["status"] == "pending"]
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    ref_comm = get_refer_commission()
     markup.add("💵 Set Reward", "💱 Set Currency")
-    markup.add("📉 Set Minimum Withdraw")
+    markup.add("📉 Set Minimum Withdraw", "🔗 Set Refer Commission")
     markup.add("📋 View All Balances")
     markup.add("➕ Add Balance Manually", "➖ Deduct Balance Manually")
     markup.add(f"⏳ Pending Withdraw ({len(pending_wds)})")
@@ -11145,6 +11324,7 @@ def _show_payment_admin(message):
         f"🎁 Per OTP Reward: <code>{cur}{rpo:.2f}</code>\n"
         f"💱 Currency: <code>{cur}</code>\n"
         f"📉 Minimum Withdraw: <code>{cur}{min_wd:.2f}</code>\n"
+        f"🔗 Refer Commission: <code>{cur}{ref_comm:.2f}</code>\n"
         f"⏳ Pending Withdraw: <code>{len(pending_wds)}</code>",
         parse_mode="HTML",
         reply_markup=markup,
@@ -11228,6 +11408,19 @@ def _payment_admin_msg_handler(message):
         _payment_admin_state[uid] = f"manual_uid:{action}"
         bot.register_next_step_handler(msg, _payment_admin_input)
 
+    elif txt == "🔗 Set Refer Commission":
+        cur = get_currency()
+        msg = bot.send_message(
+            message.chat.id,
+            f"🔗 Refer Commission amount set koro:\n\n"
+            f"Current: <code>{cur}{get_refer_commission():.2f}</code>\n"
+            f"Enter new amount (e.g. <code>10</code>):",
+            parse_mode="HTML",
+            reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟"),
+        )
+        _payment_admin_state[uid] = "set_refer_commission"
+        bot.register_next_step_handler(msg, _payment_admin_input)
+
     elif txt.startswith("⏳ Pending Withdraw"):
         _show_pending_withdraws(message)
 
@@ -11289,6 +11482,25 @@ def _payment_admin_input(message):
         cur = get_currency()
         bot.send_message(message.chat.id,
             f"✅ Minimum withdraw set: <code>{cur}{val:.2f}</code>",
+            parse_mode="HTML", reply_markup=types.ReplyKeyboardRemove())
+        _show_payment_admin(message)
+
+    elif mode == "set_refer_commission":
+        try:
+            val = float(txt.replace(",", ""))
+            if val < 0:
+                raise ValueError
+        except ValueError:
+            msg = bot.send_message(message.chat.id, "❌ Invalid! Enter a positive number:")
+            _payment_admin_state[uid] = "set_refer_commission"
+            bot.register_next_step_handler(msg, _payment_admin_input)
+            return
+        with _reward_settings_lock:
+            _reward_settings["refer_commission"] = val
+        _save_reward_settings()
+        cur = get_currency()
+        bot.send_message(message.chat.id,
+            f"✅ Refer commission set: <code>{cur}{val:.2f}</code>",
             parse_mode="HTML", reply_markup=types.ReplyKeyboardRemove())
         _show_payment_admin(message)
 
@@ -11800,6 +12012,7 @@ _ALL_MENU_BTNS = {
     "🔢 IDs Only Set", "🗑️ Flag Emoji Del",
     "🗑️ Service Emoji Del",
     "𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲",
+    "🔗 𝗥𝗲𝗳𝗳𝗲𝗿", "𝗥𝗲𝗳𝗳𝗲𝗿", "🔗 Set Refer Commission",
 }
 
 
@@ -11815,18 +12028,17 @@ def _intercept_menu_btn(message):
 
 
 def process_auto_add(message):
-    svc = (message.text or "").strip().lower()
-    if svc == "❌ cancel":
+    raw = (message.text or "").strip()
+    if raw == "❌ Cancel":
         _go_admin_panel(message)
         return
+    # Strip leading emoji / non-ASCII chars so "📸 instagram" → "instagram"
+    svc = re.sub(r'^[^a-zA-Z0-9]+', '', raw).strip().lower()
     if svc not in stock:
-        m = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        m.add("facebook", "instagram", "whatsapp", "telegram", "binance", "pc clone")
-        m.add("❌ Cancel")
         msg = bot.send_message(
             message.chat.id,
-            " <b>Vul service! Abar choose koro:</b>",
-            reply_markup=m,
+            "⚠️ <b>Vul service! Abar choose koro:</b>",
+            reply_markup=_admin_add_svc_keyboard(),
             parse_mode="HTML",
         )
         bot.register_next_step_handler(msg, process_auto_add)
@@ -11934,16 +12146,20 @@ def finalize_auto_add(message, svc, slot_name=None):
         nums = [n.strip() for n in re.split(r"[,\n\r]", message.text) if n.strip()]
 
     # ── Add numbers to stock ──────────────────────────────────────────────────
+    _first_added_num = None
     if slot_name:
         if svc not in stock:
             stock[svc] = {}
         if slot_name not in stock[svc]:
             stock[svc][slot_name] = []
+        added_count = 0
         for num in nums:
             clean = re.sub(r"\D", "", str(num))
             if clean:
                 stock[svc][slot_name].append(clean)
-        added_count = len([re.sub(r"\D", "", str(n)) for n in nums if re.sub(r"\D", "", str(n))])
+                if _first_added_num is None:
+                    _first_added_num = clean
+                added_count += 1
     else:
         added_count = 0
         for num in nums:
@@ -11953,8 +12169,16 @@ def finalize_auto_add(message, svc, slot_name=None):
             if c_name not in stock[svc]:
                 stock[svc][c_name] = []
             stock[svc][c_name].append(num)
+            if _first_added_num is None:
+                _first_added_num = re.sub(r"\D", "", str(num))
             added_count += 1
     save_stock()
+    # Notify all users about new numbers
+    if added_count and _first_added_num:
+        _nc, _nf = get_country_details(_first_added_num)
+        if _nc == "Unknown":
+            _nc, _nf = "UNKNOWN", "🌐"
+        _notify_new_numbers(svc, _nc, _nf, added_count)
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add("➕ Aro Add koro", "🔙 Admin Menu")
     bot.send_message(
