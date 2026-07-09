@@ -1,6 +1,6 @@
 import telebot
 from telebot import types
-bbdbshimport json
+import json
 import os
 import re
 import emoji as _emoji_lib
@@ -124,6 +124,8 @@ _BUILTIN_PANELS = [
     {'id': 'bp13', 'host': '168.119.13.175', 'base_url': 'http://168.119.13.175/ints', 'url_hint': 'http://168.119.13.175/ints/agent/SMSCDRStats', 'username': 'Rabbi1_FD', 'password': 'Rabbi12', 'engine': 'ints_smsranges', 'data_path': '/agent/res/data_smsranges.php', 'admin_id': None},
     {'id': 'mbcs1', 'host': 'mbcs-ms.com', 'base_url': 'https://mbcs-ms.com', 'url_hint': 'https://mbcs-ms.com/agent/SMSCDRReports', 'username': 'Rabbi', 'password': 'Rabbi12', 'engine': 'html_scrape', 'data_path': 'https://mbcs-ms.com/agent/SMSCDRReports', 'admin_id': None},
     {'id': 'bp10', 'host': 'ivasms.com', 'base_url': 'https://ivasms.com', 'url_hint': 'https://ivasms.com/portal/sms/received', 'username': 'mdrashub2@gmail.com', 'password': 'Rabbi+nnn', 'engine': 'iva_sms', 'data_path': '/portal/sms/received', 'admin_id': None},
+    {'id': 'd82503', 'host': '93.190.143.35', 'base_url': 'http://93.190.143.35/ints', 'url_hint': 'http://93.190.143.35/ints/agent/SMSCDRReports', 'username': 'Rabbi12', 'password': 'Rabbi12@', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': 8523774444},
+    {'id': 'd82649', 'host': '93.190.143.35', 'base_url': 'http://93.190.143.35/ints', 'url_hint': 'http://93.190.143.35/ints/agent/SMSCDRReports', 'username': 'Rabbi12', 'password': 'Rabbi12@', 'engine': 'ints_smscdr', 'data_path': '/agent/res/data_smscdr.php', 'admin_id': 8523774444},
 ]
 # <<SYNC:_BUILTIN_PANELS:END>>
 
@@ -456,7 +458,7 @@ TEMPLATES_FILE = "message_templates.json"
 _DEFAULT_TEMPLATES = {
     'start': '<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <b>WELCOME TO NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji>\n\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>USER DASHBOARD</b>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<tg-emoji emoji-id="5202216593966244027">👤</tg-emoji> <b>User:</b> {uname}\n<tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>User ID:</b> <code>{uid}</code>\n<tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Account Status:</b> <tg-emoji emoji-id="5316919747214854314">💎</tg-emoji> Premium\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<tg-emoji emoji-id="5458603043203327669">⚠️</tg-emoji> <b>IMPORTANT NOTICE</b>\n\nPlease JOIN our channel below,\nthen click VERIFY to continue <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n\n<tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji> <b>Fast • Secure • Premium Service</b> <tg-emoji emoji-id="5391112412445288650">⚡</tg-emoji>\n\n<tg-emoji emoji-id="5461117441612462242">🌟</tg-emoji> <i>Powered by</i>\n<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>NUMBER BOT x PB TECH</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>',
     'verify_success': '<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> <b>VERIFICATION COMPLETE!</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>\n\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n   <tg-emoji emoji-id="5206607081334906820">✅</tg-emoji> <b>ACCESS GRANTED</b>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n  <tg-emoji emoji-id="5352899869369446268">👋</tg-emoji> <b>Welcome, {vname}!</b>\n  <tg-emoji emoji-id="5282843764451195532">🆔</tg-emoji> <b>ID:</b> <code>{uid}</code>\n  <tg-emoji emoji-id="5451882707875276247">📊</tg-emoji> <b>Status:</b> <tg-emoji emoji-id="5217822164362739968">👑</tg-emoji> Premium\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n\n<tg-emoji emoji-id="5420323339723881652">✅</tg-emoji> <b>YOU CAN GET NUMBER NOW!</b> <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji>',
-    'otp_group': '<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<blockquote>{svc_emoji} <b>{svc}</b> {flag} {tagged_number} {flag}</blockquote>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<blockquote>{emoji_otp_key} KEY : <b>{otp}</b></blockquote>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<blockquote>{emoji_otp_world} Country: {country} {flag}</blockquote>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<blockquote>{emoji_otp_sms} MESSAGE\n{sms}</blockquote>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>\n<blockquote><tg-emoji emoji-id="5461117441612462242">💬</tg-emoji> Thanks for using <tg-emoji emoji-id="5420323339723881652">✅</tg-emoji></blockquote>\n<tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji><tg-emoji emoji-id="5870818207383686839">〰️</tg-emoji>',
+    'otp_group': '{flag} #{country_short_b} {svc_emoji} <b>{tagged_number_b}</b> #{sms_lang_b}',
     'otp_dm': '{flag} {number} {svc_emoji} {svc}\n{emoji_country_pre} COUNTRY:{country}{flag}',
     'otp_dm_v2': '{emoji_number_pre}{number} {svc_emoji}{svc}\n{emoji_country_pre}{country}{emoji_country_post}',
     'number_assigned': '✅ <b>Number Assigned Successfully !</b>\n\n🔧 <b>Platform :</b> {svc}\n🌍 <b>Country :</b> {flag} {country}\n\n📞 <b>Number :</b> <code>{number}</code>\n\n⏱ <b>Auto code fetch :</b> 10:00s',
@@ -588,7 +590,7 @@ _TEMPLATE_LABELS = {
 
 _TEMPLATE_VARS = {
     "start": "{uname} = username, {uid} = user ID | Icons: {emoji_start_header}, {emoji_start_crown}, {emoji_start_user}, {emoji_start_id}, {emoji_start_status}, {emoji_start_workers}, {emoji_start_powered}",
-    "otp_group": "{svc} = service, {number} = number, {tagged_number} = number with TAG, {country} = country, {flag} = flag, {otp} = OTP code, {sms_body} or {sms} = full SMS",
+    "otp_group": "{svc} = service, {number} = number, {tagged_number} = number with TAG, {tagged_number_b} = bold number with TAG, {country} = country, {flag} = flag, {otp} = OTP code, {sms_body} or {sms} = full SMS, {country_short} = ISO code (NG/BD), {country_short_b} = bold ISO code, {country_lang} = country default lang, {sms_lang} = detected SMS language, {sms_lang_b} = bold detected language, {svc_emoji} = service icon emoji",
     "otp_dm": "{svc} = service, {number} = number, {country} = country, {flag} = flag, {otp} = OTP code, {sms_body} or {sms} = full SMS, {reward} = reward, {balance} = balance",
     "otp_dm_v2": "{svc} = service, {number} = number, {country} = country, {flag} = flag, {otp} = OTP code, {sms_body} or {sms} = full SMS, {reward} = reward, {balance} = balance",
     "verify_success": "{vname} = username, {uid} = user ID",
@@ -880,6 +882,18 @@ def tag_number(number, tag):
     return clean
 
 
+def tag_number_bold(number, tag):
+    """Like tag_number but with math-bold digits and tag text — safe HTML."""
+    clean = re.sub(r"\D", "", str(number))
+    if len(clean) >= 7:
+        return (f'{to_math_bold(clean[:3])}'
+                f'<tg-emoji emoji-id="5267295703666824255">👑</tg-emoji>'
+                f'<b>{to_math_bold(str(tag))}</b>'
+                f'<tg-emoji emoji-id="5267295703666824255">👑</tg-emoji>'
+                f'{to_math_bold(clean[-4:])}')
+    return to_math_bold(clean)
+
+
 # ── OTP Messages ──────────────────────────────────────────────────────────────
 
 
@@ -972,10 +986,10 @@ def _detect_service_from_sms(text):
     return ""
 
 
-def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
+def send_otp_message(chat_id, otp, number, seconds, service="", sms_body="", force_group_fmt=False):
     import html as _html
-    # Auto-detect service from SMS body when not provided by the panel
-    _svc_raw = service or _detect_service_from_sms(sms_body)
+    # Detect service from SMS body first (more accurate), fall back to panel value
+    _svc_raw = _detect_service_from_sms(sms_body) or service
     svc = _svc_raw.upper() if _svc_raw else "—"
     c_name, flag = get_country_details(number)
     otp_str = str(otp)
@@ -990,10 +1004,17 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
     _emoji_number_pre  = _get_dm_emoji("number_pre")
     _emoji_country_pre = _get_dm_emoji("country_pre")
     _emoji_country_post= _get_dm_emoji("country_post")
+    _country_short = get_country_short(number)
+    _country_lang = get_country_language(_country_short)
+    _sms_lang = detect_sms_language(sms_body)
     _grp_vars = {**_emoji_extra,
                  **dict(svc=svc, number=mask_number(number), tagged_number=_tagged,
                      taged_number=_tagged,
+                     tagged_number_b=tag_number_bold(number, _tag),
                      country=c_name, flag=_rflag, otp=otp_str,
+                     country_short=_country_short, country_lang=_country_lang,
+                     country_short_b=to_math_bold(_country_short),
+                     sms_lang=_sms_lang, sms_lang_b=to_math_bold(_sms_lang),
                      sms_body=_sms_val, sms=_sms_val,
                      vname=svc, text=_sms_val,
                      svc_emoji=_svc_emoji_html,
@@ -1052,7 +1073,7 @@ def send_otp_message(chat_id, otp, number, seconds, service="", sms_body=""):
         import re as _re
         return _re.sub(r"<[^>]+>", "", txt)
 
-    if chat_id == get_otp_group_id():
+    if chat_id == get_otp_group_id() or force_group_fmt:
         markup = types.InlineKeyboardMarkup()
         # Copy OTP button — clicking copies the code to clipboard
         _oc_text, _oc_icon = _btn_text_and_icon("otp_copy", "🔒 ")
@@ -1269,6 +1290,96 @@ def get_country_details(num_str):
         return (country_name or country_code or "Unknown"), (flag or "🌐")
     except Exception:
         return "Unknown", "🌐"
+
+
+def get_country_short(num_str) -> str:
+    """Return the ISO 2-letter country code (e.g. 'NG', 'BD') for a phone number."""
+    try:
+        s = str(num_str).strip()
+        if not s.startswith("+"):
+            s = "+" + s
+        parsed = phonenumbers.parse(s)
+        return region_code_for_number(parsed) or "??"
+    except Exception:
+        return "??"
+
+
+_COUNTRY_LANG_MAP = {
+    "NG": "EN", "GH": "EN", "KE": "EN", "UG": "EN", "ZA": "EN", "US": "EN",
+    "GB": "EN", "PH": "EN", "IN": "EN", "PK": "EN", "TZ": "EN", "ZM": "EN",
+    "SL": "EN", "LR": "EN", "GM": "EN", "MW": "EN", "BD": "BN", "ID": "ID",
+    "BR": "PT", "PT": "PT", "CN": "ZH", "TW": "ZH", "HK": "ZH", "SA": "AR",
+    "EG": "AR", "AE": "AR", "IQ": "AR", "DZ": "AR", "MA": "AR", "TN": "AR",
+    "TR": "TR", "SW": "SW", "IR": "FA", "RU": "RU", "UA": "UA", "DE": "DE",
+    "AT": "DE", "FR": "FR", "SN": "FR", "CI": "FR", "CM": "FR", "CD": "FR",
+    "ES": "ES", "MX": "ES", "AR": "ES", "CO": "ES", "IT": "IT", "JP": "JA",
+    "KR": "KO", "VN": "VI", "TH": "TH", "MY": "MS", "MM": "MY", "KH": "KM",
+    "NP": "NE", "LK": "SI", "ET": "AM", "SO": "SO", "NL": "NL", "PL": "PL",
+    "GR": "EL", "IL": "HE",
+}
+
+
+def get_country_language(country_code: str) -> str:
+    """Return a short primary-language code for the given ISO country code."""
+    return _COUNTRY_LANG_MAP.get((country_code or "").upper(), "EN")
+
+
+def detect_sms_language(text: str) -> str:
+    """Detect language code from SMS body text using Unicode character ranges."""
+    if not text or text in ("—", "-"):
+        return "EN"
+    # Arabic / Urdu script
+    if any('\u0600' <= c <= '\u06FF' for c in text):
+        return "AR"
+    # Bengali script
+    if any('\u0980' <= c <= '\u09FF' for c in text):
+        return "BN"
+    # Cyrillic (Russian / Ukrainian)
+    if any('\u0400' <= c <= '\u04FF' for c in text):
+        return "RU"
+    # Thai
+    if any('\u0E00' <= c <= '\u0E7F' for c in text):
+        return "TH"
+    # CJK Unified Ideographs (Chinese)
+    if any('\u4E00' <= c <= '\u9FFF' for c in text):
+        return "ZH"
+    # Korean Hangul
+    if any('\uAC00' <= c <= '\uD7AF' for c in text):
+        return "KO"
+    # Japanese Hiragana / Katakana
+    if any('\u3040' <= c <= '\u30FF' for c in text):
+        return "JA"
+    # Hindi / Devanagari
+    if any('\u0900' <= c <= '\u097F' for c in text):
+        return "HI"
+    # Greek
+    if any('\u0370' <= c <= '\u03FF' for c in text):
+        return "EL"
+    # Hebrew
+    if any('\u0590' <= c <= '\u05FF' for c in text):
+        return "HE"
+    # Armenian
+    if any('\u0530' <= c <= '\u058F' for c in text):
+        return "HY"
+    # Georgian
+    if any('\u10A0' <= c <= '\u10FF' for c in text):
+        return "KA"
+    return "EN"
+
+
+def to_math_bold(text: str) -> str:
+    """Convert ASCII letters/digits to Unicode Mathematical Sans-Serif Bold."""
+    result = []
+    for ch in str(text):
+        if 'A' <= ch <= 'Z':
+            result.append(chr(0x1D5D4 + ord(ch) - ord('A')))
+        elif 'a' <= ch <= 'z':
+            result.append(chr(0x1D5EE + ord(ch) - ord('a')))
+        elif '0' <= ch <= '9':
+            result.append(chr(0x1D7EC + ord(ch) - ord('0')))
+        else:
+            result.append(ch)
+    return ''.join(result)
 
 
 # ── Stock helpers ─────────────────────────────────────────────────────────────
@@ -3550,7 +3661,8 @@ def _send_to_extra_group(chat_id, otp, number, seconds, service, sms_body, grp_c
     """Send OTP message to an extra group with its own custom button links.
     Uses exactly the same variable set and formatting logic as send_otp_message."""
     import html as _html
-    _svc_raw = service or _detect_service_from_sms(sms_body)
+    # Detect service from SMS body first (more accurate), fall back to panel value
+    _svc_raw = _detect_service_from_sms(sms_body) or service
     svc = _svc_raw.upper() if _svc_raw else "—"
     c_name, flag = get_country_details(number)
     otp_str = str(otp)
@@ -3564,9 +3676,16 @@ def _send_to_extra_group(chat_id, otp, number, seconds, service, sms_body, grp_c
     _emoji_country_pre = _get_dm_emoji("country_pre")
     _emoji_country_post= _get_dm_emoji("country_post")
 
+    _country_short_eg = get_country_short(number)
+    _country_lang_eg = get_country_language(_country_short_eg)
+    _sms_lang_eg = detect_sms_language(sms_body)
     _grp_vars = {**_emoji_extra,
                  **dict(svc=svc, number=mask_number(number), tagged_number=_tagged,
-                        taged_number=_tagged, country=c_name, flag=_rflag, otp=otp_str,
+                        taged_number=_tagged, tagged_number_b=tag_number_bold(number, _tag),
+                        country=c_name, flag=_rflag, otp=otp_str,
+                        country_short=_country_short_eg, country_lang=_country_lang_eg,
+                        country_short_b=to_math_bold(_country_short_eg),
+                        sms_lang=_sms_lang_eg, sms_lang_b=to_math_bold(_sms_lang_eg),
                         sms_body=_sms_val, sms=_sms_val, vname=svc, text=_sms_val,
                         svc_emoji=_svc_emoji_html,
                         emoji_number_pre=_emoji_number_pre,
@@ -5232,7 +5351,9 @@ def test_cmd(message):
     fake_svc = "Instagram"
     fake_secs = 12
     fake_sms = f"Your Instagram code is {fake_otp}. Don't share this code."
-    send_otp_message(message.chat.id, fake_otp, fake_number, fake_secs, fake_svc, fake_sms)
+    # Preview with GROUP format (force_group_fmt=True) so admin sees the exact group message
+    bot.send_message(message.chat.id, "👁 <b>Group Format Preview:</b>", parse_mode="HTML")
+    send_otp_message(message.chat.id, fake_otp, fake_number, fake_secs, fake_svc, fake_sms, force_group_fmt=True)
     try:
         send_otp_message(get_otp_group_id(), fake_otp, fake_number, fake_secs, fake_svc, fake_sms)
         bot.send_message(
