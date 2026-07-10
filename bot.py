@@ -615,6 +615,42 @@ _services = load_json(SERVICES_FILE, list(_DEFAULT_SERVICES))
 _addservice_state = {}
 _countdowns = {}
 
+# ── Buy Service ───────────────────────────────────────────────────────────────
+BUY_SERVICE_FILE = "buy_service_settings.json"
+_buy_service_settings = load_json(BUY_SERVICE_FILE, {
+    "premium_prices": {"3M": 0, "6M": 0, "1Y": 0},
+    "vpn_services": [
+        {"emoji_id": "5334944492300573096", "name": "NORD",      "duration": "7D",    "price": 20},
+        {"emoji_id": "5346335574498251610", "name": "EXPRESS",   "duration": "7D",    "price": 20},
+        {"emoji_id": "5352597830089347330", "name": "IP VANISH", "duration": "7D",    "price": 20},
+        {"emoji_id": "5190447043545438788", "name": "SURFSHARK", "duration": "7D",    "price": 20},
+        {"emoji_id": "5346134750417403743", "name": "HMA",       "duration": "7D",    "price": 20},
+        {"emoji_id": "5328064671951896068", "name": "PIA",       "duration": "7D",    "price": 20},
+        {"emoji_id": "5348390922507817684", "name": "PROTON",    "duration": "14D",   "price": 30},
+        {"emoji_id": "5346335574498251610", "name": "EXPRESS 30D","duration": "30D",  "price": 45},
+        {"emoji_id": "5346134750417403743", "name": "HMA 30D",   "duration": "30D",   "price": 45},
+        {"emoji_id": "5336983442125001376", "name": "9 PROXY",   "duration": "1GB",   "price": 100},
+        {"emoji_id": "5334530732331143967", "name": "OWL PROXY", "duration": "200MB", "price": 10},
+    ],
+    "binance_id": "1138284235",
+    "bkash_number": "01340670062",
+    "bkash_emoji_id": "5348469219761626211",
+    "binance_emoji_id": "5431815433011736909",
+    "dollar_rate": 128,
+})
+
+def save_buy_service_settings():
+    save_json(BUY_SERVICE_FILE, _buy_service_settings)
+
+# {uid: {"type": "premium|vpn", "label": "...", "price": N}}
+_buy_pending: dict = {}
+# {uid: {"file_id": ..., "pending": {...}}} — screenshot saved, waiting for TG username
+_buy_screenshot_pending: dict = {}
+# {admin_uid: target_uid}
+_admin_dmu_state: dict = {}
+# Admin buy service step state
+_buy_admin_state: dict = {}
+
 USER_MAP_FILE = "user_map.json"
 _raw_user_map = load_json(USER_MAP_FILE, {})
 user_map: dict[str, int] = {k: int(v) for k, v in _raw_user_map.items()}
@@ -3114,10 +3150,10 @@ _BTN_DEFAULT_ICONS = {
     "start_channel":    "5451882707875276247",
     "start_verify":     "5206607081334906820",
     "get_number":       "5296424506875722458",
-    "saport":           "5334763399299506604",
-    "balance":          "5445353829304387411",
-    "developer":        "5202216593966244027",
-    "withdraw":         "5375135722514685501",
+    "saport":           "5267294466716244344",
+    "balance":          "5296591052822585948",
+    "developer":        "5267456597436699660",
+    "withdraw":         "5298716928490120985",
     "refer":            "5267041999948653482",
     "admin_panel":      "5420155432272438703",
 }
@@ -5084,7 +5120,10 @@ def main_menu(user_id):
     markup.add(types.KeyboardButton(_dv_text, style="success", **_dv_icon),
                types.KeyboardButton(_wd_text, style="danger", **_wd_icon))
     _rf_text, _rf_icon = _btn_text_and_icon("refer", "🔗 𝗥𝗲𝗳𝗳𝗲𝗿")
-    markup.add(types.KeyboardButton(_rf_text, style="primary", **_rf_icon))
+    markup.row(
+        types.KeyboardButton(_rf_text, style="primary", **_rf_icon),
+        types.KeyboardButton("🛒 Buy Service", style="success"),
+    )
     if user_id in ADMIN_IDS:
         _ap_text, _ap_icon = _btn_text_and_icon("admin_panel", "⚙️ 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟 ⚙️")
         markup.add(types.KeyboardButton(_ap_text, style="primary", **_ap_icon))
@@ -6469,6 +6508,223 @@ def callback_handler(call):
     global stock
     try:
         data = call.data
+
+        # ── Buy Service callbacks ─────────────────────────────────────────────
+        if data == "buy_tg_premium":
+            prices = _buy_service_settings.get("premium_prices", {})
+            rate = _buy_service_settings.get("dollar_rate", 128)
+            markup = types.InlineKeyboardMarkup(row_width=1)
+            for plan_key, label in [("3M", "3 Month"), ("6M", "6 Month"), ("1Y", "1 Year")]:
+                price_bdt = prices.get(plan_key, 0)
+                if price_bdt <= 0:
+                    markup.add(types.InlineKeyboardButton(
+                        f"💎 {label} — Price set hoi nai",
+                        callback_data=f"buy_premium:{plan_key}", style="primary"
+                    ))
+                else:
+                    price_usd = round(price_bdt / rate, 2) if rate else 0
+                    markup.add(types.InlineKeyboardButton(
+                        f"💎 {label} — {price_bdt} BDT / ${price_usd}",
+                        callback_data=f"buy_premium:{plan_key}", style="primary"
+                    ))
+            markup.add(types.InlineKeyboardButton("⬅️ Back", callback_data="buy_svc_back", style="danger"))
+            try:
+                bot.edit_message_text(
+                    "💎 <b>Telegram Premium</b>\n\nPlan select koro:",
+                    call.message.chat.id, call.message.message_id,
+                    reply_markup=markup, parse_mode="HTML"
+                )
+            except Exception:
+                bot.send_message(call.message.chat.id,
+                    "💎 <b>Telegram Premium</b>\n\nPlan select koro:",
+                    reply_markup=markup, parse_mode="HTML")
+            bot.answer_callback_query(call.id)
+            return
+
+        if data.startswith("buy_premium:"):
+            plan = data.split(":", 1)[1]
+            prices = _buy_service_settings.get("premium_prices", {})
+            rate = _buy_service_settings.get("dollar_rate", 128)
+            binance_id = _buy_service_settings.get("binance_id", "1138284235")
+            bkash_num = _buy_service_settings.get("bkash_number", "01340670062")
+            bkash_emoji_id = _buy_service_settings.get("bkash_emoji_id", "")
+            binance_emoji_id = _buy_service_settings.get("binance_emoji_id", "")
+            plan_labels = {"3M": "3 Month", "6M": "6 Month", "1Y": "1 Year"}
+            label = f"Telegram Premium {plan_labels.get(plan, plan)}"
+            price_bdt = prices.get(plan, 0)
+            price_usd = round(price_bdt / rate, 2) if rate else 0
+            uid_buyer = call.from_user.id
+            _buy_pending[uid_buyer] = {"type": "premium", "label": label, "price": price_bdt}
+            markup = types.InlineKeyboardMarkup(row_width=1)
+            markup.add(types.InlineKeyboardButton(
+                binance_id, copy_text=types.CopyTextButton(text=binance_id), style="primary"
+            ))
+            markup.add(types.InlineKeyboardButton(
+                bkash_num, copy_text=types.CopyTextButton(text=bkash_num), style="success"
+            ))
+            bot.send_message(
+                call.message.chat.id,
+                f"💎 <b>{label}</b>\n\n"
+                f"💰 Price: <b>{price_bdt} BDT</b> / <b>${price_usd}</b>\n"
+                f"💱 Rate: 1$ = {rate} BDT\n\n"
+                f"Pay korar por <b>screenshot pathao</b> ei chat-e.\n\n"
+                f"─────────────────\n"
+                f"<b>Payment Options:</b>\n"
+                f"• Binance ID: <code>{binance_id}</code>\n"
+                f"• bKash: <code>{bkash_num}</code>\n"
+                f"─────────────────\n\n"
+                f"👆 Button-e click korle ID copy hobe:",
+                reply_markup=markup, parse_mode="HTML"
+            )
+            bot.answer_callback_query(call.id, f"✅ {label} selected!")
+            return
+
+        if data == "buy_vpn_menu":
+            vpns = _buy_service_settings.get("vpn_services", [])
+            if not vpns:
+                bot.answer_callback_query(call.id, "❌ Kono VPN service nei!", show_alert=True)
+                return
+            markup = types.InlineKeyboardMarkup(row_width=1)
+            for i, v in enumerate(vpns):
+                emoji_id = v.get("emoji_id", "")
+                name = v.get("name", "")
+                dur = v.get("duration", "")
+                price = v.get("price", 0)
+                btn_kwargs = {"icon_custom_emoji_id": emoji_id} if emoji_id else {}
+                markup.add(types.InlineKeyboardButton(
+                    f"{name} | {dur} | {price} BDT",
+                    callback_data=f"buy_vpn:{i}",
+                    style="success",
+                    **btn_kwargs
+                ))
+            markup.add(types.InlineKeyboardButton("⬅️ Back", callback_data="buy_svc_back", style="danger"))
+            try:
+                bot.edit_message_text(
+                    "🔒 <b>Buy VPN</b>\n\nPlan select koro:",
+                    call.message.chat.id, call.message.message_id,
+                    reply_markup=markup, parse_mode="HTML"
+                )
+            except Exception:
+                bot.send_message(call.message.chat.id,
+                    "🔒 <b>Buy VPN</b>\n\nPlan select koro:",
+                    reply_markup=markup, parse_mode="HTML")
+            bot.answer_callback_query(call.id)
+            return
+
+        if data.startswith("buy_vpn:"):
+            idx_str = data.split(":", 1)[1]
+            try:
+                idx = int(idx_str)
+                vpns = _buy_service_settings.get("vpn_services", [])
+                v = vpns[idx]
+            except (ValueError, IndexError):
+                bot.answer_callback_query(call.id, "❌ Service pawa jay ni!", show_alert=True)
+                return
+            bkash_num = _buy_service_settings.get("bkash_number", "01340670062")
+            bkash_emoji_id = _buy_service_settings.get("bkash_emoji_id", "")
+            emoji_id = v.get("emoji_id", "")
+            name = v.get("name", "")
+            dur = v.get("duration", "")
+            price = v.get("price", 0)
+            label = f"VPN — {name} | {dur}"
+            uid_buyer = call.from_user.id
+            _buy_pending[uid_buyer] = {"type": "vpn", "label": label, "price": price}
+            markup = types.InlineKeyboardMarkup(row_width=1)
+            markup.add(types.InlineKeyboardButton(
+                bkash_num, copy_text=types.CopyTextButton(text=bkash_num), style="success"
+            ))
+            vpn_emoji_tag = f'<tg-emoji emoji-id="{emoji_id}">🔒</tg-emoji> ' if emoji_id else "🔒 "
+            bot.send_message(
+                call.message.chat.id,
+                f"{vpn_emoji_tag}<b>{name}</b>\n"
+                f"📅 Duration: <b>{dur}</b>\n"
+                f"💰 Price: <b>{price} BDT</b>\n\n"
+                f"Pay korar por <b>screenshot pathao</b> ei chat-e.\n\n"
+                f"─────────────────\n"
+                f"<b>Payment:</b> bKash Personal\n"
+                f"📱 Number: <code>{bkash_num}</code>\n"
+                f"─────────────────\n\n"
+                f"👆 Button-e click korle number copy hobe:",
+                reply_markup=markup, parse_mode="HTML"
+            )
+            bot.answer_callback_query(call.id, f"✅ {name} selected!")
+            return
+
+        if data.startswith("copy_bin:"):
+            val = data.split(":", 1)[1]
+            bot.answer_callback_query(call.id, f"✅ Binance ID: {val}", show_alert=True)
+            return
+
+        if data.startswith("copy_bk:"):
+            val = data.split(":", 1)[1]
+            bot.answer_callback_query(call.id, f"✅ bKash: {val}", show_alert=True)
+            return
+
+        if data == "buy_svc_back":
+            markup = types.InlineKeyboardMarkup(row_width=1)
+            markup.add(
+                types.InlineKeyboardButton("💎 Telegram Premium", callback_data="buy_tg_premium", style="primary"),
+                types.InlineKeyboardButton("🔒 Buy VPN", callback_data="buy_vpn_menu", style="success"),
+            )
+            try:
+                bot.edit_message_text(
+                    "🛒 <b>BUY SERVICE</b>\n\nNicher theke jekono service select koro:",
+                    call.message.chat.id, call.message.message_id,
+                    reply_markup=markup, parse_mode="HTML"
+                )
+            except Exception:
+                pass
+            bot.answer_callback_query(call.id)
+            return
+
+        if data.startswith("buy_del_vpn:"):
+            uid_cb = call.from_user.id
+            if uid_cb not in ADMIN_IDS:
+                bot.answer_callback_query(call.id, "❌ No permission!")
+                return
+            val = data.split(":", 1)[1]
+            if val == "cancel":
+                bot.answer_callback_query(call.id, "Cancelled")
+                try:
+                    bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
+                except Exception:
+                    pass
+                return
+            try:
+                idx = int(val)
+                vpns = _buy_service_settings.get("vpn_services", [])
+                removed = vpns.pop(idx)
+                save_buy_service_settings()
+                bot.answer_callback_query(call.id, f"✅ {removed['name']} removed!")
+                try:
+                    bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
+                except Exception:
+                    pass
+                bot.send_message(call.message.chat.id,
+                    f"✅ <b>{removed['name']} | {removed['duration']}</b> removed!", parse_mode="HTML")
+            except (ValueError, IndexError) as e:
+                bot.answer_callback_query(call.id, "❌ Error!", show_alert=True)
+            return
+
+        if data.startswith("admin_dmu:"):
+            uid_cb = call.from_user.id
+            if uid_cb not in ADMIN_IDS:
+                bot.answer_callback_query(call.id, "❌ No permission!")
+                return
+            target = int(data.split(":", 1)[1])
+            _admin_dmu_state[uid_cb] = target
+            bot.answer_callback_query(call.id)
+            msg = bot.send_message(
+                call.message.chat.id,
+                f"📨 <b>User <code>{target}</code>-ke message pathao:</b>\n\n"
+                f"Text, photo, video, sticker — sob accepted.\n"
+                f"Custom emoji-r jonno emoji ID lekho text-e.\n\n"
+                f"🔙 Back: <b>Admin Panel</b> button press koro.",
+                reply_markup=_back_admin_kb(), parse_mode="HTML"
+            )
+            bot.register_next_step_handler(msg, _buy_send_msg_step)
+            return
+
 
         # ── Admin Number Add — service selection ─────────────────────────────
         if data.startswith("admin_add_svc:"):
@@ -9567,6 +9823,74 @@ def text_handler(message):
         )
 
 
+
+    elif txt == "🛒 Buy Service":
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        markup.add(
+            types.InlineKeyboardButton("💎 Telegram Premium", callback_data="buy_tg_premium", style="primary"),
+            types.InlineKeyboardButton("🔒 Buy VPN", callback_data="buy_vpn_menu", style="success"),
+        )
+        bot.send_message(
+            message.chat.id,
+            "🛒 <b>BUY SERVICE</b>\n\nNicher theke jekono service select koro:",
+            reply_markup=markup,
+            parse_mode="HTML",
+        )
+
+    # ── Buy Service Admin ───────────────────────────────────────────────────────
+    elif txt == "𝗕𝘂𝘆 𝗦𝗲𝗿𝘃𝗶𝗰𝗲 𝗠𝗮𝗻𝗮𝗴𝗲" and uid in ADMIN_IDS:
+        _show_buy_service_admin(message)
+
+    elif txt == "💎 Set Premium Price" and uid in ADMIN_IDS:
+        prices = _buy_service_settings["premium_prices"]
+        rate = _buy_service_settings.get("dollar_rate", 128)
+        msg = bot.send_message(
+            message.chat.id,
+            f"💎 <b>Telegram Premium Price Set</b>\n\n"
+            f"Current prices:\n"
+            f"• 3 Month: <b>{prices.get('3M', 0)} BDT</b>\n"
+            f"• 6 Month: <b>{prices.get('6M', 0)} BDT</b>\n"
+            f"• 1 Year:  <b>{prices.get('1Y', 0)} BDT</b>\n"
+            f"• Dollar Rate: <b>1$ = {rate} BDT</b>\n\n"
+            "3 ta price dao — 3M 6M 1Y BDT-te (space diye):\n"
+            "<i>Example: <code>650 1200 2000</code></i>\n\n"
+            "Dollar rate change korte 4 ta dao:\n"
+            "<i>Example: <code>650 1200 2000 130</code></i>\n\n"
+            "🔙 Back: <b>Admin Panel</b> button press koro.",
+            reply_markup=_back_admin_kb(),
+            parse_mode="HTML",
+        )
+        bot.register_next_step_handler(msg, _buy_set_premium_step)
+
+    elif txt == "➕ Add VPN Service" and uid in ADMIN_IDS:
+        msg = bot.send_message(
+            message.chat.id,
+            "➕ <b>New VPN Service Add</b>\n\n"
+            "Format (space diye):\n"
+            "<code>EMOJI_ID NAME DURATION PRICE_BDT</code>\n\n"
+            "Example:\n"
+            "<code>5334944492300573096 NORD 7D 300</code>\n\n"
+            "🔙 Back: <b>Admin Panel</b> button press koro.",
+            reply_markup=_back_admin_kb(),
+            parse_mode="HTML",
+        )
+        bot.register_next_step_handler(msg, _buy_add_vpn_step)
+
+    elif txt == "🗑️ Remove VPN" and uid in ADMIN_IDS:
+        _show_vpn_remove_list(message)
+
+    elif txt == "📨 Send User Message" and uid in ADMIN_IDS:
+        msg = bot.send_message(
+            message.chat.id,
+            "📨 <b>User-ke Message Pathao</b>\n\n"
+            "Target user-er <b>Chat ID</b> dao:\n"
+            "<i>(Admin screenshot notification-e ID dekhte pabe)</i>\n\n"
+            "🔙 Back: <b>Admin Panel</b> button press koro.",
+            reply_markup=_back_admin_kb(),
+            parse_mode="HTML",
+        )
+        bot.register_next_step_handler(msg, _buy_send_ask_uid_step)
+
 # ── Demo OTP config step handlers ─────────────────────────────────────────────
 
 
@@ -11809,6 +12133,9 @@ def _go_admin_panel(message, text="🔥 <b>ADMIN PANEL</b>"):
         KB("𝗣𝗮𝘆𝗺𝗲𝗻𝘁 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀",    style="primary", icon_custom_emoji_id=_get_admin_btn_icon("payment_settings")),
         KB("𝗨𝘀𝗲𝗿 𝗠𝗲𝗻𝘂",          style="danger",  icon_custom_emoji_id=_get_admin_btn_icon("user_menu")),
     )
+    m_admin.add(
+        KB("𝗕𝘂𝘆 𝗦𝗲𝗿𝘃𝗶𝗰𝗲 𝗠𝗮𝗻𝗮𝗴𝗲", style="success"),
+    )
     bot.send_message(
         message.chat.id,
         text,
@@ -12134,6 +12461,9 @@ _ALL_MENU_BTNS = {
     "🗑️ Service Emoji Del",
     "𝗔𝗣𝗜 𝗞𝗲𝘆 𝗖𝗵𝗮𝗻𝗴𝗲",
     "🔗 𝗥𝗲𝗳𝗳𝗲𝗿", "𝗥𝗲𝗳𝗳𝗲𝗿", "🔗 Set Refer Commission",
+    "🛒 Buy Service",
+    "𝗕𝘂𝘆 𝗦𝗲𝗿𝘃𝗶𝗰𝗲 𝗠𝗮𝗻𝗮𝗴𝗲", "💎 Set Premium Price", "➕ Add VPN Service",
+    "🗑️ Remove VPN", "📨 Send User Message",
 }
 
 
@@ -12456,6 +12786,311 @@ def _iva_web_cookie_watcher():
         except Exception as _e:
             print(f"[WEB-COOKIE] Error: {_e}")
         time.sleep(10)
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ── Buy Service: Helper Functions ──────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def _show_buy_service_admin(message):
+    uid = message.from_user.id
+    if uid not in ADMIN_IDS:
+        return
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    markup.add("💎 Set Premium Price", "➕ Add VPN Service")
+    markup.add("🗑️ Remove VPN", "📨 Send User Message")
+    markup.add("🔙 𝗔𝗗𝗠𝗜𝗡 𝗣𝗔𝗡𝗘𝗟")
+    prices = _buy_service_settings["premium_prices"]
+    rate = _buy_service_settings.get("dollar_rate", 128)
+    vpn_count = len(_buy_service_settings.get("vpn_services", []))
+    bot.send_message(
+        message.chat.id,
+        f"🛒 <b>Buy Service Admin Panel</b>\n\n"
+        f"💎 Premium Prices:\n"
+        f"  • 3 Month: <b>{prices.get('3M', 0)} BDT</b>\n"
+        f"  • 6 Month: <b>{prices.get('6M', 0)} BDT</b>\n"
+        f"  • 1 Year:  <b>{prices.get('1Y', 0)} BDT</b>\n"
+        f"  • Dollar Rate: <b>1$ = {rate} BDT</b>\n\n"
+        f"🔒 VPN Services: <b>{vpn_count}</b> ta\n\n"
+        f"Niche theke option choose koro:",
+        reply_markup=markup,
+        parse_mode="HTML",
+    )
+
+
+def _show_vpn_remove_list(message):
+    uid = message.from_user.id
+    if uid not in ADMIN_IDS:
+        return
+    vpns = _buy_service_settings.get("vpn_services", [])
+    if not vpns:
+        bot.send_message(message.chat.id, "❌ Kono VPN service nei.")
+        _show_buy_service_admin(message)
+        return
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    for i, v in enumerate(vpns):
+        emoji_id = v.get("emoji_id", "")
+        name = v.get("name", "")
+        dur = v.get("duration", "")
+        price = v.get("price", 0)
+        label = f"{name} | {dur} | {price} BDT"
+        btn_kwargs = {"icon_custom_emoji_id": emoji_id} if emoji_id else {}
+        markup.add(types.InlineKeyboardButton(
+            f"🗑️ {label}", callback_data=f"buy_del_vpn:{i}", style="danger", **btn_kwargs
+        ))
+    markup.add(types.InlineKeyboardButton("❌ Cancel", callback_data="buy_del_vpn:cancel"))
+    bot.send_message(
+        message.chat.id,
+        "🗑️ <b>Remove VPN Service</b>\n\nKonTa remove korbe?",
+        reply_markup=markup,
+        parse_mode="HTML",
+    )
+
+
+def _buy_set_premium_step(message):
+    if _is_back(message.text):
+        _go_admin_panel(message)
+        return
+    if _intercept_menu_btn(message):
+        return
+    parts = (message.text or "").strip().split()
+    if len(parts) < 3:
+        msg = bot.send_message(message.chat.id,
+            "❌ Format bhul! 3 ta dao (3M 6M 1Y BDT):\n"
+            "<i>Example: <code>650 1200 2000</code></i>",
+            reply_markup=_back_admin_kb(), parse_mode="HTML")
+        bot.register_next_step_handler(msg, _buy_set_premium_step)
+        return
+    try:
+        p3m = int(parts[0]); p6m = int(parts[1]); p1y = int(parts[2])
+        rate = int(parts[3]) if len(parts) >= 4 else _buy_service_settings.get("dollar_rate", 128)
+    except ValueError:
+        msg = bot.send_message(message.chat.id,
+            "❌ Shudhu number dao!\n<i>Example: <code>650 1200 2000</code></i>",
+            reply_markup=_back_admin_kb(), parse_mode="HTML")
+        bot.register_next_step_handler(msg, _buy_set_premium_step)
+        return
+    _buy_service_settings["premium_prices"] = {"3M": p3m, "6M": p6m, "1Y": p1y}
+    _buy_service_settings["dollar_rate"] = rate
+    save_buy_service_settings()
+    bot.send_message(message.chat.id,
+        f"✅ <b>Premium prices updated!</b>\n\n"
+        f"• 3 Month: <b>{p3m} BDT</b>\n"
+        f"• 6 Month: <b>{p6m} BDT</b>\n"
+        f"• 1 Year:  <b>{p1y} BDT</b>\n"
+        f"• Dollar Rate: <b>1$ = {rate} BDT</b>",
+        parse_mode="HTML")
+    _show_buy_service_admin(message)
+
+
+def _buy_add_vpn_step(message):
+    if _is_back(message.text):
+        _go_admin_panel(message)
+        return
+    if _intercept_menu_btn(message):
+        return
+    parts = (message.text or "").strip().split()
+    if len(parts) < 4:
+        msg = bot.send_message(message.chat.id,
+            "❌ Format bhul!\n"
+            "<code>EMOJI_ID NAME DURATION PRICE_BDT</code>\n"
+            "<i>Example: <code>5334944492300573096 NORD 7D 300</code></i>",
+            reply_markup=_back_admin_kb(), parse_mode="HTML")
+        bot.register_next_step_handler(msg, _buy_add_vpn_step)
+        return
+    try:
+        emoji_id = parts[0]
+        price = int(parts[-1])
+        duration = parts[-2]
+        name = " ".join(parts[1:-2])
+    except ValueError:
+        msg = bot.send_message(message.chat.id,
+            "❌ Price shudhu number hobe!",
+            reply_markup=_back_admin_kb(), parse_mode="HTML")
+        bot.register_next_step_handler(msg, _buy_add_vpn_step)
+        return
+    new_svc = {"emoji_id": emoji_id, "name": name, "duration": duration, "price": price}
+    _buy_service_settings.setdefault("vpn_services", []).append(new_svc)
+    save_buy_service_settings()
+    bot.send_message(message.chat.id,
+        f"✅ <b>VPN added!</b>\n"
+        f"Name: <b>{name}</b> | Duration: <b>{duration}</b> | Price: <b>{price} BDT</b>",
+        parse_mode="HTML")
+    _show_buy_service_admin(message)
+
+
+def _buy_send_ask_uid_step(message):
+    uid = message.from_user.id
+    if _is_back(message.text):
+        _go_admin_panel(message)
+        return
+    if _intercept_menu_btn(message):
+        return
+    raw = re.sub(r"\D", "", (message.text or "").strip())
+    if not raw:
+        msg = bot.send_message(message.chat.id,
+            "❌ Valid Chat ID dao (only numbers).",
+            reply_markup=_back_admin_kb(), parse_mode="HTML")
+        bot.register_next_step_handler(msg, _buy_send_ask_uid_step)
+        return
+    target_uid = int(raw)
+    _admin_dmu_state[uid] = target_uid
+    msg = bot.send_message(
+        message.chat.id,
+        f"✅ Target: <code>{target_uid}</code>\n\n"
+        f"📝 Ebar message content pathao (text, photo, video sob accepted):\n"
+        f"Custom emoji er jonno emoji ID lekho message-e.\n\n"
+        f"🔙 Back: <b>Admin Panel</b> button press koro.",
+        reply_markup=_back_admin_kb(), parse_mode="HTML")
+    bot.register_next_step_handler(msg, _buy_send_msg_step)
+
+
+def _buy_send_msg_step(message):
+    uid = message.from_user.id
+    if _is_back(message.text):
+        _admin_dmu_state.pop(uid, None)
+        _go_admin_panel(message)
+        return
+    if _intercept_menu_btn(message):
+        _admin_dmu_state.pop(uid, None)
+        return
+    target_uid = _admin_dmu_state.pop(uid, None)
+    if not target_uid:
+        _go_admin_panel(message)
+        return
+
+    def _resolve_custom_emoji_in_text(text):
+        """Replace bare 18-19 digit IDs in text with tg-emoji tags."""
+        import re as _re2
+        def _repl(m):
+            eid = m.group(1)
+            return f'<tg-emoji emoji-id="{eid}">⭐</tg-emoji>'
+        return _re2.sub(r'(?<![/\d])(\d{18,19})(?![\d])', _repl, text or "")
+
+    try:
+        if message.photo:
+            cap = _resolve_custom_emoji_in_text(message.caption or "")
+            bot.send_photo(target_uid, message.photo[-1].file_id,
+                           caption=cap or None, parse_mode="HTML" if cap else None)
+        elif message.video:
+            cap = _resolve_custom_emoji_in_text(message.caption or "")
+            bot.send_video(target_uid, message.video.file_id,
+                           caption=cap or None, parse_mode="HTML" if cap else None)
+        elif message.document:
+            cap = _resolve_custom_emoji_in_text(message.caption or "")
+            bot.send_document(target_uid, message.document.file_id,
+                              caption=cap or None, parse_mode="HTML" if cap else None)
+        elif message.sticker:
+            bot.send_sticker(target_uid, message.sticker.file_id)
+        elif message.voice:
+            bot.send_voice(target_uid, message.voice.file_id)
+        elif message.animation:
+            cap = _resolve_custom_emoji_in_text(message.caption or "")
+            bot.send_animation(target_uid, message.animation.file_id,
+                               caption=cap or None, parse_mode="HTML" if cap else None)
+        elif message.text:
+            txt_out = _resolve_custom_emoji_in_text(message.text)
+            bot.send_message(target_uid, txt_out, parse_mode="HTML")
+        else:
+            bot.send_message(message.chat.id, "❌ Ei content type support hoi na.")
+            return
+        bot.send_message(message.chat.id,
+            f"✅ Message sent to <code>{target_uid}</code>!", parse_mode="HTML")
+    except Exception as e:
+        bot.send_message(message.chat.id, f"❌ Pathano jay ni: <code>{e}</code>", parse_mode="HTML")
+    _show_buy_service_admin(message)
+
+
+@bot.message_handler(content_types=["photo"])
+def photo_handler(message):
+    uid = message.from_user.id
+    # Screenshot from user who is awaiting payment confirmation
+    if uid in _buy_pending:
+        pending = _buy_pending.pop(uid)
+        svc_type = pending.get("type", "")
+        file_id = message.photo[-1].file_id
+
+        if svc_type == "premium":
+            # For Telegram Premium: ask which account will receive it
+            _buy_screenshot_pending[uid] = {"file_id": file_id, "pending": pending}
+            msg = bot.send_message(
+                message.chat.id,
+                "✅ <b>Screenshot peyechi!</b>\n\n"
+                "📲 Kon Telegram account-e Premium nibe?\n"
+                "<b>Username অথবা Phone number dao:</b>\n\n"
+                "<i>Example: <code>@username</code> অথবা <code>+8801XXXXXXXXX</code></i>",
+                parse_mode="HTML",
+            )
+            bot.register_next_step_handler(msg, _buy_premium_tg_username_step)
+        else:
+            # For VPN: notify admins directly
+            _notify_admins_screenshot(uid, message.from_user, file_id, pending, tg_target=None)
+        return
+    # If admin, ignore
+    if uid in ADMIN_IDS:
+        return
+
+
+def _notify_admins_screenshot(uid, from_user, file_id, pending, tg_target):
+    """Send payment screenshot to all super admins."""
+    uname = from_user.username
+    fname = from_user.first_name or ""
+    user_info = f"@{uname}" if uname else fname or str(uid)
+    service_label = pending.get("label", "Unknown")
+    price = pending.get("price", 0)
+
+    tg_line = f"📲 Premium For: <b>{tg_target}</b>\n" if tg_target else ""
+    caption = (
+        f"📸 <b>PAYMENT SCREENSHOT</b>\n\n"
+        f"👤 User: {user_info}\n"
+        f"🆔 Chat ID: <code>{uid}</code>\n"
+        f"📦 Service: <b>{service_label}</b>\n"
+        f"💰 Price: <b>{price} BDT</b>\n"
+        f"{tg_line}\n"
+        f"✅ Verify korar por user-ke service pathao."
+    )
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton(
+        "📨 Send Message to User",
+        callback_data=f"admin_dmu:{uid}",
+        style="primary",
+    ))
+    for admin_uid in SUPER_ADMIN_IDS:
+        try:
+            bot.send_photo(
+                admin_uid, file_id,
+                caption=caption, parse_mode="HTML", reply_markup=markup,
+            )
+        except Exception:
+            pass
+    bot.send_message(
+        uid,
+        "✅ <b>Screenshot pathano hoyeche!</b>\n\n"
+        "Admin review korbe ebong shighroi service pathabe. ধন্যবাদ! 🙏",
+        parse_mode="HTML",
+    )
+
+
+def _buy_premium_tg_username_step(message):
+    """Receive target Telegram username/phone for premium, then notify admins."""
+    uid = message.from_user.id
+    if _intercept_menu_btn(message):
+        _buy_screenshot_pending.pop(uid, None)
+        return
+    raw = (message.text or "").strip()
+    if not raw:
+        msg = bot.send_message(
+            message.chat.id,
+            "❌ Username অথবা Phone number dao:\n"
+            "<i>Example: <code>@username</code> অথবা <code>+8801XXXXXXXXX</code></i>",
+            parse_mode="HTML",
+        )
+        bot.register_next_step_handler(msg, _buy_premium_tg_username_step)
+        return
+    saved = _buy_screenshot_pending.pop(uid, None)
+    if not saved:
+        return
+    _notify_admins_screenshot(uid, message.from_user, saved["file_id"], saved["pending"], tg_target=raw)
 
 
 threading.Thread(target=_iva_web_cookie_watcher, daemon=True).start()
