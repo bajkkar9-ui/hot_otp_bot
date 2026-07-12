@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 import json
 import os
-hhhggimport re
+import re
 import emoji as _emoji_lib
 import time
 import threading
@@ -316,7 +316,7 @@ _group_settings = load_json(GROUP_SETTINGS_FILE, {
     'numbers_per_batch': 2,
     'v2_active_panel': 'stex',
     'v3_enabled': False,
-    'extra_groups': [{'id': -1002414484554, 'bot_link': 'https://t.me/pbpremium_otp_bot', 'channel_link': 'https://t.me/gjifch743'}, {'id': -1003738666960, 'bot_link': 'https://t.me/pbpremium_otp_bot', 'channel_link': 'https://t.me/+JsT0epbhAY8zNDY1'}],
+    'extra_groups': [{'id': -1003738666960, 'bot_link': 'https://t.me/pbpremium_otp_bot', 'channel_link': 'https://t.me/+JsT0epbhAY8zNDY1'}],
     'v2_user_mode': True,
     'fastx_api_key': 'MURAD_88F18AB46B13F781BD52C4E1',
 })
@@ -620,17 +620,17 @@ BUY_SERVICE_FILE = "buy_service_settings.json"
 _buy_service_settings = load_json(BUY_SERVICE_FILE, {
     "premium_prices": {"3M": 0, "6M": 0, "1Y": 0},
     "vpn_services": [
-        {"emoji_id": "5334944492300573096", "name": "NORD",      "duration": "7D",    "price": 20},
-        {"emoji_id": "5346335574498251610", "name": "EXPRESS",   "duration": "7D",    "price": 20},
-        {"emoji_id": "5352597830089347330", "name": "IP VANISH", "duration": "7D",    "price": 20},
-        {"emoji_id": "5190447043545438788", "name": "SURFSHARK", "duration": "7D",    "price": 20},
-        {"emoji_id": "5346134750417403743", "name": "HMA",       "duration": "7D",    "price": 20},
-        {"emoji_id": "5328064671951896068", "name": "PIA",       "duration": "7D",    "price": 20},
-        {"emoji_id": "5348390922507817684", "name": "PROTON",    "duration": "14D",   "price": 30},
-        {"emoji_id": "5346335574498251610", "name": "EXPRESS 30D","duration": "30D",  "price": 45},
-        {"emoji_id": "5346134750417403743", "name": "HMA 30D",   "duration": "30D",   "price": 45},
-        {"emoji_id": "5336983442125001376", "name": "9 PROXY",   "duration": "1GB",   "price": 100},
-        {"emoji_id": "5334530732331143967", "name": "OWL PROXY", "duration": "200MB", "price": 10},
+        {"id": "nord_7d",       "emoji_id": "5334944492300573096", "name": "NORD",       "duration": "7D",    "price": 20},
+        {"id": "express_7d",    "emoji_id": "5346335574498251610", "name": "EXPRESS",    "duration": "7D",    "price": 20},
+        {"id": "ipvanish_7d",   "emoji_id": "5352597830089347330", "name": "IP VANISH",  "duration": "7D",    "price": 20},
+        {"id": "surfshark_7d",  "emoji_id": "5190447043545438788", "name": "SURFSHARK",  "duration": "7D",    "price": 20},
+        {"id": "hma_7d",        "emoji_id": "5346134750417403743", "name": "HMA",        "duration": "7D",    "price": 20},
+        {"id": "pia_7d",        "emoji_id": "5328064671951896068", "name": "PIA",        "duration": "7D",    "price": 20},
+        {"id": "proton_14d",    "emoji_id": "5348390922507817684", "name": "PROTON",     "duration": "14D",   "price": 30},
+        {"id": "express_30d",   "emoji_id": "5346335574498251610", "name": "EXPRESS 30D","duration": "30D",   "price": 45},
+        {"id": "hma_30d",       "emoji_id": "5346134750417403743", "name": "HMA 30D",    "duration": "30D",   "price": 45},
+        {"id": "9proxy_1gb",    "emoji_id": "5336983442125001376", "name": "9 PROXY",    "duration": "1GB",   "price": 100},
+        {"id": "owlproxy_200mb","emoji_id": "5334530732331143967", "name": "OWL PROXY",  "duration": "200MB", "price": 10},
     ],
     "binance_id": "1138284235",
     "bkash_number": "01340670062",
@@ -641,6 +641,22 @@ _buy_service_settings = load_json(BUY_SERVICE_FILE, {
 
 def save_buy_service_settings():
     save_json(BUY_SERVICE_FILE, _buy_service_settings)
+
+# ── Migrate: ensure every VPN entry has a unique id ──────────────────────────
+def _migrate_vpn_ids():
+    vpns = _buy_service_settings.get("vpn_services", [])
+    changed = False
+    seen_ids = set()
+    for i, v in enumerate(vpns):
+        vid = v.get("id", "")
+        if not vid or vid in seen_ids:
+            v["id"] = f"vpn_{int(time.time() * 1000)}_{i}"
+            changed = True
+        seen_ids.add(v["id"])
+    if changed:
+        save_buy_service_settings()
+
+_migrate_vpn_ids()
 
 # {uid: {"type": "premium|vpn", "label": "...", "price": N}}
 _buy_pending: dict = {}
@@ -5031,6 +5047,28 @@ def panel6_monitor():
 # ── Demo OTP monitor ──────────────────────────────────────────────────────────
 
 
+def _demo_fire_service(cfg_name, digits, numbers, svc):
+    """Send one demo OTP for a single service to main group + all extra groups."""
+    otp = "".join([str(random.randint(0, 9)) for _ in range(digits)])
+    number = random.choice(numbers)
+    # Main group
+    main_grp = get_otp_group_id()
+    if main_grp:
+        try:
+            send_otp_message(main_grp, otp, number, "—", svc, "")
+        except Exception as e:
+            print(f"[DEMO] {cfg_name} main group error ({svc}): {e}")
+    # Extra groups
+    extra_grps = _group_settings.get("extra_groups", [])
+    for eg in extra_grps:
+        eg_id = eg.get("id")
+        if eg_id:
+            try:
+                _send_to_extra_group(eg_id, otp, number, "—", svc, "", eg)
+            except Exception as e:
+                print(f"[DEMO] {cfg_name} extra group {eg_id} error ({svc}): {e}")
+
+
 def demo_monitor():
     print("[DEMO] Thread started.")
     while True:
@@ -5044,13 +5082,19 @@ def demo_monitor():
             if now >= _demo_next_fire.get(cid, 0):
                 _demo_next_fire[cid] = now + cfg["interval"]
                 services = cfg.get("services") or ["Facebook"]
+                digits = cfg["digits"]
+                numbers = cfg["numbers"]
+                cfg_name = cfg["name"]
+                # Fire all services simultaneously in separate threads
+                threads = []
                 for svc in services:
-                    otp = "".join([str(random.randint(0, 9)) for _ in range(cfg["digits"])])
-                    number = random.choice(cfg["numbers"])
-                    try:
-                        send_otp_message(get_otp_group_id(), otp, number, "—", svc, "")
-                    except Exception as e:
-                        print(f"[DEMO] {cfg['name']} send error ({svc}): {e}")
+                    t = threading.Thread(
+                        target=_demo_fire_service,
+                        args=(cfg_name, digits, numbers, svc),
+                        daemon=True
+                    )
+                    t.start()
+                    threads.append(t)
         time.sleep(1)
 
 
@@ -6590,10 +6634,11 @@ def callback_handler(call):
                 name = v.get("name", "")
                 dur = v.get("duration", "")
                 price = v.get("price", 0)
+                vid = v.get("id") or str(i)
                 btn_kwargs = {"icon_custom_emoji_id": emoji_id} if emoji_id else {}
                 markup.add(types.InlineKeyboardButton(
                     f"{name} | {dur} | {price} BDT",
-                    callback_data=f"buy_vpn:{i}",
+                    callback_data=f"buy_vpn:{vid}",
                     style="success",
                     **btn_kwargs
                 ))
@@ -6612,12 +6657,20 @@ def callback_handler(call):
             return
 
         if data.startswith("buy_vpn:"):
-            idx_str = data.split(":", 1)[1]
-            try:
-                idx = int(idx_str)
-                vpns = _buy_service_settings.get("vpn_services", [])
-                v = vpns[idx]
-            except (ValueError, IndexError):
+            vid = data.split(":", 1)[1]
+            vpns = _buy_service_settings.get("vpn_services", [])
+            v = None
+            for _vpn in vpns:
+                if _vpn.get("id", "") == vid:
+                    v = _vpn
+                    break
+            if v is None:
+                # fallback: try as integer index for old buttons
+                try:
+                    v = vpns[int(vid)]
+                except (ValueError, IndexError):
+                    v = None
+            if v is None:
                 bot.answer_callback_query(call.id, "❌ Service pawa jay ni!", show_alert=True)
                 return
             bkash_num = _buy_service_settings.get("bkash_number", "01340670062")
@@ -6634,20 +6687,24 @@ def callback_handler(call):
                 bkash_num, copy_text=types.CopyTextButton(text=bkash_num), style="success"
             ))
             vpn_emoji_tag = f'<tg-emoji emoji-id="{emoji_id}">🔒</tg-emoji> ' if emoji_id else "🔒 "
-            bot.send_message(
-                call.message.chat.id,
-                f"{vpn_emoji_tag}<b>{name}</b>\n"
-                f"📅 Duration: <b>{dur}</b>\n"
-                f"💰 Price: <b>{price} BDT</b>\n\n"
-                f"Pay korar por <b>screenshot pathao</b> ei chat-e.\n\n"
-                f"─────────────────\n"
-                f"<b>Payment:</b> bKash Personal\n"
-                f"📱 Number: <code>{bkash_num}</code>\n"
-                f"─────────────────\n\n"
-                f"👆 Button-e click korle number copy hobe:",
-                reply_markup=markup, parse_mode="HTML"
-            )
+            # Answer first — prevents button timeout even if send_message fails
             bot.answer_callback_query(call.id, f"✅ {name} selected!")
+            try:
+                bot.send_message(
+                    call.message.chat.id,
+                    f"{vpn_emoji_tag}<b>{name}</b>\n"
+                    f"📅 Duration: <b>{dur}</b>\n"
+                    f"💰 Price: <b>{price} BDT</b>\n\n"
+                    f"Pay korar por <b>screenshot pathao</b> ei chat-e.\n\n"
+                    f"─────────────────\n"
+                    f"<b>Payment:</b> bKash Personal\n"
+                    f"📱 Number: <code>{bkash_num}</code>\n"
+                    f"─────────────────\n\n"
+                    f"👆 Button-e click korle number copy hobe:",
+                    reply_markup=markup, parse_mode="HTML"
+                )
+            except Exception as _bvpn_err:
+                print(f"[BUY_VPN] send_message error: {_bvpn_err}")
             return
 
         if data.startswith("copy_bin:"):
@@ -6690,20 +6747,54 @@ def callback_handler(call):
                 except Exception:
                     pass
                 return
+            vpns = _buy_service_settings.get("vpn_services", [])
+            # Find by id first, then fallback to integer index for old buttons
+            removed_idx = None
+            for j, _vpn in enumerate(vpns):
+                if _vpn.get("id", str(j)) == val:
+                    removed_idx = j
+                    break
+            if removed_idx is None:
+                try:
+                    candidate = int(val)
+                    if 0 <= candidate < len(vpns):
+                        removed_idx = candidate
+                except ValueError:
+                    pass
+            if removed_idx is None:
+                bot.answer_callback_query(call.id, "❌ Error! VPN list update hoyeche, abar try koro.", show_alert=True)
+                return
+            removed = vpns.pop(removed_idx)
+            save_buy_service_settings()
+            bot.answer_callback_query(call.id, f"✅ {removed['name']} removed!")
             try:
-                idx = int(val)
-                vpns = _buy_service_settings.get("vpn_services", [])
-                removed = vpns.pop(idx)
-                save_buy_service_settings()
-                bot.answer_callback_query(call.id, f"✅ {removed['name']} removed!")
+                bot.delete_message(call.message.chat.id, call.message.message_id)
+            except Exception:
                 try:
                     bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
                 except Exception:
                     pass
+            # Show updated remove list or done message
+            remaining = _buy_service_settings.get("vpn_services", [])
+            if remaining:
+                new_markup = types.InlineKeyboardMarkup(row_width=1)
+                for jj, rv in enumerate(remaining):
+                    eid = rv.get("emoji_id", "")
+                    rvid = rv.get("id") or str(jj)
+                    rlabel = f"{rv.get('name','')} | {rv.get('duration','')} | {rv.get('price',0)} BDT"
+                    rkw = {"icon_custom_emoji_id": eid} if eid else {}
+                    new_markup.add(types.InlineKeyboardButton(
+                        f"🗑️ {rlabel}", callback_data=f"buy_del_vpn:{rvid}", style="danger", **rkw
+                    ))
+                new_markup.add(types.InlineKeyboardButton("❌ Cancel", callback_data="buy_del_vpn:cancel"))
                 bot.send_message(call.message.chat.id,
-                    f"✅ <b>{removed['name']} | {removed['duration']}</b> removed!", parse_mode="HTML")
-            except (ValueError, IndexError) as e:
-                bot.answer_callback_query(call.id, "❌ Error!", show_alert=True)
+                    f"✅ <b>{removed['name']}</b> removed!\n\n"
+                    f"🗑️ <b>Remove VPN Service</b>\n\nAro remove korbe?",
+                    reply_markup=new_markup, parse_mode="HTML")
+            else:
+                bot.send_message(call.message.chat.id,
+                    f"✅ <b>{removed['name']}</b> removed!\n\n❌ Aar kono VPN service nei.",
+                    parse_mode="HTML")
             return
 
         if data.startswith("admin_dmu:"):
@@ -8465,7 +8556,7 @@ def _parse_spreadsheet(data: bytes, filename: str):
 
 
 def _notify_new_numbers(svc, c_name, flag, total_added):
-    """Broadcast NEW NUMBERS notification to all registered users in background."""
+    """Broadcast NEW NUMBERS notification to all registered users + main group + extra groups."""
     _NEW_SEP = ''.join(['<tg-emoji emoji-id="5870818207383686839">➖</tg-emoji>'] * 8)
     _added_icon = '<tg-emoji emoji-id="5267041999948653482">📤</tg-emoji>'
     _svc_e = _v2_svc_emoji(svc)
@@ -8480,6 +8571,22 @@ def _notify_new_numbers(svc, c_name, flag, total_added):
         f"Use /start to get your numbers!"
     )
     def _send():
+        # Send to main group
+        main_grp = get_otp_group_id()
+        if main_grp:
+            try:
+                bot.send_message(main_grp, text, parse_mode="HTML")
+            except Exception as _eg:
+                print(f"[NEW-NUM] Main group send error: {_eg}")
+        # Send to extra groups
+        for eg in _group_settings.get("extra_groups", []):
+            eg_id = eg.get("id")
+            if eg_id:
+                try:
+                    bot.send_message(eg_id, text, parse_mode="HTML")
+                except Exception as _eg:
+                    print(f"[NEW-NUM] Extra group {eg_id} send error: {_eg}")
+        # Send to all registered users (inbox)
         for uid in list(users):
             try:
                 bot.send_message(uid, text, parse_mode="HTML")
@@ -10181,53 +10288,54 @@ def do_broadcast(message):
         parse_mode="HTML",
     )
 
-    success, fail = 0, 0
-    for uid in list(users):
+    def _bc_send_one(chat_id):
         try:
             if has_photo:
-                bot.send_photo(
-                    uid,
-                    message.photo[-1].file_id,
-                    caption=cap(message),
-                    parse_mode="HTML",
-                )
+                bot.send_photo(chat_id, message.photo[-1].file_id, caption=cap(message), parse_mode="HTML")
             elif has_animation:
-                bot.send_animation(
-                    uid,
-                    message.animation.file_id,
-                    caption=cap(message),
-                    parse_mode="HTML",
-                )
+                bot.send_animation(chat_id, message.animation.file_id, caption=cap(message), parse_mode="HTML")
             elif has_video:
-                bot.send_video(
-                    uid, message.video.file_id, caption=cap(message), parse_mode="HTML"
-                )
+                bot.send_video(chat_id, message.video.file_id, caption=cap(message), parse_mode="HTML")
             elif has_video_note:
-                bot.send_video_note(uid, message.video_note.file_id)
+                bot.send_video_note(chat_id, message.video_note.file_id)
             elif has_sticker:
-                bot.send_sticker(uid, message.sticker.file_id)
+                bot.send_sticker(chat_id, message.sticker.file_id)
             elif has_audio:
-                bot.send_audio(
-                    uid, message.audio.file_id, caption=cap(message), parse_mode="HTML"
-                )
+                bot.send_audio(chat_id, message.audio.file_id, caption=cap(message), parse_mode="HTML")
             elif has_voice:
-                bot.send_voice(
-                    uid, message.voice.file_id, caption=cap(message), parse_mode="HTML"
-                )
+                bot.send_voice(chat_id, message.voice.file_id, caption=cap(message), parse_mode="HTML")
             elif has_document:
-                bot.send_document(
-                    uid,
-                    message.document.file_id,
-                    caption=cap(message),
-                    parse_mode="HTML",
-                )
+                bot.send_document(chat_id, message.document.file_id, caption=cap(message), parse_mode="HTML")
             else:
-                bot.send_message(
-                    uid, make_broadcast_msg(message.text), parse_mode="HTML"
-                )
-            success += 1
+                bot.send_message(chat_id, make_broadcast_msg(message.text), parse_mode="HTML")
+            return True
         except Exception:
+            return False
+
+    # Send to main group
+    main_grp = get_otp_group_id()
+    if main_grp:
+        try:
+            _bc_send_one(main_grp)
+        except Exception:
+            pass
+    # Send to extra groups
+    for eg in _group_settings.get("extra_groups", []):
+        eg_id = eg.get("id")
+        if eg_id:
+            try:
+                _bc_send_one(eg_id)
+            except Exception:
+                pass
+
+    # Send to all registered users
+    success, fail = 0, 0
+    for uid in list(users):
+        if _bc_send_one(uid):
+            success += 1
+        else:
             fail += 1
+        time.sleep(0.03)
 
     bot.send_message(
         message.chat.id,
@@ -12833,10 +12941,11 @@ def _show_vpn_remove_list(message):
         name = v.get("name", "")
         dur = v.get("duration", "")
         price = v.get("price", 0)
+        vid = v.get("id") or str(i)
         label = f"{name} | {dur} | {price} BDT"
         btn_kwargs = {"icon_custom_emoji_id": emoji_id} if emoji_id else {}
         markup.add(types.InlineKeyboardButton(
-            f"🗑️ {label}", callback_data=f"buy_del_vpn:{i}", style="danger", **btn_kwargs
+            f"🗑️ {label}", callback_data=f"buy_del_vpn:{vid}", style="danger", **btn_kwargs
         ))
     markup.add(types.InlineKeyboardButton("❌ Cancel", callback_data="buy_del_vpn:cancel"))
     bot.send_message(
@@ -12909,7 +13018,26 @@ def _buy_add_vpn_step(message):
             reply_markup=_back_admin_kb(), parse_mode="HTML")
         bot.register_next_step_handler(msg, _buy_add_vpn_step)
         return
-    new_svc = {"emoji_id": emoji_id, "name": name, "duration": duration, "price": price}
+    # Validate: emoji_id must be numeric (Telegram custom emoji ID)
+    if not emoji_id.strip().isdigit():
+        msg = bot.send_message(message.chat.id,
+            "❌ <b>Format bhul!</b> EMOJI_ID shudhu number hobe (Telegram custom emoji ID).\n\n"
+            "Sothik format:\n"
+            "<code>EMOJI_ID NAME DURATION PRICE_BDT</code>\n\n"
+            "Example:\n"
+            "<code>5334944492300573096 NORD 7D 300</code>\n\n"
+            "⚠️ Protham ta hobe Emoji ID (digit only), tarpor name, duration, price.",
+            reply_markup=_back_admin_kb(), parse_mode="HTML")
+        bot.register_next_step_handler(msg, _buy_add_vpn_step)
+        return
+    if not name.strip():
+        msg = bot.send_message(message.chat.id,
+            "❌ VPN name daw!",
+            reply_markup=_back_admin_kb(), parse_mode="HTML")
+        bot.register_next_step_handler(msg, _buy_add_vpn_step)
+        return
+    vpn_id = f"vpn_{int(time.time() * 1000)}"
+    new_svc = {"id": vpn_id, "emoji_id": emoji_id, "name": name, "duration": duration, "price": price}
     _buy_service_settings.setdefault("vpn_services", []).append(new_svc)
     save_buy_service_settings()
     bot.send_message(message.chat.id,
@@ -13106,6 +13234,7 @@ print("   ▸ BP1: Mahofuza12          (139.99.69.196)")
 print("   ▸ BP2: Rabbi12             (139.99.9.4)")
 print("   ▸ BP3: Rabbi12             (54.36.173.235)")
 print("   ▸ BP4: Rabbi5              (54.39.104.241)")
+print("   ▸ BP14: Rabbi5             (54.39.104.241) [OTP]")
 print("   ▸ BP5: mahofuza            (213.32.24.208)")
 print("   ▸ BP6: Rabbi200            (15.235.182.3 /konekta)")
 print("   ▸ BP7: Rabbi12             (nexor-iprn.com)")
